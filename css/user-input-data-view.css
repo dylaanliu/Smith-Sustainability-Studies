@@ -1,0 +1,23 @@
+form[id="new-entry"], .form-horizontal {
+	background-color: white;
+	margin-right:30px;
+	padding:10px 10px 10px 20px;
+	border:1px solid black;
+	margin-bottom: 20px;
+}
+
+.btn-default {
+	margin-right:100px;
+}
+
+h1 {
+	text-align:center;
+}
+
+.row[id="input-mid"] {
+	margin-top:50px;
+}
+
+div[id="incomplete"] {
+	margin-top:20px;
+}

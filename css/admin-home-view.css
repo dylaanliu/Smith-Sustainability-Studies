@@ -1,0 +1,29 @@
+/*
+CSS for admin-home-view
+*/
+h1[id="home-header"] {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.row[id="home-top"], .row[id="home-users"] {
+	margin-top:10px;
+	/*margin-top:10%; */
+	background-color:#CCE5FF;
+	padding: 0px 50px 50px 50px;	
+}
+
+.row[id="home-mid"] {
+	margin-top:30px;
+	padding: 20px 50px 20px 50px;
+}
+
+.btn-primary[id="home-btn-primary"] {
+	margin:0px auto;
+	margin-bottom: 20px;
+	width:200px !important;
+}
+
+.btn-info{
+	width:100px !important;
+}
