@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <!--Default Home Page-->
+        <!-- bootstrap -->
+        <meta   charset="uX-8"> 
+        <meta   h@p-equiv="X-UA-Compa]ble"  content="IE=edge">  
+        <meta   name="viewport" content="width=device-width, initial-scale=1">  
+        <!--The above 3 lines must be included-->
+        <title>Smith Sustainability Studies</title>
+
+        <!-- bootstrap -->
+        <link   href="css/bootstrap.min.css"    rel="stylesheet">   
+        <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
+
+        <link   href="css/default-home.css" rel="stylesheet">
+
+
+        <!--Can download jQuery from https://jquery.com/download/ uncompressed-->
+        <!--<script language="JavaScript" type="text/javascript" src="js/jquery-3.1.1.js"></script>
+        -->
+        
+        <!--Modal Imports-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <!--Navigation-->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Smith Sustainability Studies</a>
+                </div>
+                <center>
+                    <div class="navbar-collapse collapse" id="navbar-main">
+                        
+                        <form class="navbar-form navbar-right" role="search" id="loginForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                            </div>
+                            <button type="submit" class="btn btn-info" id="login" name="login" value="Login">Login</button>
+                        </form>
+                    </div>
+                </center>
+            </div>
+        </div>
+
+        <div class="modal fade" id="infoModal" role="dialog">
+            <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Want to learn more about participating in a study?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Contact us at queens dot smith dot env at gmail dot com.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>    
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="row" id="info">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <h1>Welcome!</h1>
+                    <p>Loreme ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                    <div class="center">
+                        <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#infoModal">Not yet in a study?</button>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+
+        <footer class="row row-footer">
+            <div class="container">
+                <div class="row " id="r-footer">                            
+                    <div class="col-xs-12">
+                        <p style="padding:6px;"></p>
+                        <p align=center>&copy; Copyright 2017 Smith School of Business</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--JavaScript-->
+
+        <script src="js/index-home.js"></script>
+    </body>
+
+</html>

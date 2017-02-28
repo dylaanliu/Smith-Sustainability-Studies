@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+    <head>
+        <!--Default Home Page-->
+        <!-- bootstrap -->
+        <meta   charset="uX-8"> 
+        <meta   h@p-equiv="X-UA-Compa]ble"  content="IE=edge">  
+        <meta   name="viewport" content="width=device-width, initial-scale=1">  
+        <!--The above 3 lines must be included-->
+        <title>Smith Sustainability Studies</title>
+
+        <!-- bootstrap -->
+        <link   href="css/bootstrap.min.css"    rel="stylesheet">   
+        <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
+
+        <link   href="css/main.css" rel="stylesheet">
+
+
+        <!--Can download jQuery from https://jquery.com/download/ uncompressed-->
+        <script language="JavaScript" type="text/javascript" src="js/jquery-3.1.1.js"></script>
+
+        <!--Modal Imports-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="http://www.w3schools.com/lib/w3data.js"></script>
+    </head>
+
+    <body onload="loadAdminHomeView()">
+        <!--Navigation-->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header"> 
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="adminHome"><a href="#" onclick="loadAdminHomeView()" >Home</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-create-study-view.html')">Create Study</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-manage-studies-view.html')">Manage Studies</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-monitor-studies-view.html')">Monitor Studies</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-user-accounts-view.html')">User Accounts</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-monitor-users-view.html')">Monitor Users</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="index.html" id="logout">Logout</a></li> <!--Need JS logout function-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- put in admin-home view-->
+        <div class="container" id="viewGoesHere">
+        </div>
+ 
+        <footer class="navbar-fixed-bottom">
+            <div class="container">
+                <div class="row " id="r-footer">                            
+                    <div class="col-xs-12">
+                        <p style="padding:6px;"></p>
+                        <p align=center>&copy; Copyright 2017 Smith School of Business</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!--JavaScript-->
+        <script src="js/admin-home-ctr.js"></script>
+        <script src="js/utilities.js"></script>
+        
+    </body>
+
+</html>
