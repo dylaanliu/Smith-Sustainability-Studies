@@ -1,6 +1,4 @@
--- SQL script to initialize the inventory and users tables. NOTE, the cisc282 database is deleted 
--- so all PREVIOUS data is LOST
-
+-- SQL script to initialize the inventory and users tables.
 -- first, remove then create database
 -- DROP DATABASE `cisc498`;
 -- CREATE DATABASE `cisc498`;
