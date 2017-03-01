@@ -1,22 +1,3 @@
-<?php
-/*
-THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-OTHER POSSIBLE MISSING FEATURES ARE:
-    No related data (automatic joins) supported
-    No condensed JSON output supported
-    No support for PostgreSQL or SQL Server
-    No POST parameter support
-    No JSONP/CORS cross domain support
-    No base64 binary column support
-    No permission system
-    No search/filter support
-    No pagination or sorting supported
-    No column selection supported
-SEE
-https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/  
-*/
-
 require_once 'utils/utils.php';
 require_once 'model.php';
 
@@ -83,9 +64,10 @@ error_log("hello9", 0);
 }
 
 function getUser($userID) {
+
     return
     '{"User":[
-      {"userId":"1", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "email":"amy_schumer@gmail.com", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
+      {"userId":"1", "userName":"amy123", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "email":"amy_schumer@gmail.com", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
       ]}';
 
       //return $userInfo;
@@ -93,5 +75,3 @@ function getUser($userID) {
 }
 
 ?>
-
- 
