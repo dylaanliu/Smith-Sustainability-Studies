@@ -1,5 +1,4 @@
--- SQL script to initialize the inventory and users tables. NOTE, the cisc282 database is deleted 
--- so all PREVIOUS data is LOST
+-- SQL script to initialize the inventory and users tables. 
 
 -- first, remove then create database
 -- DROP DATABASE `cisc498`;
@@ -39,7 +38,7 @@ INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLeve
                          'a8b0015a2602606b344bece3e54e9e0e76546253510a4b0457968742aac0f11cbf3350fcc66000a866419b5eb2da8ddc4f2a2ab3a4cbf4d30266ac5aac7cba17', 
                          'Bob', 'Brown', 'user', 1);
                         
--- LOAD DATA LOCAL INFILE  'C:/Users/dwong_000/Dropbox/ShareEmma/QueensUniversity/Year_Second/CoursesFirstTerm/CISC 282 Web Applications/Project2/support/inventory.txt' 
+-- LOAD DATA LOCAL INFILE  <absolute path>/userTable.txt' 
 -- INTO TABLE inventory 
 -- FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
 -- LINES TERMINATED BY '\r\n'
