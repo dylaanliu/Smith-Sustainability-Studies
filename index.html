@@ -14,22 +14,18 @@
         <link   href="css/bootstrap.min.css"    rel="stylesheet">   
         <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
 
-        <link   href="css/default-home.css" rel="stylesheet">
+        <link   href="css/mainStyles.css" rel="stylesheet">
 
-
-        <!--Can download jQuery from https://jquery.com/download/ uncompressed-->
-        <!--<script language="JavaScript" type="text/javascript" src="js/jquery-3.1.1.js"></script>
-        -->
-        
-        <!--Modal Imports-->
+        <!--jQuery and Bootstrap Imports-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
 
     <body>
+        <div class="page-wrap">
         <!--Navigation-->
-        <div class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-fixed">
             <div class="container">
                 <div class="navbar-header">
                     <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
@@ -37,7 +33,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Smith Sustainability Studies</a>
+                    <a class="navbar-brand" href="index.html">SMITH SUSTAINABILITY STUDIES</a>
                 </div>
                 <center>
                     <div class="navbar-collapse collapse" id="navbar-main">
@@ -54,7 +50,7 @@
                     </div>
                 </center>
             </div>
-        </div>
+        </nav>
 
         <div class="modal fade" id="infoModal" role="dialog">
             <div class="modal-dialog">
@@ -74,35 +70,33 @@
             </div>    
             </div>
         </div>
-        
-        <div class="container">
-            <div class="row" id="info">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <h1>Welcome!</h1>
-                    <p>Loreme ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div class="jumbotron hero">
+            <div class="container">
+                <div class="row" id="info">
+                    <div class="col-sm-6 col-sm-push-6 box">
+                        <h1>Welcome!</h1>
+                        <p>Welcome to our Sustainability Studies website created by researchers at Queen’s University. We run ongoing studies related to pro-environmental behaviours and hope that you will consider participating in one of our studies.</p>
+                        <p>If you would like to find out more about participating, please contact xyz@gmail.com. If you are already registered in a study, please sign in above. If you are starting a new study and need to register, please click on the “Not yet in a study?” button below</p>
 
-                    <div class="center">
-                        <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#infoModal">Not yet in a study?</button>
+                        <div class="center">
+                            <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#infoModal">Not yet in a study?</button>
+                        </div>
                     </div>
+                    
+                    
                 </div>
-                
-                
             </div>
         </div>
 
-        <footer class="row row-footer">
-            <div class="container">
-                <div class="row " id="r-footer">                            
-                    <div class="col-xs-12">
-                        <p style="padding:6px;"></p>
-                        <p align=center>&copy; Copyright 2017 Smith School of Business</p>
-                    </div>
-                </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <p class="copyright pull-right"> &copy; Copyright 2017</p>
             </div>
         </footer>
+    </div> <!--page wrap-->
         <!--JavaScript-->
 
-        <script src="js/index-home.js"></script>
+        <script src="js/index.js"></script>
     </body>
 
 </html>

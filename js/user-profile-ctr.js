@@ -1,5 +1,7 @@
 function loadUserProfileView() {
 
+    var controller = "server/user-profile-ctr.php"
+    var profileQuery = { q: "example"};
 	var view = "views/user-profile-view.html";
 
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
@@ -10,8 +12,9 @@ function loadUserProfileView() {
                 console.log("in get");
                 
 				document.getElementById("username").value = profileString["User"][0]["userName"];
-				//document.forms[3].username.value = profileString["User"][0]["email"];
-
+				console.log(profileString["User"][0]["userName"]);
+				document.getElementById("email").value = profileString["User"][0]["email"];
+				
             });
             console.log("out of get");
         } // end if

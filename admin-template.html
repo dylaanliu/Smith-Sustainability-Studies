@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--Default Home Page-->
+        <!-- bootstrap -->
+        <meta   charset="uX-8"> 
+        <meta   h@p-equiv="X-UA-Compa]ble"  content="IE=edge">  
+        <meta   name="viewport" content="width=device-width, initial-scale=1">  
+        <!--The above 3 lines must be included-->
+        <title>Smith Sustainability Studies</title>
+
+        <!-- jQuery/bootstrap -->
+        <link   href="css/bootstrap.min.css"    rel="stylesheet">   
+        <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>     
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>        
+        
+        <!-- Datatables -->
+<!--         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.13/fh-3.1.2/datatables.min.css"/> -->
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.13/fh-3.1.2/datatables.min.js"></script>
+        <!-- DataTables CSS  -->
+        <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+        <!-- DataTables Responsive CSS -->
+        <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+        <!-- Misc Plug-ins -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+        
+        <!--CSS-->
+        <link   href="css/mainStyles.css" rel="stylesheet">
+        <link   href="css/pe-icon-7-stroke.css" rel="stylesheet">
+    </head>
+
+    <body onload="loadAdminHomeView()">
+        <!--Navigation-->
+        <nav class="wrapper">
+            <div class="sidebar" data-color="azure" data-image="images/Stock1.jpg" style="background-image: url(images/Stock1.jpg);">
+<!--                 <div class="navbar-header"> 
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div> -->
+                <div id="navbar" class="sidebar-wrapper">
+                    <div class="logo">
+                        <a class="simple-text" href="#">SMITH SUSTAINABILITY STUDIES</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="adminHome"><a href="#" onclick="loadAdminHomeView()" ><i class="pe-7s-home"></i>Home</a></li>
+                        <li>
+                            <div class="separator">
+                                <a href="#"></a>
+                            </div>
+                        </li>
+                        
+                        <li id="loadAdminUserAccounts"><a href="#" onclick="loadAdminUserAccountsView()"><i class="pe-7s-users"></i>User Accounts</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-monitor-users-view.html')"><i class="pe-7s-note2"></i>Monitor Users</a></li>
+                        <li>
+                            <div class="separator">
+                                <a href="#"></a>
+                            </div>
+                        </li>
+                        <li id="loadAdminCreateStudy"><a href="#" onclick="loadAdminCreateStudyView()"><i class="pe-7s-users"></i>Create Study</a></li>
+                        <li><a href="#" onclick="viewManager('views/admin-manage-studies-view.html')"><i class="pe-7s-note2"></i>Manage Studies</a></li>
+                        <li><a href="#" onclick="loadAdminMonitorStudiesView()"><i class="pe-7s-graph1"></i>Monitor Studies</a></li>
+                    </ul>
+                    <!-- <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="index.html" id="logout">Logout</a></li> 
+                    </ul> -->
+                </div>
+            </div>
+            <div class="main-panel">
+                <nav class="navbar navbar-fixed">
+                    <div class="container-fluid">
+                        <!-- Logo -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main" aria-expanded="false" aria-controls="navbar">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="Admin-Home.html"> ADMIN</a>
+                        </div>
+                        <div id="navbar-main" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="admin_profile.html">
+                                        <i class="pe-7s-user"></i> Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">Log out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>        
+
+        <!-- put in admin views: Home, Create Study, Manage Studies, Monitor Studies, 
+                                 User Accounts, Monitor Users 
+        -->
+                <div class="container" id="viewGoesHere">
+                </div>
+         
+                <footer class="footer">
+                <div class="container-fluid">
+                    <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <a href="#">
+                                Link to email
+                            </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <p class="copyright pull-right"> &copy; Copyright 2017</p>
+                </div>
+            </footer>
+            </div><!--End main panel-->
+        </div><!--End Wrapper-->
+        <!--JavaScript-->
+        <script src="js/utilities.js"></script>
+        <script src="js/admin-template-ctr.js"></script>
+        <script src="js/admin-home-ctr.js"></script>
+        <script src="js/admin-create-study-ctr.js"></script>        
+        <script src="js/admin-user-accounts-ctr.js"></script>   
+        <script src="js/admin-monitor-studies-ctr.js"></script>     
+    </body>
+
+</html>

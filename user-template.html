@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--TODO & Consider-->
+<!--
+    - Create New User Button: Do we want a pop-up form?
+    - Extract Raw Data
+-->
+    <head>
+        <!--User Home Page-->
+        <!-- bootstrap -->
+        <meta   charset="uX-8"> 
+        <meta   h@p-equiv="X-UA-Compa]ble"  content="IE=edge">  
+        <meta   name="viewport" content="width=device-width, initial-scale=1">  
+        <!--The above 3 lines must be included-->
+        <title>Smith Sustainability Studies</title>
+
+        <!-- bootstrap -->
+        <link   href="css/bootstrap.min.css"    rel="stylesheet">   
+        <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
+
+        <link   href="css/main.css" rel="stylesheet">
+
+        <!--Load User view CSS files here -->
+        <link   href="css/user-home-view.css" rel="stylesheet">    
+        <link   href="css/user-input-data-view.css" rel="stylesheet">
+        <link   href="css/user-statistics-view.css" rel="stylesheet">
+        <link   href="css/user-community-posts.css" rel="stylesheet">
+<!--         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.css"/> -->
+
+        <!--Can download jQuery from https://jquery.com/download/ uncompressed-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>     
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+        
+        <!-- Datatables -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.13/fh-3.1.2/datatables.min.css"/>
+<!--         <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.13/fh-3.1.2/datatables.min.js"></script> -->
+<!--         <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script> -->
+        <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+
+
+<!--         Modal Imports
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>  
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+-->
+
+         <!--Load the AJAX API for charts-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!--         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+
+        <!--Load FLOT Charts-->
+<!--         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.symbol.min.js"></script>
+        <script type="text/javascript" src="http://raw.github.com/markrcote/flot-axislabels/master/jquery.flot.axislabels.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
+        <script type="text/javascript" language="javascript" src="flot/jquery.flot.js"></script>
+        <script type="text/javascript" language="javascript" src="flot/jquery.flot.time.js"></script> -->
+
+
+    </head>
+
+    <body onload="loadUserHomeView()">
+        <!--Navigation-->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div id="navbar" class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>                
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">                
+                    <ul class="nav navbar-nav">
+                        <li class="active" id="userHome"><a href="#" onclick="loadUserHomeView()" >Home</a></li>
+                        <li id="inputData"><a href="#" onclick="loadUserInputDataIncomplete()">Input Data</a></li>
+                        <li id="statistics"><a href="#" onclick="loadUserStatisticsView()">Statistics</a></li>
+                        <li id="communityPosts"><a href="#" onclick="loadUserCommunityView()">Community Posts</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#" onclick="loadUserProfileView()">My Account</a></li>
+                        <li><a href="index.html" id="logout">Logout</a></li> <!--Need JS logout function-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- put in user-home view-->
+        <div class="container" id="viewGoesHere">
+        </div>
+ 
+        <footer role="contentInfo">
+            <div class="container">
+                <div class="row " id="r-footer">                            
+                    <div class="col-xs-12">
+                        <p style="padding:6px;"></p>
+                        <p>&copy; Copyright 2017</p>
+                        <p>If you have any questions or concerns about the study, please email the admins at queens dot smith dot env at gmail dot com </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--JavaScript
+-->
+        <script src="js/utilities.js"></script>
+        <script src="js/user-template-ctr.js"></script>  
+        <script src="js/user-home-ctr.js"></script>  
+        <script src="js/user-input-data-ctr.js"></script> 
+        <script src="js/user-statistics-ctr.js"></script> 
+        <!-- <script src="js/tmp-stats.js"></script>  -->
+        <script src="js/user-community-posts-ctr.js"></script> 
+        <script src="js/user-profile-ctr.js"></script> 
+        <!--
+                <script src="js/user-statistics-ctr.js"</script>
+        -->
+
+        
+    </body>
+
+</html>

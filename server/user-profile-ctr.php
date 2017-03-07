@@ -1,4 +1,5 @@
 <?php
+session_start();
 /*
 THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
 AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
@@ -18,7 +19,7 @@ https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
 */
 
 require_once 'utils/utils.php';
-require_once 'model.php';
+/*require_once 'model.php';*/ // uncomment later for actual implementation
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
@@ -83,9 +84,10 @@ error_log("hello9", 0);
 }
 
 function getUser($userID) {
+
     return
     '{"User":[
-      {"userId":"1", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "email":"amy_schumer@gmail.com", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
+      {"userId":"1", "userName":"amy123", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "email":"amy_schumer@gmail.com", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
       ]}';
 
       //return $userInfo;

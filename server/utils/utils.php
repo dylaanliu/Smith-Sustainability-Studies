@@ -28,3 +28,13 @@ function cleanInputPut($paramIn) {
     return $paramIn;
 }
 
+// user to authenticate if a user has the rights to access a page
+// TODO - need to debug and perhaps enhance
+function authenticate($privilegeLevel) {
+    //first check whether session is set and if the user has privilage for the page
+/*     if(!isset($_SESSION['userID']) || $privilegeLevel != $_SESSION['privilegeLevel']) {
+        return false;
+    }
+ */    
+     return true;
+}
