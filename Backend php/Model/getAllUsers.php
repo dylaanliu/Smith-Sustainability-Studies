@@ -1,25 +1,13 @@
 <?php
 	
 	/*
-		Retreive Admin user information.
+		Get all data for all users excluding passwords.
 	*/
 	
 	require_once 'connection.php';
 	
-	$obj = json_decode($_POST["x"], false); // change "x"
-	
-	$ID = (int) $obj["ID"];
-	
 	$conn = dbConnect();
-	
-	//$query = "SELECT userName, encodedPW FROM userTable WHERE userID = ?";
-    $result = mysqli_query($conn, "SELECT userName, encodedPW FROM userTable WHERE userID = $ID");
-	
-	//$stmt = $conn->prepare($query);		// prepare query
-		
-	//$stmt->bind_Param("i", $ID);
-	//$stmt->execute();
-	//$result = $stmt->get_result();
+    $result = mysqli_query($conn, "SELECT * FROM userTable");
 	
     // check if any records found. If records found, gather them into an array and return the array
     if ($result == false)
@@ -27,6 +15,7 @@
     else {
         $rows = array();
         while($row = mysqli_fetch_assoc($result)) {
+            $row['encodedPW'] = '';             // don't send password to client for security reasons
             $rows[] = $row;
         } // end while
     } // end else
