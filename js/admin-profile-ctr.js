@@ -1,11 +1,11 @@
-function loadUserProfileView() {
+function loadAdminProfileView() {
 
-    var controller = "server/user-profile-ctr.php"
-    var controllerData = { q: "getUser"};
-    var view = "views/user-profile-view.html";
+    var controller = "server/admin-profile-ctr.php"
+    var controllerData = { q: "getUser" };
+	var view = "views/admin-profile-view.html";
 
-    $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
-        if(statusTxt == "error")
+	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
+		if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
             $.getJSON(controller, controllerData, function(profileString) {
@@ -18,9 +18,9 @@ function loadUserProfileView() {
                 $('#profile-mid #email').attr("value", user.email);
             });
         } // end if
-    });
+	});
 
-// on the click of the save button, check the form and submit if it is OK    
+    // on the click of the save button, check the form and submit if it is OK    
     $("#viewGoesHere").on( "click", "#saveChanges", function(event) {
 console.log("got here 1");
         $('#profile-form').validate({  // initialize plugin
