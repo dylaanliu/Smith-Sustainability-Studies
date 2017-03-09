@@ -18,7 +18,7 @@
 	$phaseNum = $obj["phaseNum"];
 	
 	$query = "INSERT INTO postTable (userID, dateTime, text, image, conditionGroupNum, phaseNum)
-			  VALUES ($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum)";
+			  VALUES ('".$userID."', '".$dateTime."', '".$text."', '".$image."', '".$conditionGroupNum."', '".$phaseNum."')";
 	
     $result = mysqli_query($conn, $query);
 	

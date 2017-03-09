@@ -17,7 +17,7 @@
 	$query = "SELECT ID, studyID, conditionGroupNum, phaseNum, phaseStarted, phaseEnded,
 			  phasePermission, entriesNum, postsNum, likesNum
 			  FROM conditionGroupPhaseTable
-			  WHERE studyID = $studyID AND condtionGroupNum = $cgNum AND phaseNum = $phaseNum";
+			  WHERE studyID = '".$studyID."' AND condtionGroupNum = '".$cgNum."' AND phaseNum = '".$phaseNum."'";
 	
     $result = mysqli_query($conn, $query);
 	

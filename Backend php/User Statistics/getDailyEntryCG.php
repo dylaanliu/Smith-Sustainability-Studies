@@ -17,7 +17,7 @@
                DailyEntries.endEnergy, DailyEntries.conditionGroupNum, DailyEntries.phaseNum, 
 			   DailyEntries.teamNumber
 			   FROM DailyEntries INNER JOIN Users
-			   ON DailyEntries.userId = Users.userId AND DailyEntries.conditionGroupNum = $cgNum";
+			   ON DailyEntries.userId = Users.userId AND DailyEntries.conditionGroupNum = '".$cgNum."'";
 	
     //$stmt = $conn->prepare($query);		// prepare query
 		

@@ -16,8 +16,8 @@
 	$email = $obj["email"];
 	
 	$query = "UPDATE userTable
-			  SET userName = $userName, encodedPW = $pw, email = $email
-			  WHERE userID = $userID";
+			  SET userName = '".$userName."', encodedPW = '".$pw."', email = '".$email."' 
+			  WHERE userID = '".$userID."'";
 	
 	//$stmt = $conn->prepare($query);		// prepare query
 		

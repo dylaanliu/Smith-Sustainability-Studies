@@ -13,7 +13,7 @@
 	$ID = (int) $obj["ID"];
 	
 	$query = "SELECT * FROM userTable
-			  WHERE userID = $ID";
+			  WHERE userID = '" . $ID . "'";
 	
     $result = mysqli_query($conn, $query);
 	
@@ -30,5 +30,5 @@
     
     mysqli_close($conn);	// Close database connection
 	
-	return json_encode($rows);
+	echo json_encode($rows);
 ?>

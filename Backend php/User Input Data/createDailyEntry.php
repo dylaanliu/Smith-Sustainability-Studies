@@ -21,8 +21,8 @@
 	
 	$query = "INSERT INTO dailyEntriesTable ( userID, date, startTime, startEnergy, 
 			  endTime, endEnergy, currentConditionGroup, currentPhase )
-			  VALUES ($userID, $date, $startTime, $startEnergy, $endTime, $endEnergy
-			  $ccGroup, $currentPhase)";
+			  VALUES ('".$userID."', '".$date."', '".$startTime."', '".$startEnergy."', '".$endTime."', '".$endEnergy."', '"
+			  .$ccGroup."', '".$currentPhase"')";
 		  
     $result = mysqli_query($conn, $query);
     

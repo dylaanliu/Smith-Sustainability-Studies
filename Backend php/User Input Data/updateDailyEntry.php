@@ -16,8 +16,8 @@
 	$endTime = $obj["endTime"];
 	
 	$query = "UPDATE dailyEntriesTable
-		  SET endEnergy = $endEnergy, endTime = $endTime
-		  WHERE userID = $userID AND entryID = $entryID";
+		  SET endEnergy = '".$endEnergy."', endTime = '".$endTime."' 
+		  WHERE userID = '".$userID."' AND entryID = '".$entryID"'";
 	
     $result = mysqli_query($conn, $query);
     

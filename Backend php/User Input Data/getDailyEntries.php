@@ -13,7 +13,7 @@
 	$ID = (int) $obj["ID"];
 	
 	$query = "SELECT * FROM dailyEntriesTable
-			  WHERE userID = $ID";
+			  WHERE userID = '".$ID."'";
 	
     $result = mysqli_query($conn, $query);
 	

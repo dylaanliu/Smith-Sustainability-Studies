@@ -17,7 +17,7 @@
 	$privilegeLevel = $obj[];
 	
 	$query = "INSERT INTO userTable
-			  VALUES ($userName, $pw, $firstName, $lastName, $privilegeLevel)";
+			  VALUES ('".$userName."', '".$pw."', '".$firstName."', '".$lastName."', '".$privilegeLevel."')";
 		  
     $result = mysqli_query($conn, $query);
     

@@ -13,7 +13,7 @@
 	$username = $obj["usernameIn"];
 	$pw = $obj["passwordIn"];
 	
-	$query = "SELECT * FROM userTable WHERE userName = $username";
+	$query = "SELECT * FROM userTable WHERE userName = '".$username."'";
 	
 	//$stmt = $conn->prepare($query);		// prepare query
 		

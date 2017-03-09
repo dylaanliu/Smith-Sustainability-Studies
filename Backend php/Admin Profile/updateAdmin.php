@@ -15,8 +15,8 @@
 	$userID = (int) $obj[];
 	
 	$query = "UPDATE userTable
-		  SET userName = $userName, encodedPW = $pw
-		  WHERE userID = $userID";
+		  SET userName = '" .$userName. "', encodedPW = '" .$pw. "' 
+		  WHERE userID = '" .$userID. "'";
 		  
     $result = mysqli_query($conn, $query);
     

@@ -13,7 +13,7 @@
 	$conn = dbConnect();
 	
 	//$query = "SELECT userName, encodedPW FROM userTable WHERE userID = ?";
-    $result = mysqli_query($conn, "SELECT userName, encodedPW FROM userTable WHERE userID = $ID");
+    $result = mysqli_query($conn, "SELECT userName, encodedPW FROM userTable WHERE userID = '" .$ID. "'");
 	
 	//$stmt = $conn->prepare($query);		// prepare query
 		

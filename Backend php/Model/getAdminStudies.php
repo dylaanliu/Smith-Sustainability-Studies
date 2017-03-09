@@ -14,7 +14,7 @@
 	
 	$query = "SELECT * FROM adminStudiesTable INNER JOIN studyTable
 			  ON adminStudiesTable.studyID = studyTable.studyID
-			  WHERE userID = $adminID";
+			  WHERE userID = '" .$adminID. "'";
 	
 	//$stmt = $conn->prepare($query);		// prepare query
 		
