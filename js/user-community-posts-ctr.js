@@ -78,7 +78,7 @@ function insertHTML(postsString){
         $("#accordion").append(
             "<div class='media-footer'"+
                 "<p>where share buttons and like go</p>"+
-            "</div>"+
+            //"</div>"+
         "</div>");
 
  

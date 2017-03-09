@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 -- SQL script to initialize the users tables. 
-=======
--- SQL script to initialize the inventory and users tables. 
->>>>>>> c2052c31fa424dd3cf98be2397437ee3f279201e
 
 -- first, remove then create database
 -- DROP DATABASE `cisc498`;
@@ -30,7 +26,7 @@ CREATE TABLE `userTable` ( userID INTEGER NOT NULL AUTO_INCREMENT,
 INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLevel, adminID, email) VALUES 
                         ('admin', 
                          'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 
-                         'Big', 'Duder1', 'super_admin', -1, 'admin@gmail.com');
+                         'Big', 'Dog1', 'super_admin', -1, 'admin@gmail.com');
 INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLevel, adminID) VALUES 
                         ('Jane_Webster', 
                          '4a1fe4735e6e13c6b1bbcc452d7964035346cca1403b7032c5d3f6b28bb68c8ce08c3ff51309fc575b3001932e506b37c5a5c4d789a6741b0319b045bad144c6', 
@@ -38,11 +34,10 @@ INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLeve
 INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLevel, adminID) VALUES 
                         ('Emma_Wong', 
                          '596e907a763db377a526dd89dcdd51ca4aa1d9c9eede501e9f87e962dccf2f05553ffc38cede08273245b0e19f2c3078194ce82baea58d113be550b1ab0a3ee6', 
-                         'Emma', 'Wong', 'super_admin', 1);
+                         'Emma', 'Wong', 'super_admin', 1, 'admin2@gmail.com');
 INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLevel, adminID) VALUES 
                         ('Bob_Brown', 
                          'a8b0015a2602606b344bece3e54e9e0e76546253510a4b0457968742aac0f11cbf3350fcc66000a866419b5eb2da8ddc4f2a2ab3a4cbf4d30266ac5aac7cba17', 
-<<<<<<< HEAD
                          'Bob', 'Brown', 'admin', 1);
 INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLevel, adminID, email) VALUES 
                         ('Holy_Roller', 
@@ -82,11 +77,6 @@ INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLeve
                          'Amy', 'Schumer', 'user', 1, 'amy123@gmail.com');
                          
 -- LOAD DATA LOCAL INFILE  '' 
-=======
-                         'Bob', 'Brown', 'user', 1);
-                        
--- LOAD DATA LOCAL INFILE  <absolute path>/userTable.txt' 
->>>>>>> c2052c31fa424dd3cf98be2397437ee3f279201e
 -- INTO TABLE inventory 
 -- FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
 -- LINES TERMINATED BY '\r\n'

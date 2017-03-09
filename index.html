@@ -14,7 +14,7 @@
         <link   href="css/bootstrap.min.css"    rel="stylesheet">   
         <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
 
-        <link   href="css/mainStyles.css" rel="stylesheet">
+        <link   href="css/Template.css" rel="stylesheet">
 
         <!--jQuery and Bootstrap Imports-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -28,33 +28,39 @@
         <nav class="navbar navbar-fixed">
             <div class="container">
                 <div class="navbar-header">
-                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                    <button type="button" class="navbar-toggle" id="toggle-home" data-toggle="collapse" data-target="#navbar-main" >
+                        <span class="icon-bar1"></span>
+                        <span class="icon-bar2"></span>
+                        <span class="icon-bar3"></span>
                     </button>
                     <a class="navbar-brand" href="index.html">SMITH SUSTAINABILITY STUDIES</a>
                 </div>
-                <center>
+                <!-- <center> -->
                     <div class="navbar-collapse collapse" id="navbar-main">
                         
                         <form class="navbar-form navbar-right" role="search" id="loginForm">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="username" id="username" placeholder="Username">
+                                <label class="sr-only" for="text">Username:</label>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                <label class="sr-only" for="pwd">Password:</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                             </div>
-                            <button type="submit" class="btn btn-info" id="login" name="login" value="Login">Login</button>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="remember-me"> Remember me 
+                                </label>
+                            </div>
+                            <button type="submit" class="btn pull-right" id="login" name="login" value="Login">Login</button>
                         </form>
                     </div>
-                </center>
+                <!-- </center> -->
             </div>
         </nav>
 
         <div class="modal fade" id="infoModal" role="dialog">
-            <div class="modal-dialog">
-        
+            <div class="modal-dialog">        
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -75,15 +81,13 @@
                 <div class="row" id="info">
                     <div class="col-sm-6 col-sm-push-6 box">
                         <h1>Welcome!</h1>
-                        <p>Welcome to our Sustainability Studies website created by researchers at Queen’s University. We run ongoing studies related to pro-environmental behaviours and hope that you will consider participating in one of our studies.</p>
-                        <p>If you would like to find out more about participating, please contact xyz@gmail.com. If you are already registered in a study, please sign in above. If you are starting a new study and need to register, please click on the “Not yet in a study?” button below</p>
+                        <p>Welcome to our Sustainability Studies website created by researchers at Queen&#39;s University. We run ongoing studies related to pro-environmental behaviours and hope that you will consider participating in one of our studies.</p>
+                        <p>If you would like to find out more about participating, please contact xyz@gmail.com. If you are already registered in a study, please sign in above. If you are starting a new study and need to register, please click on the &quot;Not yet in a study?&quot; button below</p>
 
-                        <div class="center">
-                            <button type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#infoModal">Not yet in a study?</button>
+                        <div class="pull-right">
+                            <button type="button" class="btn" data-toggle="modal" data-target="#infoModal">Not yet in a study?</button>
                         </div>
-                    </div>
-                    
-                    
+                    </div>                    
                 </div>
             </div>
         </div>

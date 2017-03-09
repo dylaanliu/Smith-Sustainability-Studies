@@ -76,58 +76,66 @@ switch ($method) {
                   "errorMsg" => $errorMsg, 
                   "data" => $study));
         break;
+      case 'get_posts':
+      error_log("GET posts - admin monitor studies",0);
+        $error = false;
+        $studyID = $_GET["studyID"];
+        $conditionGroup = $_GET["conditionGroup"];
+        $phaseNum = $_GET["phaseNum"];
+        $posts = getPostCGPhase($studyID, $conditionGroup, $phaseNum);
+        if ($posts == null) {
+            $error = true;
+            $errorMsg = 'No post found';
+            error_log("some error", 0);
+        }
+        else
+            $errorMsg = 'Posts found';
+        error_log("before echo", 0);
+        echo json_encode(array(
+                  "error" => $error,
+                  "errorMsg" => $errorMsg, 
+                  "data" => $posts));
+        error_log("after echoed",0);
+        break;
     }
     break;
   case 'PUT':                              // not required in this controller
   case 'POST':                             // not required in this controller
-  case 'DELETE':                           // not required in this controller
-  default:
-    http_response_code(404);
-    // really also want to pass a message back to the client to indicate what the error was
-    break;
+  case 'DELETE':
+    error_log("got into admin-monitor-users - DELETE");
+        $error = false;
+        // get parameters
+        parse_str($_SERVER['QUERY_STRING'], $query_params);
+        if (!isset($query_params['postID'])) {
+            $error = true;
+            $errorMsg = 'No post specified';
+        }
+        else if (!ctype_digit($query_params['postID'])){       // must be all digits
+            $error = true;
+            $errorMsg = 'Illegal post specified';
+        }
+        else {
+            // check if there was an database error or nothing returned
+            $postID = $query_params['postID'];
+            
+            if (!deletePost($postID)) {
+                $error = true;
+                $errorMsg = 'No post  found';
+            }
+            else
+                $errorMsg = 'Post deleted';        
+        }
+        echo json_encode(array(
+                  "error" => $error,
+                  "errorMsg" => $errorMsg));
+        break;
+        
+    default:
+        http_response_code(404);
+        echo "Error: Unrecognised request.";
+        echo json_encode(array(
+                  "error" => true,
+                  "errorMsg" => "Error: Unrecognised request."));
+        break;
 }
 
-/*function getStudy($studyID){
-  // need a JOIN for study and Admin Study table
-  return '[{"studyId":"1", 
-      "adminId":"1", 
-      "name":"Study 1 Effect of Social Media:",
-      "description":"my description text", 
-      "conditionGroups":"5", 
-      "phases":"3",
-      "startDate":"",
-      "endDate": ""},
-      {"studyId":"2", 
-      "adminId":"1", 
-      "name":"Study 2 Effect of Sunshine and Rainbows:",
-      "description":"description text2", 
-      "conditionGroups":"3", 
-      "phases":"3",
-      "startDate":"",
-      "endDate": ""},
-      {"studyId":"4", 
-      "adminId":"1", 
-      "name":"Study 4 Dangers of Cute Cat Videos:",
-      "description":"Studies the detrimental effects of cute cat videos on the study habits of college students.", 
-      "conditionGroups":"4", 
-      "phases":"2",
-      "startDate":"",
-      "endDate": ""},
-      {"studyId":"6", 
-      "adminId":"1", 
-      "name":"Study 6 TWD and Smurf collecting:",
-      "description":"Measures the tendency of kids who collect Smurfs relative to their grown up need for Total World Domination", 
-      "conditionGroups":"3", 
-      "phases":"5",
-      "startDate":"",
-      "endDate": ""},
-      {"studyId":"7", 
-      "adminId":"1", 
-      "name":"Study 7 Walking and Health:",
-      "description":"Examines if increase hours of watching the Walking Dead leads to a more healthy life style.", 
-      "conditionGroups":"5", 
-      "phases":"2",
-      "startDate":"",
-      "endDate": ""}
-     ]';
-}*/

@@ -6,7 +6,7 @@
 -- ALTER DATABASE `cisc498` CHARACTER SET utf8 COLLATE utf8_bin;
 -- use `cisc498`;
 
--- create user table and fill it with values
+-- create study table and fill it with values
 DROP TABLE IF EXISTS studyTable;
 CREATE TABLE `studyTable` ( studyID INTEGER NOT NULL AUTO_INCREMENT, 
                            title VARCHAR(50), 
@@ -36,7 +36,7 @@ INSERT INTO `studyTable` (title, description, conditionGroups, phases, startDate
                         );
 INSERT INTO `studyTable` (title, description, conditionGroups, phases, startDate, endDate) VALUES 
                         ("Dangers of Cute Cat Videos", 
-                            "Studies the detrimental effects of cute cat videos on the study habits of collage students.",
+                            "Studies the detrimental effects of cute cat videos on the study habits of college students.",
                             "1", "4", "2016-12-24", "2017-01-24"
                         );
 INSERT INTO `studyTable` (title, description, conditionGroups, phases, startDate, endDate) VALUES 

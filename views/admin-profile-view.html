@@ -7,10 +7,6 @@
                                     
               <!-- edit form column -->
               <div class="col-md-9 personal-info">
-                <div class="alert alert-info alert-dismissable">
-                  <a class="panel-close close" data-dismiss="alert">×</a> 
-                  This is an <strong>.alert</strong>. Use this to show important messages to the user.
-                </div>
                 <h3>Personal info</h3>
                 
                 <form class="form-horizontal" role="form" id="profile-form">
@@ -23,7 +19,14 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="col-md-3 control-label">Password:</label>
+                    <label class="col-md-3 control-label">Current Password:</label>
+                    <div class="col-md-8">
+                      <input class="form-control" type="password" id="password" name="current_password" value="11111122333">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">New Password:</label>
                     <div class="col-md-8">
                       <input class="form-control" type="password" id="password" name="password" value="11111122333">
                     </div>

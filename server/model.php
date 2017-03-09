@@ -17,6 +17,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 // userTable Table Functions
 ///////////////////////////////////////////////////////////////////////////////////////
+
 // This function takes a user name and password and returns a user record if valid and a null if not valid.
 // Relies on utils/dbConnect.php
 function validateUser($usernameIn, $passwordIn) {
@@ -33,7 +34,8 @@ error_log($encodedPW, 0);
     return null;            
 }
 
-// get all the records from the userTable table
+
+// get user from the userTable table
 function getUser($userID) {
     
     $conn = dbConnect();
@@ -76,6 +78,79 @@ function getAllUsers() {
     return $rows;
 }
 
+
+// delete a user from the userTable table
+function deleteUser($userID) {
+    
+    $conn = dbConnect();
+
+    $sql = "DELETE FROM userTable WHERE userID = '".$userID."';";
+    $result = mysqli_query($conn, $sql);
+
+    mysqli_close($conn);    
+    return $result;
+}
+
+// create a user in the userTable table. Returns userID if successful; otherwise returns null.
+function createUser($userName, $firstName, $lastName, $password, $email, $privilegeLevel, $adminID) {
+    
+    $conn = dbConnect();
+     
+    // TODO - centralize in one location for maintainability 
+    $encodedPW = hash('sha512', $password);
+    
+    // build string and insert new record
+    $sql = "INSERT INTO userTable ".
+           "(userName, encodedPW, firstName, lastName, email, privilegeLevel, adminID)".
+           " VALUES ".
+           "('".$userName."','".$encodedPW."','".$firstName."','".$lastName."','".$email."','".$privilegeLevel."','".$adminID."')".
+           ";";
+    $result = mysqli_query($conn, $sql);
+    
+    // get the userID if record was successfully created
+    if (!$result) {
+        mysqli_close($conn);    
+        return null;
+    }
+
+    // get last inserted record
+    $sql = "SELECT * from userTable ORDER BY userID DESC LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+
+    // check if any record found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else 
+        $rows = array(mysqli_fetch_assoc($result));
+
+    mysqli_close($conn);        
+    return $rows;
+}
+            
+
+// update a user in the userTable table. Returns true if successful; otherwise returns false.
+function updateUser($userID, $userName, $firstName, $lastName, $email, $studyID, $currentConditionGroup, $currentPhase, $teamNum) {
+    
+    $conn = dbConnect();
+     
+    // build string and insert new record
+    $sql = "UPDATE userTable SET ".
+           "userName='".$userName."',".
+           "firstName='".$firstName."',".
+           "lastName='".$lastName."',".
+           "email='".$email."',".
+           "studyID='".$studyID."',".
+           "currentConditionGroup='".$currentConditionGroup."',".
+           "currentPhase='".$currentPhase."',".
+           "teamNum='".$teamNum."'".
+           "WHERE userID=".$userID.";";
+    $result = mysqli_query($conn, $sql);
+
+    mysqli_close($conn);    
+    return $result;    
+}
+
+
 // update a subset of the user record in the userTable table. Returns true if successful; otherwise returns false.
 // Probably a better way of doing this by combining this function with the updateUser function.
 function updateProfile($userID, $userName, $password, $email) {
@@ -97,9 +172,62 @@ function updateProfile($userID, $userName, $password, $email) {
     return $result;    
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // adminStudiesTable Table Functions
 ///////////////////////////////////////////////////////////////////////////////////////
+
+
+// Inserts admin - study relationships into the adminStudiesTable table. Given $userID,
+//     1) checks if the $userID has the appropriate privilage (is an admin or superadmin). If so,
+//        adds the association into the table.
+//     2) adds an association for all superadmin users into the table since all superadmins should 
+//        see all studies   
+function createAdminStudies($userID, $study) {
+    $numRecords = 0;
+    $conn = dbConnect();
+    
+    // get user record if the user is an admin
+    $sql = "SELECT * from userTable WHERE userID='".$userID."' AND (privilegeLevel = 'admin' OR privilegeLevel = 'super_admin');";
+    $result = mysqli_query($conn, "SELECT * FROM userTable");
+
+    // if user is not an admin, return null to indicate error
+    if (!$result || mysqli_num_rows($result) == 0) {
+        mysqli_close($conn);    
+        return $numRecords;
+    }
+
+    // get user's record and all records of super_admins
+    $sql = "SELECT * from userTable WHERE userID='".$userID."' OR privilegeLevel='super_admin';";
+    $userRecords = mysqli_query($conn, $sql);
+    
+    // For each admin/super_admin user record, create a user-study record in the adminStudiesTable table
+    if (!$userRecords || mysqli_num_rows($userRecords) == 0) {
+        mysqli_close($conn);    
+        return $numRecords;
+    } 
+    else {
+        while($userRecord = mysqli_fetch_array($userRecords)) {
+            $sql = "INSERT INTO adminStudiesTable ".
+                   "(userID, studyID)".
+                   " VALUES ".
+                   "('".$userRecord['userID']."','".$study."')".
+                   ";";
+            $result = mysqli_query($conn, $sql);
+            
+            // TODO - error in insertion - abort. Should really clean up and remove inserted records.
+            if (!$result) {
+                mysqli_close($conn);    
+                return 0;
+            } 
+            else
+                $numRecords++;
+        }
+    }
+    mysqli_close($conn);        
+    return $numRecords;
+}
+
 
 // This function access the "adminStudiesTable" first to get the studies associated with
 // an admin. Then it access the "studyTable" to get the records of interest. This is done using a JOIN.
@@ -129,6 +257,185 @@ function getAdminStudies($adminID) {
     return $rows;
 }
 
+// This function access the "adminStudiesTable" first to get the studies associated with
+// an admin. Then it access the "conditionGroupPhaseTable" to get the records of interest. This is done using a JOIN.
+function getAdminConditionGroupPhase($adminID) {
+    $conn = dbConnect();
+     
+    // build string and insert new record
+    $sql =  "SELECT * ".
+            "FROM adminStudiesTable ".
+            "INNER JOIN conditionGroupPhaseTable ".
+            "ON adminStudiesTable.studyID=conditionGroupPhaseTable.studyID ".
+            "WHERE userID=".$adminID.";";
+ 
+    $result = mysqli_query($conn, $sql);
+
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    }
+        
+    mysqli_close($conn);    
+    return $rows;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+// studyTable Table Functions
+///////////////////////////////////////////////////////////////////////////////////////
+
+// create a study in the studyTable table. Returns study record if successful; otherwise returns null.
+function createStudy($title, $description, $conditionGroups, $phases, $startDate, $endDate, $status) {    
+    $conn = dbConnect();
+    
+    // build string and insert new record
+    $sql = "INSERT INTO studyTable ".
+           "(title, description, conditionGroups, phases, startDate, endDate, status)".
+           " VALUES ".
+           "('".$title."','".$description."','".$conditionGroups."','".$phases."','".$startDate."','".$endDate."','".$status."')".
+           ";";
+    $result = mysqli_query($conn, $sql);
+
+    // return null if the creation was not successful
+    if (!$result) {
+        error_log("unsuccessful create",0);
+        mysqli_close($conn);    
+        return null;
+    }
+
+    // get the study record and hence the studyID if record was successfully created
+    $sql = "SELECT * from studyTable ORDER BY studyID DESC LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+
+    // check if any record found. If records found, gather them into an array and return the array
+    if ($result == false) 
+        $row = null;
+    else 
+        $row = mysqli_fetch_array($result);
+
+    mysqli_close($conn);        
+    return $row;
+}
+
+// This function access the "studyTable" first to get the study specified 
+// Then it access the "adminStudiesTable" to get the records of interest. This is done using a JOIN.
+function getStudy($studyID) {
+    $conn = dbConnect();
+
+    // build string and insert new record
+    $sql =  "SELECT * ".
+            "FROM studyTable ".
+            //"INNER JOIN studyTable ".
+            //"ON adminStudiesTable.studyID=studyTable.studyID ".
+            "WHERE studyID=".$studyID.";";
+ 
+    $result = mysqli_query($conn, $sql);
+
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    }
+        
+    mysqli_close($conn);    
+    return $rows;
+}      
+
+///////////////////////////////////////////////////////////////////////////////////////
+// conditionGroupPhaseTable Table Functions
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+// create a condition group pahse record
+function createConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum, $phaseStarted, $phaseEnded, $phasePermission, $entriesNum, $postsNum, $likesNum) {
+    $conn = dbConnect();
+    
+    // build string and insert new record
+    $sql = "INSERT INTO conditionGroupPhaseTable ".
+           "(studyID, conditionGroupNum, phaseNum, phaseStarted, phaseEnded, phasePermission, entriesNum, postsNum, likesNum)".
+           " VALUES ".
+           "('".$studyID."','".$conditionGroupNum."','".$phaseNum."','".$phaseStarted."','".$phaseEnded."',b'".$phasePermission."','".$entriesNum."','".$postsNum."','".$likesNum."')".
+           ";";
+    $result = mysqli_query($conn, $sql);
+    
+    // return null if the creation was not successful
+    if (!$result) {
+        mysqli_close($conn);    
+        return null;
+    }
+
+    // get the record and hence the ID if record was successfully created
+    $sql = "SELECT * from conditionGroupPhaseTable ORDER BY ID DESC LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+
+    // check if any record found. If records found, gather them into an array and return the array
+    if ($result == false) 
+        $row = null;
+    else 
+        $row = mysqli_fetch_array($result);
+
+    mysqli_close($conn);        
+    return $row;    
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+// postTable Table Functions
+///////////////////////////////////////////////////////////////////////////////////////
+// This function access the "studyTable" first to get the study specified 
+// Then it access the "adminStudiesTable" to get the records of interest. This is done using a JOIN.
+function getPostCGPhase($studyID, $conditionGroupNum, $phaseNum) {
+    error_log($studyID, 0);
+    error_log($conditionGroupNum, 0);
+    error_log($phaseNum,0);
+    $conn = dbConnect();
+/*    $sql = "SELECT * from userTable WHERE userID='".$userID."' AND (privilegeLevel = 'admin' OR privilegeLevel = 'super_admin');";*/
+    // build string and insert new record
+
+    /*postTable.postId, postTable.userID, userTable.userName, postTable.dateTimeStamp,
+               postTable.postText, postTable.image, postTable.conditionGroupNum, postTable.phaseNum, postTable.studyID ".*/
+    $sql =  "SELECT *".
+            "FROM postTable ;";
+           // "INNER JOIN userTable ".
+           // "ON postTable.userID=userTable.userID ".
+            //"WHERE studyID='".$studyID."' AND conditionGroupNum='".$conditionGroupNum."' AND phaseNum='".$phaseNum."';";
+ 
+    $result = mysqli_query($conn, $sql);
+
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    }
+        
+    mysqli_close($conn);    
+    return $rows;
+}   
+
+// delete a post from the postTable 
+function deletePost($postID) {
+    
+    $conn = dbConnect();
+
+    $sql = "DELETE FROM postTable WHERE postID = '".$postID."';";
+    $result = mysqli_query($conn, $sql);
+
+    mysqli_close($conn);    
+    return $result;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Misc Functions
@@ -139,6 +446,7 @@ function getAdminStudies($adminID) {
 function dbConnect() {
     // this will avoid mysql_connect() deprecation error.
     error_reporting( ~E_DEPRECATED & ~E_NOTICE );
+    // but I strongly suggest you to use PDO or MySQLi.
  
     define('DBHOST', '127.0.0.1');
     define('DBUSER', 'root');
