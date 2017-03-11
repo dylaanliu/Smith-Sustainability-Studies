@@ -1,125 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<!--TODO & Consider-->
-<!--
-    - Create New User Button: Do we want a pop-up form?
-    - Extract Raw Data
--->
     <head>
-        <!--User Home Page-->
-        <!-- bootstrap -->
-        <meta   charset="uX-8"> 
-        <meta   h@p-equiv="X-UA-Compa]ble"  content="IE=edge">  
-        <meta   name="viewport" content="width=device-width, initial-scale=1">  
-        <!--The above 3 lines must be included-->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/TemplateUser.css">
+        <link rel="stylesheet" href="css/pe-icon-7-stroke.css">
+        <!-- <link rel="stylesheet" href="css/user-views-new.css"> -->
+        <!-- DataTables CSS  -->
+        <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+        <!-- DataTables Responsive CSS -->
+        <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
         <title>Smith Sustainability Studies</title>
-
-        <!-- bootstrap -->
-        <link   href="css/bootstrap.min.css"    rel="stylesheet">   
-        <link   href="css/bootstrap-theme.min.css"  rel="stylesheet">
-
-        <link   href="css/Template.css" rel="stylesheet">
-
-        <!--Load User view CSS files here -->
-        <link   href="css/user-home-view.css" rel="stylesheet">    
-        <link   href="css/user-input-data-view.css" rel="stylesheet">
-        <link   href="css/user-statistics-view.css" rel="stylesheet">
-        <link   href="css/user-community-posts.css" rel="stylesheet">
-<!--         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.13/r-2.1.1/sc-1.4.2/se-1.2.0/datatables.min.css"/> -->
-
-        <!--Can download jQuery from https://jquery.com/download/ uncompressed-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>     
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
-        
-        <!-- Datatables -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.13/fh-3.1.2/datatables.min.css"/>
-<!--         <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.13/fh-3.1.2/datatables.min.js"></script> -->
-<!--         <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script> -->
-        <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
-
-
-<!--         Modal Imports
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-        <script src="//code.jquery.com/jquery-1.12.4.js"></script>  
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
--->
-
-         <!--Load the AJAX API for charts-->
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<!--         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
-
-        <!--Load FLOT Charts-->
-<!--         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.symbol.min.js"></script>
-        <script type="text/javascript" src="http://raw.github.com/markrcote/flot-axislabels/master/jquery.flot.axislabels.js"></script>
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
-        <script type="text/javascript" language="javascript" src="flot/jquery.flot.js"></script>
-        <script type="text/javascript" language="javascript" src="flot/jquery.flot.time.js"></script> -->
-
-
     </head>
 
     <body onload="loadUserHomeView()">
-        <!--Navigation-->
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div id="navbar" class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>                
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">                
-                    <ul class="nav navbar-nav">
-                        <li class="active" id="userHome"><a href="#" onclick="loadUserHomeView()" >Home</a></li>
-                        <li id="inputData"><a href="#" onclick="loadUserInputDataIncomplete()">Input Data</a></li>
-                        <li id="statistics"><a href="#" onclick="loadUserStatisticsView()">Statistics</a></li>
-                        <li id="communityPosts"><a href="#" onclick="loadUserCommunityView()">Community Posts</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" onclick="loadUserProfileView()">My Account</a></li>
-                        <li><a href="index.html" id="logout">Logout</a></li> <!--Need JS logout function-->
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <div class="wrapper">
+            <div class="sidebar" data-color="green" data-image="img/Stock1.jpg" style="background-image: url(img/Stock1.jpg);">
+                <div class="sidebar-wrapper">
+                    <!--sidebar wrapper should be here; otherwise get side scroll bar-->
+                    <div class="logo">
+                        <a class="simple-text" href="#">SMITH SUSTAINABILITY STUDIES</a>
+                    </div>
+                    <div class="logo logo-mini">
+                        <a href="#" class="simple-text">
+                            SMITH
+                        </a>
+                    </div>
 
-        <!-- put in user-home view-->
-        <div class="container" id="viewGoesHere">
-        </div>
- 
-        <footer role="contentInfo">
-            <div class="container">
-                <div class="row " id="r-footer">                            
-                    <div class="col-xs-12">
-                        <p style="padding:6px;"></p>
-                        <p>&copy; Copyright 2017</p>
-                        <p>If you have any questions or concerns about the study, please email the admins at queens dot smith dot env at gmail dot com </p>
+                    <ul class="nav">
+                            <li class="active" id="userHome">
+                                <a href="#" onclick="loadUserHomeView()">
+                                    <i class="pe-7s-home"></i>
+                                    <p>HOME</p>
+                                </a>
+                            </li>
+                            <li>
+                                <div class="separator">
+                                    <a href="#"></a>
+                                </div>
+                            </li>
+                            <li id="inputData">
+                                <a href="#" onclick="loadUserInputDataIncomplete()">
+                                    <i class="pe-7s-users"></i>
+                                    <p>INPUT DATA</p>
+                                </a>
+                            </li>
+                            <li id="statistics">
+                                <a href="#" onclick="loadUserStatisticsView()">
+                                    <i class="pe-7s-note2"></i>
+                                    <p>STATISTICS</p>
+                                </a>
+                             </li>
+                             <li id="communityPosts">
+                                <a href="#" onclick="loadUserCommunityView()">
+                                    <i class="pe-7s-leaf"></i>
+                                    <p>COMMUNITY POSTS</p>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+            <div class="main-panel">
+                <nav class="navbar navbar-fixed" id="user-nav">
+                    <div class="container-fluid">
+                        <!-- Logo -->
+                        <div class="navbar-minimize">
+                            <button id="minimizeSidebar" class="btn btn-fill btn-icon"><i class="pe-7s-angle-left-circle"></i></button>
+                        </div>
+                        <div class="navbar-header"  id="navbar">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main">
+                                <span class="icon-bar bar1"></span>
+                                <span class="icon-bar bar2"></span>
+                                <span class="icon-bar bar3"></span>
+                            </button>
+                            <a class="navbar-brand" href="#"><span id="username"></span></a>
+                        </div>
+                        <div class="collapse navbar-collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="#" onclick="loadUserProfileView()">
+                                        <i class="pe-7s-user"></i>
+                                        <p>My Account</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="index.html" id="logout">
+                                        <!--Need JS logout function-->
+                                        <i class="pe-7s-close-circle"></i>
+                                        <p>Log out</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class="content">
+                    <div id="viewGoesHere">
+                        <!-- Inputs Home View -->
+                    </div>
+                </div>
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+                            <ul id="user-footer">
+                                <li>
+                                    <a href="#" style="color: #66615B; font-size: 14px">
+                                            If you have any questions or concerns about the study, please email the admins at queens dot smith dot env at gmail dot com
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" style="color: #66615B; font-size: 11px">
+                                            “We don't inherit the earth from our ancestors, we borrow it from our children.” ― David Brower
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <p class="copyright pull-right"> &copy; Copyright 2017</p>
+                    </div>
+                </footer>
             </div>
-        </footer>
-        <!--JavaScript
--->
-        <script src="js/utilities.js"></script>
-        <script src="js/user-template-ctr.js"></script>  
-        <script src="js/user-home-ctr.js"></script>  
-        <script src="js/user-input-data-ctr.js"></script> 
-        <script src="js/user-statistics-ctr.js"></script> 
-        <!-- <script src="js/tmp-stats.js"></script>  -->
-        <script src="js/user-community-posts-ctr.js"></script> 
-        <script src="js/user-profile-ctr.js"></script> 
-        <!--
-                <script src="js/user-statistics-ctr.js"</script>
-        -->
+        </div>
+        <!-- JavaScript -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.validate.js"></script>
 
+        <!-- DataTables JavaScript -->
+        <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <!-- ADDons -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.7/js/min/perfect-scrollbar.jquery.min.js"></script>
+
+        <!-- Misc Plug-ins -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+         <!--Load the AJAX API for charts-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         
+        <!-- Controllers -->
+        <script src="js/Template.js"></script>
+        <script src="js/utilities.js"></script>
+        <script src="js/user-home-ctr.js"></script>
+        <script src="js/user-template-ctr.js"></script>
+        <script src="js/user-input-data-ctr.js"></script>
+        <script src="js/user-statistics-ctr.js"></script>
+        <script src="js/user-community-posts-ctr.js"></script>
+        <script src="js/user-profile-ctr.js"></script>
     </body>
-
 </html>

@@ -338,3 +338,11 @@ function debounce(func, wait, immediate) {
         if (immediate && !timeout) func.apply(context, args);
     };
 };
+
+
+// load a view
+function viewManager(file){
+    $("#viewGoesHere").load(file);
+}
+
+

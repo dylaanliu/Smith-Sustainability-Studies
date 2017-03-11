@@ -6,9 +6,10 @@ $(document).ready(function() {
 	
 }); // end function
 
-var controller = "server/admin-monitor-studies-ctr.php";
+// var controller = "server/admin-monitor-studies-ctr.php";
 
 function loadAdminMonitorStudiesView() {
+    var controller = "server/admin-monitor-studies-ctr.php";
 
 //	var data_file = "adminhome.json"; // path to temp json file
     var adminStudyQuery = { q: "get_admin_studies", otherVar: "something" };
@@ -189,7 +190,7 @@ $("#viewGoesHere").on( "click", "#select-form button[name='submitParameters']", 
 	
 	
 function viewResults(studyID){
-//    var controller = "server/admin-monitor-studies-ctr.php";
+    var controller = "server/admin-monitor-studies-ctr.php";
     var singleStudyQuery = { q: "get_study_data", studyID: studyID};
     console.log("getting view results");
 
@@ -298,7 +299,7 @@ function generateTableOfData(studyID, selectedConditionGroups, selectedPhases) {
 
 
 function viewCommunityPosts(studyID) {
-//    var controller = "server/admin-monitor-studies-ctr.php";
+    var controller = "server/admin-monitor-studies-ctr.php";
     var communityQuery = { q: "get_study_data", studyID: studyID};
 
     document.getElementById("infoGoesHere-"+studyID).innerHTML = "";
@@ -401,7 +402,7 @@ function monitorConditionGroupPhaseTabs(studyID, numConditionGroups, numPhases) 
 
 // currently breaks create study page
 function displayPost(studyID, cg, ph) {
-//    var controller = "server/admin-monitor-studies-ctr.php";
+    var controller = "server/admin-monitor-studies-ctr.php";
     var postQuery = {q: "get_posts", studyID: studyID, conditionGroup: cg, phaseNum: ph };
     var post = "";
 
@@ -496,6 +497,7 @@ function displayPost(studyID, cg, ph) {
 }
 
 function deletePost(postID) {
+    var controller = "server/admin-monitor-studies-ctr.php";
 
     var checkstr = confirm('Are you sure you want to delete this post?');
     if(checkstr == true) {

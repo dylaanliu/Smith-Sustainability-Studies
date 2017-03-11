@@ -6,6 +6,9 @@ $(document).ready(function(){
 
 function loadUserStatisticsView() {
 
+    $(".nav li").removeClass("active");
+    $(".nav li #statistics").addClass("active");
+
 //	var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/user-statistics-ctr.php"
     var userDailyEntry = { q: "daily_entries_user"};

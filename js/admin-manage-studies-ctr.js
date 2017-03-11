@@ -7,9 +7,8 @@ $(document).ready(function() {
 }); // end function
 
 function loadAdminManageStudiesView() {
-
-    var controller = "server/admin-manage-studies-ctr.php"
-    var controllerData = { q: "getStudies" }
+   var controller = "server/admin-manage-studies-ctr.php";
+    var controllerData = { q: "getStudies" };
     var view = "views/admin-manage-studies-view.html";
     
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
@@ -26,6 +25,7 @@ function loadAdminManageStudiesView() {
                 document.getElementById("manageStudiesTable").innerHTML = "";
                 if (!result.error) {
                     // html injection
+                    console.log('hi');
                     $.each(studyArray, function(index, studyRecord) {
                         $("#manageStudiesTable").append("<form id='editStudyForm" + studyRecord.studyID + "' class='form-horizontal' role='form'>");
                         $("#manageStudiesTable").append(

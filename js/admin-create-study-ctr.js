@@ -14,9 +14,13 @@ $(document).ready(function() {
 });
 
 
-function loadAdminCreateStudyView() {
+function loadAdminCreateStudyView() {    
     var view = "views/admin-create-study-view.html";
     var controllerData = { };
+
+    // sidebar: make current page active; deactivate other link 'active' states
+    $(".nav li").removeClass("active");
+    $(".nav li #loadAdminUserAccounts").addClass("active");
 
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";

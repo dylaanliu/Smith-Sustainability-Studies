@@ -2,12 +2,11 @@
 
 $(document).ready(function() {
 
-	loadUserHomeView();
-	
+    loadUserHomeView();
+    
 }); // end function
 
 function loadUserHomeView() {
-
     var view = "views/user-home-view.html";
     var controller = "server/user-home-ctr.php";
     // need controller data, but the data here is not used in this case
@@ -16,6 +15,9 @@ function loadUserHomeView() {
     var userQuery= { q: "getUser"};
     var cgPhaseQuery = { q: "condition_group_phase", studyId: "", CurrentConditionGroup: "", currentPhase: ""};
     var rewardsQuery = { q: "reward", studyId: ""};
+    
+    //make link on nav active
+    $(".nav li #userHome").addClass("active");
     
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
@@ -171,5 +173,5 @@ function loadUserHomeView() {
     
             
         }
-	});
+    });
 } // end function

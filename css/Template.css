@@ -273,7 +273,7 @@ a:focus {
 }
 
 .hero {
-    background: url(../images/Stock1.jpg) center no-repeat;
+    background: url(../img/Stock1.jpg) center no-repeat;
     background-size: cover;
     border: none;
     margin: 0px;

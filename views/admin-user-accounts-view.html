@@ -1,69 +1,92 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row" id="top">
-        <div class="col-sm-12">
-            <h1 class="text-left">User Accounts:</h1>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">User Accounts</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="separator">
+                            <a href="#">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row panel-body">
+                    <div class="col-md-12">
+                        <table width="100%" class="table table-striped table-scroll table-bordered table-hover" id="userAccountsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Study</th>
+                                    <th>Condition Group</th>
+                                    <th>Current Phase</th>
+                                    <th>Team Number</th>
+                                    <th class="Action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="insertUserTable">
+                                <!-- Table -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- </div> panel-body  -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="separator">
+                                <a href="#">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 col-sm-offset-1">
+                            <button type="button" class="btn btn-primary pull-left home-btn-primary" id="create-new-account" name="create-new-account"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Create New Account</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- card  -->
+            </div>
+            <!-- col-md-10  -->
         </div>
-        <div class="col-sm-12">
-            <table id="userAccountsTable" class="table table-sm table-fixed table-scroll table-inverse table-bordered table-hover" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th >UserID</th>
-                        <th >First Name</th>
-                        <th >Last Name</th>
-                        <th >Username</th>
-                        <th >Email</th>
-                        <th >Study</th>
-                        <th >Condition</br>Group</th>
-                        <th >Current</br>Phase</th>
-                        <th >Team</br>Number</th>
-                        <th class="Action">Action</th>
-                    </tr>
-                </thead>
-                
-                <!-- dynamically insert content here -->
-                <tbody id="insertUserTable">
-                </tbody> 
-                
-            </table>
-        </div>
-        <div class="col-xs-12 col-sm-4 col-sm-offset-4">
-             <p style="padding:6px;"></p>
-             <button type="button" class="btn btn-primary" id="create-new-account" name="create-new-account">
-                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Create New Account</button>
-        </div>            
+        <!-- row  -->
     </div>
 </div>
-
+<!-- container fluid  -->
 <div id="deleteUserAccountModal" class="modal fade">
     <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Confirmation</h4>
-        </div>
-        <div class="modal-body">
-            Are you sure?
-        </div>
-        <div class="modal-footer">
-            <div class="col-sm-2 pull-right">
-                <button type="button" data-dismiss="modal" class="btn btn-primary btn-block" id="delete">Delete</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmation</h4>
             </div>
-            <div class="col-sm-2 pull-right">
-                <button type="button" data-dismiss="modal" class="btn btn-danger btn-block"  id="cancel">Cancel</button>
+            <div class="modal-body">
+                Are you sure?
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-2 pull-right">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary btn-block" id="delete">Delete</button>
+                </div>
+                <div class="col-sm-2 pull-right">
+                    <button type="button" data-dismiss="modal" class="btn btn-danger btn-block" id="cancel">Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
-
 <div id="newUserAccountModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h2 class="modal-title">New User Account: </h2>
-        </div>
-        <div class="modal-body">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title">New User Account: </h2>
+            </div>
+            <div class="modal-body">
                 <form id="newUserAccountModalForm" class="form-horizontal" role="form">
                     <div class="form-group">
                         <label for="userName" class="col-sm-3 control-label">Username</label>
@@ -82,7 +105,7 @@
                         <div class="col-sm-6">
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
                         </div>
-                    </div>     
+                    </div>
                     <div class="form-group">
                         <label for="firstName" class="col-sm-3 control-label">First Name</label>
                         <div class="col-sm-6">
@@ -98,7 +121,7 @@
                     <div class="form-group">
                         <label for="privilegeLevelSelector" class="col-sm-3 control-label">Privilege Level</label>
                         <div class="col-sm-6">
-                            <select class="form-control" id="privilegeLevelSelector"  name="privilegeLevelSelector" >
+                            <select class="form-control" id="privilegeLevelSelector" name="privilegeLevelSelector">
                                 <option value="user" selected>user</option>
                                 <option value="admin">admin</option>
                                 <option value="super_admin">super admin</option>
@@ -112,83 +135,80 @@
                         <div class="col-sm-offset-2 col-sm-4 center-text">
                             <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cancel</button>
                         </div>
-                    </div>                    
+                    </div>
                 </form>
+            </div>
         </div>
     </div>
-    </div>
 </div>
-
-
 <div id="editUserAccountModal" class="modal fade" role="dialog">
     <form id="editUserAccountModalForm" class="form-horizontal" role="form">
-    <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h2 class="modal-title">Edit User Account: </h2>
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Edit User Account: </h2>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="userName" class="col-sm-3 control-label">Username</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter User Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-3 control-label">E-Mail Address</label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="studyID" class="col-sm-3 control-label">Study</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="studyID" name="studyID" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentConditionGroup" class="col-sm-3 control-label">Condition Group</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="currentConditionGroup" name="currentConditionGroup" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentPhase" class="col-sm-3 control-label">Current Phase</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="currentPhase" name="currentPhase" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamNum" class="col-sm-3 control-label">Team Number</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="teamNum" name="teamNum" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-offset-2 col-sm-4 center-text">
+                        <button type="submit" class="btn btn-primary btn-block">Update Account</button>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-4 center-text">
+                        <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="userName" class="col-sm-3 control-label">Username</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter User Name">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="email" class="col-sm-3 control-label">E-Mail Address</label>
-                <div class="col-sm-6">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
-                </div>
-            </div>     
-            <div class="form-group">
-                <label for="firstName" class="col-sm-3 control-label">First Name</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="lastName" class="col-sm-3 control-label">Last Name</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="studyID" class="col-sm-3 control-label">Study</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="studyID" name="studyID" placeholder="">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="currentConditionGroup" class="col-sm-3 control-label">Condition Group</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="currentConditionGroup" name="currentConditionGroup" placeholder="">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="currentPhase" class="col-sm-3 control-label">Current Phase</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="currentPhase" name="currentPhase" placeholder="">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="teamNum" class="col-sm-3 control-label">Team Number</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="teamNum" name="teamNum" placeholder="">
-                </div>
-            </div>
-        </div>                    
-        <div class="modal-footer">
-            <div class="col-sm-offset-2 col-sm-4 center-text">
-                <button type="submit" class="btn btn-primary btn-block">Update Account</button>
-            </div>
-            <div class="col-sm-offset-2 col-sm-4 center-text">
-                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-    </div>
     </form>
 </div>
-

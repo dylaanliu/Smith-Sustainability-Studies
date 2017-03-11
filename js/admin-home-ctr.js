@@ -7,7 +7,8 @@ $(document).ready(function() {
 }); // end function
 
 function loadAdminHomeView() {
-
+    $(".nav li #adminHome").addClass("active");
+    
 //	var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/admin-home-ctr.php"
     var controllerData = { q: "me", otherVar: "something" }
@@ -51,7 +52,8 @@ function loadAdminHomeView() {
 // for Extract Raw Data Button click event
 $("#viewGoesHere").on( "click", "#extractRawData", function(event){
 	// replace with call to PHP retrieve
-	alert("Extracting data: NOT IMPLEMENTED");
+	//alert("Extracting data: NOT IMPLEMENTED");
+    loadAdminManageStudiesView();
 });
 
 // for Create New Study Button click event
@@ -77,15 +79,17 @@ $("#viewGoesHere").on( "click", "#currentStudiesTable button[name='manage']", fu
     var studyID = this.id;
     console.log("going to manage a study");
     console.log("studyID = " + studyID);
-    alert("NOT IMPLEMENTED");
+    loadAdminManageStudiesView();
+    //alert("NOT IMPLEMENTED");
 });
 	
-// for individual Manage Study Buttons in Current Studies Table
+// for individual Monitor Study Buttons in Current Studies Table
 $("#viewGoesHere").on( "click", "#currentStudiesTable button[name='monitor']", function(event){
     var studyID = this.id;
     console.log("going to monitor a study");
     console.log("studyID = " + studyID);
-    alert("NOT IMPLEMENTED");
+    loadAdminMonitorStudiesView();
+    //alert("NOT IMPLEMENTED");
 });
 	
 	

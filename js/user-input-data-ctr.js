@@ -15,6 +15,8 @@ $(document).ready(function() {
 
 // load incomplete entries
 function loadUserInputDataIncomplete() {
+    $(".nav li").removeClass("active");
+    $(".nav li #inputData").addClass("active");
 
     var view = "views/user-input-data-view.html";
     var controller = "server/user-input-data-ctr.php";
