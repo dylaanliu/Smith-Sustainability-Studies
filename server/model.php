@@ -252,7 +252,7 @@ function getAdminStudies($adminID) {
             $rows[] = $row;
         }
     }
-        
+error_log(print_r($rows, true),0);        
     mysqli_close($conn);    
     return $rows;
 }
@@ -403,6 +403,8 @@ function getPostCGPhase($studyID, $conditionGroupNum, $phaseNum) {
 
     /*postTable.postId, postTable.userID, userTable.userName, postTable.dateTimeStamp,
                postTable.postText, postTable.image, postTable.conditionGroupNum, postTable.phaseNum, postTable.studyID ".*/
+
+// TODO: Do join with matching study, phase and cg num params
     $sql =  "SELECT *".
             "FROM postTable ;";
            // "INNER JOIN userTable ".
@@ -435,6 +437,43 @@ function deletePost($postID) {
 
     mysqli_close($conn);    
     return $result;
+}
+
+function createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupNum, $phaseNum, $studyID) {
+    $conn = dbConnect();
+    error_log("userID: ".$userID." dateTime: ".$dateTimeStamp." postText: ".$postText. " image: ". $image." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
+
+    $sql = "INSERT INTO postTable (userID, dateTimeStamp, postText, image, conditionGroupNum, phaseNum, studyID) ".
+            " VALUES ('".$userID."',".$dateTimeStamp.",'".$postText."','".$image."','".$conditionGroupNum."','".$phaseNum."','".$studyID."');";
+           //";";
+
+    $result = mysqli_query($conn, $sql);
+    
+    // return null if the creation was not successful
+    if (!$result) {
+        mysqli_close($conn);  
+        error_log("No result",0);  
+        return null;
+    }
+    error_log("result: ",0);
+    error_log($result,0);
+
+    // get the record and hence the ID if record was successfully created
+    $sql = "SELECT * from postTable ORDER BY ID DESC LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+
+    // check if any record found. If records found, gather them into an array and return the array
+    if ($result == false) {
+        error_log("No row",0);
+        $row = null;
+    } else {
+        $row = mysqli_fetch_array($result);
+    }
+
+    mysqli_close($conn);
+    error_log("row: ",0);
+    error_log($row,0);        
+    return $row;    
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
