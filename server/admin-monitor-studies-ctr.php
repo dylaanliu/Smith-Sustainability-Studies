@@ -61,6 +61,47 @@ switch ($method) {
                   "data" => $studies));
         break;
       case 'get_study_data':
+          $error = false;
+          $studies = null;
+          $conditionGroupPhase = null;
+          $posts = null;
+
+          $studyIDIn = cleanInputGet('studyID');
+          if (empty($studyIDIn)) {
+              $error = true;
+              $errorMsg = 'Expecting studyID';
+          }
+          
+          $studies = getAdminStudies($adminID);
+          if ($studies == null) {
+              $error = true;
+              $errorMsg = 'No studies found';
+          }
+          else {
+              $errorMsg = 'Admin studies found.';
+
+              $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+              if ($conditionGroupPhase == null) {
+                  $error = true;
+                  $errorMsg = 'Database error accessing conditionGroupTable';
+              }
+              else {
+                  $posts = getStudyPosts($studyIDIn);
+                  if ($posts == null) {
+                      $error = true;
+                      $errorMsg = 'Database error accessing postTable';
+                  }
+              }
+          }
+          
+          echo json_encode(array(
+                    "error" => $error,
+                    "errorMsg" => $errorMsg, 
+                    "studies" => $studies,
+                    "conditionGroupPhase" => $conditionGroupPhase,
+                    "posts" => $posts));
+          break;
+      case 'get_single_study_data':
         $error = false;
         $studyID = $_GET["studyID"];
         $study = getStudy($studyID);
@@ -75,13 +116,15 @@ switch ($method) {
                   "error" => $error,
                   "errorMsg" => $errorMsg, 
                   "data" => $study));
+        error_log("returned from study: ",0);
+        error_log(print_r($study, true),0);
         break;
       case 'get_posts':
-      error_log("GET posts - admin monitor studies",0);
+        error_log("GET posts - admin monitor studies",0);
         $error = false;
-        $studyID = $_GET["studyID"];
-        $conditionGroup = $_GET["conditionGroup"];
-        $phaseNum = $_GET["phaseNum"];
+        $studyID = cleanInputGet("studyID");
+        $conditionGroup = cleanInputGet("conditionGroup");
+        $phaseNum = cleanInputGet("phaseNum");
         $posts = getPostCGPhase($studyID, $conditionGroup, $phaseNum);
         if ($posts == null) {
             $error = true;
@@ -97,10 +140,75 @@ switch ($method) {
                   "data" => $posts));
         error_log("after echoed",0);
         break;
+      case 'get_results':
+        error_log("GET daily entries - admin monitor studies", 0);
+        $error = false;
+        $studyID = cleanInputGet("studyID");
+        $dailyEntries = getStudyDailyEntries($studyID);
+        if ($dailyEntries == null) {
+            $error = true;
+            $errorMsg = 'No Daily Entries found';
+            error_log("some error", 0);
+        }
+        else
+            $errorMsg = 'Daily Entries found';
+        //error_log("before echo", 0);
+        echo json_encode(array(
+                  "error" => $error,
+                  "errorMsg" => $errorMsg, 
+                  "data" => $dailyEntries));
+        //error_log("after echoed",0);
     }
+
     break;
   case 'PUT':                              // not required in this controller
-  case 'POST':                             // not required in this controller
+  case 'POST':
+    error_log("Posting new post");
+    $error = false;
+    $postRecord = null;
+
+    $dateTimeStamp = cleanInputPost("dateTime1");
+    $text = cleanInputPost("text1");
+    $image = cleanInputPost("image1");
+    $conditionGroupNum = cleanInputPost("conditionGroupNum1");
+    $phaseNum = cleanInputPost("phaseNum1");
+    $studyID = cleanInputPost("studyID1");
+
+    error_log("userID: ".$adminID." dateTime: ".$dateTimeStamp." postText: ".$text. " image: ". $image." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
+
+    if (empty($text)) {
+        $error = true;
+        $errorMsg = 'Text is required.';
+    }
+    if (empty($conditionGroupNum)) {
+        $error = true;
+        $errorMsg = 'condition group required.';
+    }
+    if (empty($phaseNum)) {
+        $error = true;
+        $errorMsg = 'phase required.';
+    }
+
+    if(!$error) {
+        // TODO - last parameter is adminID which should be from the $_SESSION 
+        //$userRecords = createUser($userNameIn, $firstNameIn, $lastNameIn, $passwordIn, 'user', $_SESSION['userID']);
+        $postRecord = createPost($adminID, $dateTimeStamp, $text, $image, $conditionGroupNum, $phaseNum, $studyID);  
+        
+        if ($postRecord == null) {
+            $error = true;
+            $errorMsg = 'Database error: Could not create post';
+        }  else {
+          $errorMsg = 'Post Created';
+        }
+    }
+
+    echo json_encode(array(
+              "error" => $error,
+              "errorMsg" => $errorMsg,
+              "data" => $postRecord));
+
+    break;
+                            
   case 'DELETE':
     error_log("got into admin-monitor-users - DELETE");
         $error = false;
@@ -139,3 +247,29 @@ switch ($method) {
         break;
 }
 
+
+function getStudyPosts($studyID) {
+    $conn = dbConnect();
+
+
+// TODO: Do join with matching study, phase and cg num params
+    $sql =  "SELECT *".
+            "FROM postTable ".
+            "WHERE studyID=".$studyID.";";
+ 
+    $result = mysqli_query($conn, $sql);
+
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    }
+        
+    mysqli_close($conn);    
+    return $rows;
+
+}   

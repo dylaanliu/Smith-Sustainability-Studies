@@ -1,6 +1,6 @@
 function loadAdminProfileView() {
 
-    var controller = "server/admin-profile-ctr.php"
+    var controller = "server/admin-profile-ctr.php" + "?_=" + (new Date()).getTime();  // load from server always
     var controllerData = { q: "getUser" };
 	var view = "views/admin-profile-view.html";
 

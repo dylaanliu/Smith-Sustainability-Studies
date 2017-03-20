@@ -8,19 +8,14 @@
 
 var adminCreateStudyController = "server/admin-create-study-ctr.php";
     
-
 $(document).ready(function() {
     
 });
 
 
-function loadAdminCreateStudyView() {    
+function loadAdminCreateStudyView() {
     var view = "views/admin-create-study-view.html";
     var controllerData = { };
-
-    // sidebar: make current page active; deactivate other link 'active' states
-    $(".nav li").removeClass("active");
-    $(".nav li #loadAdminUserAccounts").addClass("active");
 
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";
@@ -147,7 +142,7 @@ function conditionGroupPhaseTabs(numConditionGroups, numPhases) {
                 tabStr += "<div class='tab-pane fade active in' id='condition" + cg + "Phase" + ph + "'>";  
             else
                 tabStr += "<div class='tab-pane' id='condition" + cg + "Phase" + ph + "'>";  
-            tabStr += "<p>Condition " + cg + "Phase " + ph + "</p>";
+//            tabStr += "<p>Condition " + cg + "Phase " + ph + "</p>";
             tabStr += phaseCheckBoxes(cg, ph);
             tabStr += "</div>";
         }        
@@ -169,6 +164,7 @@ function conditionGroupPhaseTabs(numConditionGroups, numPhases) {
 function phaseCheckBoxes (cg, ph) {
     var phaseCheckBoxes = "";
 
+    phaseCheckBoxes += "<div class='row'>";
     phaseCheckBoxes += "<div class='col-sm-4'>";
     phaseCheckBoxes += "    <strong>Basic</strong><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='dataEntry' checked>";
@@ -207,7 +203,28 @@ function phaseCheckBoxes (cg, ph) {
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='progressionSystem'>";
     phaseCheckBoxes += "        <label for='progressionSystem'>Progression System</label><br>";
     phaseCheckBoxes += "</div>";    
-    
+    phaseCheckBoxes += "</div>";    
+    phaseCheckBoxes += "<div class='row'>";
+    phaseCheckBoxes += "    <p style='padding:6px;'></p>";
+    phaseCheckBoxes += "    <div class='col-sm-12'>";
+    phaseCheckBoxes += "        <strong>Number of :</strong><br>";
+    phaseCheckBoxes += "    </div>";
+    phaseCheckBoxes += "    <label for='entriesNum_" + cg + "_" + ph + "' class='col-sm-1 control-label'>Entries</label>";
+    phaseCheckBoxes += "    <div class='col-sm-3'>";
+    phaseCheckBoxes += "        <input type='text' class='form-control' id='entriesNum_" + cg + "_" + ph + "' name='entriesNum_" + cg + "_" + ph + "' value='0'>";
+    phaseCheckBoxes += "    </div>";
+    phaseCheckBoxes += "    <label for='postsNum_" + cg + "_" + ph + "' class='col-sm-1 control-label'>Posts</label>";
+    phaseCheckBoxes += "    <div class='col-sm-3'>";
+    phaseCheckBoxes += "        <input type='text' class='form-control' id='postsNum_" + cg + "_" + ph + "' name='postsNum_" + cg + "_" + ph + "' value='0'>";
+    phaseCheckBoxes += "    </div>";
+    phaseCheckBoxes += "    <label for='likesNum_" + cg + "_" + ph + "' class='col-sm-1 control-label'>Likes</label>";
+    phaseCheckBoxes += "    <div class='col-sm-3'>";
+    phaseCheckBoxes += "        <input type='text' class='form-control' id='likesNum_" + cg + "_" + ph + "' name='likesNum_" + cg + "_" + ph + "' value='0'>";
+    phaseCheckBoxes += "    </div>";
+    phaseCheckBoxes += "    <p style='padding:6px;'></p>";
+    phaseCheckBoxes += "</div>";    
+    phaseCheckBoxes += "<p style='padding:6px;'></p>";
+
     return phaseCheckBoxes;
 }
 

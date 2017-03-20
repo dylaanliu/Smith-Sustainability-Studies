@@ -8,7 +8,7 @@
 // go to content div and shove some stuff in
 
 var userAccountsTable;
-var adminUserAccountsController = "server/admin-user-accounts-ctr.php";
+var adminUserAccountsController = "server/admin-user-accounts-ctr.php" + "?_=" + (new Date()).getTime();  // load from server always
 
 // should not be using globals 
 var adminUserAccountsControllerEditRowPos;
@@ -53,10 +53,6 @@ function loadAdminUserAccountsView(createUserIn) {
     var createUser = createUserIn || false;
     var view = "views/admin-user-accounts-view.html";
     var controllerData = { q: "getAllUsers", userID: "" };
-
-    // sidebar: make current page active; deactivate other link 'active' states
-    $(".nav li").removeClass("active");
-    $(".nav li #loadAdminUserAccounts").addClass("active");
 
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";

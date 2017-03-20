@@ -9,14 +9,14 @@ function loadUserStatisticsView() {
     $(".nav li").removeClass("active");
     $(".nav li #statistics").addClass("active");
 
-//	var data_file = "adminhome.json"; // path to temp json file
+//  var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/user-statistics-ctr.php"
     var userDailyEntry = { q: "daily_entries_user"};
     var cgDailyEntry = {q: "daily_entries_condition_group", conditionGroupNum: ""};
     var cgUserDailyEntry = {q: "users_in_condition_group", conditionGroupNum: ""};
     var view = "views/user-statistics-view.html";
     
-	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
+    $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
@@ -42,7 +42,7 @@ function loadUserStatisticsView() {
             //loadPersonalStatistics();
             //loadConditionGroupStatistics();
         }
-	});
+    });
 } // end function
 
 function loadPersonalStatistics(userDailyEntryString){
@@ -201,7 +201,7 @@ function loadConditionGroupStatistics(cgDailyEntryString) {
     console.log(cgDailyEntryArray);
 
     // put into a table
-    var array = [['Rank', 'Username']];
+    //var array = [['Rank', 'Username']];
 
      $("#ranking").append(
         "<div class='table-responsive'>"+          
@@ -271,10 +271,12 @@ function loadSubTeamStatistics(cgDailyEntryString) {
         // Set chart options
         var options = {
            
-                width: 600,
-                height: 300
-           
-
+            height: 300,
+            title: 'Energy Consumption per Team', 
+            legend: { position: 'none' },            
+            vAxis: {
+              'title': "Sub-Teams"
+            }
         };
 
 

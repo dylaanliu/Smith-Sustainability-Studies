@@ -7,11 +7,10 @@ $(document).ready(function() {
 }); // end function
 
 function loadAdminHomeView() {
-    $(".nav li #adminHome").addClass("active");
-    
+
 //	var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/admin-home-ctr.php"
-    var controllerData = { q: "me", otherVar: "something" }
+    var controllerData = { q: "me", otherVar: "something", timestamp: "time_" + (new Date()).getTime() }
     var view = "views/admin-home-view.html";
     
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
@@ -19,7 +18,7 @@ function loadAdminHomeView() {
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
             $.getJSON(controller, controllerData, function(result) {
-                //console.log(JSON.stringify(result));
+                console.log(JSON.stringify(result));
                 //alert(result);
                 var studyArray = result.data;
                 // var studyContent = "";
@@ -30,7 +29,7 @@ function loadAdminHomeView() {
                     // html injection
                     $.each(studyArray, function(index, studyRecord) {
                         $("#currentStudiesTable").append(
-                            "<div class='col-sm-10 col-sm-offset-1'>" + 
+                            "<div class='col-sm-10 col-sm-offset-1 nice-blue-background'>" + 
                                 "<h3>Study " + studyRecord.studyID + " " + studyRecord.title + ":</h3><p> "+ studyRecord.description +"</p>"+
                                 "<div class='col-sm-6 col-sm-offset-2'></div>" +
                                 "<div class='col-sm-2'><button type='button' name='manage' class='btn btn-info pull-left' id='" + studyRecord.studyID +
@@ -49,11 +48,10 @@ function loadAdminHomeView() {
 } // end function
 
 
-// for Extract Raw Data Button click event
+// TODO - for Extract Raw Data Button click event
 $("#viewGoesHere").on( "click", "#extractRawData", function(event){
 	// replace with call to PHP retrieve
-	//alert("Extracting data: NOT IMPLEMENTED");
-    loadAdminManageStudiesView();
+	alert("Extracting data: NOT IMPLEMENTED");
 });
 
 // for Create New Study Button click event
@@ -74,22 +72,18 @@ $("#viewGoesHere").on( "click", "#manageUserAccount", function(event){
     loadAdminUserAccountsView(false);
 });
 	
-// for individual Manage Study Buttons in Current Studies Table
+// TODO - for individual Manage Study Buttons in Current Studies Table
 $("#viewGoesHere").on( "click", "#currentStudiesTable button[name='manage']", function(event){
     var studyID = this.id;
-    console.log("going to manage a study");
-    console.log("studyID = " + studyID);
-    loadAdminManageStudiesView();
-    //alert("NOT IMPLEMENTED");
+    loadAdminManageStudiesView(studyID);
 });
 	
-// for individual Monitor Study Buttons in Current Studies Table
+// TODO - for individual Manage Study Buttons in Current Studies Table
 $("#viewGoesHere").on( "click", "#currentStudiesTable button[name='monitor']", function(event){
     var studyID = this.id;
     console.log("going to monitor a study");
     console.log("studyID = " + studyID);
-    loadAdminMonitorStudiesView();
-    //alert("NOT IMPLEMENTED");
+    alert("NOT IMPLEMENTED");
 });
 	
 	

@@ -41,7 +41,7 @@ error_log("got into admin-create-study - POST");
         $descriptionIn = cleanInputPost('description');
         $conditionGroupsIn = cleanInputPost('conditionGroupSelector');
         $phaseIn = cleanInputPost('phaseSelector');
-
+error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
         // basic input validation. 
         // TODO:
         // Should really check all fields for validity (valid characters, maxlength, valid ranges, etc)
@@ -52,9 +52,11 @@ error_log("got into admin-create-study - POST");
         
         // create the Study record in the studyTable table
         if (!$error) {
+            // need to set dates, otherwise we get an error
             date_default_timezone_set('America/Toronto');
-            $startDate = date('Y-m-d H:i:s');
-            $endDate = "2035-12-31 00:00:00";
+            $startDate = date('Y-m-d H:i:s'); // when the study is made active
+            $endDate = "2035-12-31 00:00:00"; // when the study is archived
+
             $newStudy = createStudy($titleIn, $descriptionIn, $conditionGroupsIn, $phaseIn, $startDate, $endDate, "created");
             if ($newStudy == null) {
                 $error = true;
@@ -83,15 +85,27 @@ error_log("got into admin-create-study - POST");
         // this study.
         // TODO - should really clean up if there was an error during the creation
         //        of the records to avoid orphan records
+        //      - should be server side checking that the 'Num' fields are numbers
         $numConditionGroupPhaseRecords == 0;
         for ($cg = 1; !$error && $cg <= $conditionGroupsIn; $cg++) {            
             for ($ph = 1; !$error && $ph <= $phaseIn; $ph++) {
-                $phasePermission = makePhasePermission($cg, $ph);
+                $phasePermission = makePhasePermission("POST", $cg, $ph);
+                $entriesNum = cleanInputPost('entriesNum_'.$cg.'_'.$ph); 
+                $postsNum = cleanInputPost('postsNum_'.$cg.'_'.$ph);
+                $likesNum = cleanInputPost('likesNum_'.$cg.'_'.$ph);
+
+                if (empty($entriesNum)) 
+                    $entriesNum = 0;
+                if (empty($postsNum)) 
+                    $postsNum = 0;
+                if (empty($likesNum)) 
+                    $likesNum = 0;
+                
                 $newConditionGroupPhase = createConditionGroupPhase($newStudy['studyID'], $cg, $ph, 0, 0, 
-                                                $phasePermission, 0, 0, 0);
+                                                $phasePermission, $entriesNum, $postsNum, $likesNum);
                 if ($newConditionGroupPhase == null) {
                     $error = true;
-                    $errorMsg = 'Database error: Could not condition group phase record: ';
+                    $errorMsg = 'Database error: Could not create condition group phase record: ';
                 } 
                 else {
                     $errorMsg = 'Study Successfully Created';              
@@ -124,52 +138,3 @@ error_log("got into admin-create-study - DELETE");
         break;
 }
 
-
-function isChecked($chkname, $value) {
-
-    if(!empty($_POST[$chkname])) {
-        foreach($_POST[$chkname] as $chkval) {
-            if($chkval == $value) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-
-// go through $_POST and look for the checkboxes that are checked to create a phasePermission mask
-// for a conditionGroupPhaseTable record.
-//          Bit Fields
-//           1  Data Entry
-//           2  Personal Statistics
-//           3  Conditional Group Statistics
-//           4  Sub-team Statistics
-//           5  Share to Social Media
-//           6  Submit Tips
-//           7  View Admin Tips
-//           8  View Condition Group Tips
-//           9  View Sub-team Tips
-//           10 Share Posts to Social Media
-//           11 Private
-//           12 Public
-//           13 Progression System
-//
-function makePhasePermission($cg, $ph) {
-    $phasePermissionStr = "";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "progressionSystem") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "public") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "private") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "sharePostsToSocialMedia") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "viewSubTeamTips") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "viewConditionGroupTips") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "viewAdminTips") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "submitTips") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "shareToSocialMedia") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "subTeamStatistics") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "conditionGroupStatistics") ? "1" : "0";
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "personalStatistics") ? "1" : "0";    
-    $phasePermissionStr .= isChecked("phasePermissions_".$cg."_".$ph, "dataEntry") ? "1" : "0";
-
-    return $phasePermissionStr;
-}

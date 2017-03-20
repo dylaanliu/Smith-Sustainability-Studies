@@ -4,13 +4,20 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/TemplateUser.css">
+        <link rel="stylesheet" href="css/Template.css">
         <link rel="stylesheet" href="css/pe-icon-7-stroke.css">
-        <!-- <link rel="stylesheet" href="css/user-views-new.css"> -->
+
+        <!-- Load Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Londrina+Solid" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Cabin|Raleway" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+
         <!-- DataTables CSS  -->
         <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+        
         <!-- DataTables Responsive CSS -->
         <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
         <title>Smith Sustainability Studies</title>
@@ -44,19 +51,19 @@
                             </li>
                             <li id="inputData">
                                 <a href="#" onclick="loadUserInputDataIncomplete()">
-                                    <i class="pe-7s-users"></i>
+                                    <i class="pe-7s-leaf"></i>
                                     <p>INPUT DATA</p>
                                 </a>
                             </li>
                             <li id="statistics">
                                 <a href="#" onclick="loadUserStatisticsView()">
-                                    <i class="pe-7s-note2"></i>
+                                    <i class="pe-7s-graph1"></i>
                                     <p>STATISTICS</p>
                                 </a>
                              </li>
                              <li id="communityPosts">
                                 <a href="#" onclick="loadUserCommunityView()">
-                                    <i class="pe-7s-leaf"></i>
+                                    <i class="pe-7s-chat"></i>
                                     <p>COMMUNITY POSTS</p>
                                 </a>
                             </li>
@@ -103,17 +110,17 @@
                     </div>
                 </div>
                 <footer class="footer">
-                    <div class="container-fluid">
+                    <div class="container-fluid" id="user-footer">
                         <nav class="pull-left">
-                            <ul id="user-footer">
+                            <ul>
                                 <li>
                                     <a href="#" style="color: #66615B; font-size: 14px">
-                                            If you have any questions or concerns about the study, please email the admins at queens dot smith dot env at gmail dot com
-                                    </a>
+                                                If you have any questions or concerns about the study, please email the admins at queens.smith.env@gmail.com.
+                                        </a>
                                 </li>
                                 <li>
                                     <a href="#" style="color: #66615B; font-size: 11px">
-                                            “We don't inherit the earth from our ancestors, we borrow it from our children.” ― David Brower
+                                        &quot;We don't inherit the earth from our ancestors, we borrow it from our children.&quot; ― David Brower
                                     </a>
                                 </li>
                             </ul>
@@ -127,6 +134,7 @@
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/jquery.validate.js"></script>
+        <script src="js/jquery-ui.min.js" type="text/javascript"></script>
 
         <!-- DataTables JavaScript -->
         <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>

@@ -9,8 +9,7 @@
 -- create user table and fill it with values
 DROP TABLE IF EXISTS dailyEntriesTable;
 CREATE TABLE `dailyEntriesTable` ( entryID INTEGER NOT NULL AUTO_INCREMENT, 
-                           userID INTEGER NOT NULL,
-                           studyID INTEGER NOT NULL, 
+                           userID INTEGER NOT NULL, 
                            entryDate DATE,
                            startTime TIME, 
                            endTime TIME, 
@@ -22,22 +21,27 @@ CREATE TABLE `dailyEntriesTable` ( entryID INTEGER NOT NULL AUTO_INCREMENT,
                            numReminders INTEGER DEFAULT 0, 
                            conditionGroupNum INTEGER NOT NULL, 
                            phaseNum INTEGER NOT NULL,
+                           studyID INTEGER NOT NULL,
                            PRIMARY KEY (entryID));
-INSERT INTO `dailyEntriesTable` (userID, studyID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum) VALUES 
-                        ("4", "1", "2016-12-24", "09:00:00", "1234", "17:00:00", "0",
-                         "0", "0", "10", "2", "1", "2"
+INSERT INTO `dailyEntriesTable` (userID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum, studyID) VALUES 
+                        ("6", "2016-12-24", "09:00:00", "1234", "17:00:00", "2344",
+                         "0", "0", "10", "2", "1", "2", "2"
                         );
-INSERT INTO `dailyEntriesTable` (userID, studyID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum) VALUES 
-                        ("6", "1", "2016-12-30", "09:30:00", "2234", "00:00:00", "0",
-                         "0", "0", "10", "2", "1", "2"
+INSERT INTO `dailyEntriesTable` (userID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum, studyID) VALUES 
+                        ("6", "2016-12-30", "09:30:00", "2234", "00:00:00", "3423",
+                         "0", "0", "10", "2", "1", "2", "2"
                         );
-INSERT INTO `dailyEntriesTable` (userID, studyID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum) VALUES 
-                        ("7", "1", "2016-12-31", "09:30:00", "2234", "00:00:00", "0",
-                         "1", "2", "3", "4", "5", "6"
+INSERT INTO `dailyEntriesTable` (userID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum, studyID) VALUES 
+                        ("7", "2016-12-31", "09:30:00", "2234", "00:00:00", "3452",
+                         "1", "2", "3", "4", "2", "2", "2"
                         );
-/* INSERT INTO `dailyEntriesTable` (userID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum) VALUES 
+INSERT INTO `dailyEntriesTable` (userID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum, studyID) VALUES 
+                        ("7", "2017-01-01", "09:30:00", "2274", "00:00:00", "5345",
+                         "1", "2", "3", "4", "2", "1", "2"
+                        );                        
+/* INSERT INTO `dailyEntriesTable` (userID, entryDate, startTime, startEnergy, endTime, endEnergy, numLikes, numShares, numPosts, numReminders, conditionGroupNum, phaseNum, studyID) VALUES 
                         ("", "", "", "", "", "",
-                         "", "", "", "", "", ""
+                         "", "", "", "", "", "", ""
                         );
  */
                          
