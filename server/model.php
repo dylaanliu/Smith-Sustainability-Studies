@@ -355,25 +355,31 @@ function getStudy($studyID) {
 // dailyEntriesTable Table Functions
 ///////////////////////////////////////////////////////////////////////////////////////
 
-function getDailyEntries($userID) {
+function getDailyEntries($userID, $complete) {
 	
 	$conn = dbConnect();	// Create database connection
 	
-	$query = "SELECT * FROM dailyEntriesTable
-			  WHERE userID = '".$userID."';";
+	if ($complete) {	// Get all completed daily entries
+		$query = "SELECT * FROM dailyEntriesTable
+				  WHERE userID = '".$userID."';";
+    }		
+	else {				// Get all incomplete daily entries
+		$query = "SELECT * FROM dailyEntriesTable
+				  WHERE userID = '".$userID."' AND endTime = '00:00:00';";
+	}
 	
-    $result = mysqli_query($conn, $query);
+	$result = mysqli_query($conn, $query);
 	
-    // check if any records found. If records found, gather them into an array and return the array
-    if ($result == false)
-        $rows = null;
-    else {
-        $rows = array();
-        while($row = mysqli_fetch_assoc($result)) {
-            $rows[] = $row;
-        } // end while
-    } // end else
-    
+	// check if any records found. If records found, gather them into an array and return the array
+	if ($result == false)
+		$rows = null;
+	else {
+		$rows = array();
+		while($row = mysqli_fetch_assoc($result)) {
+			$rows[] = $row;
+		} // end while
+	} // end else
+
     mysqli_close($conn);	// Close database connection
 	
 	return $rows;
@@ -410,12 +416,19 @@ function getDailyEntryCG($cgNum) {
 	
 }
 
-function updateDailyEntry($userID, $entryID, $endEnergy, $endTime) {
+function updateDailyEntry($userID, $entryID, $toUpdate) {
 	
 	$conn = dbConnect();	// Create database connection
 	
+	$entryDate = $toUpdate["entryDate"];
+	$startTime = $toUpdate["startTime"];
+	$startEnergy = $toUpdate["startEnergy"];
+	$endTime = $toUpdate["endTime"];
+	$endEnergy = $toUpdate["endEnergy"];
+	
 	$query = "UPDATE dailyEntriesTable
-		  SET endEnergy = '".$endEnergy."', endTime = '".$endTime."' 
+		  SET entryDate = '".$entryDate."', startTime = '".$startTime."', endTime = '".$endTime."',
+		  startEnergy = '".$startEnergy."', endEnergy = '".$endEnergy."'
 		  WHERE userID = '".$userID."' AND entryID = '".$entryID"';";
 	
     $result = mysqli_query($conn, $query);
@@ -425,14 +438,15 @@ function updateDailyEntry($userID, $entryID, $endEnergy, $endTime) {
 	return $result;
 }
 
-function createDailyEntry($userID, $date, $startTime, $startEnergy, $endTime, $endEnergy, $ccGroup, $currentPhase) {
+function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, 
+  $CurrentConditionGroup, $currentPhase) {
 	
 	$conn = dbConnect();	// Close database connection
 	
 	$query = "INSERT INTO dailyEntriesTable ( userID, date, startTime, startEnergy, 
 			  endTime, endEnergy, currentConditionGroup, currentPhase )
-			  VALUES ('".$userID."', '".$date."', '".$startTime."', '".$startEnergy."', '".$endTime."', '".$endEnergy."', '"
-			  .$ccGroup."', '".$currentPhase"');";
+			  VALUES ('".$userID."', '".$entryDate."', '".$startTime."', '".$startEnergy."', '".$endTime."', '".$endEnergy."', '"
+			  .$CurrentConditionGroup."', '".$currentPhase"');";
 		  
     $result = mysqli_query($conn, $query);
     
