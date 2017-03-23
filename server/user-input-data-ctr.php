@@ -113,7 +113,7 @@ switch ($method) {
 }
 
 
-function getDailyEntries($userID, $complete) {
+/*function getDailyEntries($userID, $complete) {
     return
     '{"DailyEntries":[
     {"entryId":"1", 
@@ -159,7 +159,7 @@ function getDailyEntries($userID, $complete) {
 
       //return $userInfo;
  
-}
+}*/
 
 function updateDailyEntry($userID, $entryID, $toUpdate){
   // do update here
@@ -170,7 +170,7 @@ error_log("hello9", 0);
  
 }
 
-function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, 
+/*function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, 
   $CurrentConditionGroup, $currentPhase) {
   error_log("creating entry", 0);
   $newEntryData = array("userId" => $userID,
@@ -185,7 +185,7 @@ function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTim
 
   // do CREATE here
   return true;
-}
+}*/
 
 ?>
 
