@@ -33,7 +33,7 @@ switch ($method) {
       case 'daily_entries_user':
         $userID = "1";                                     // adminID is not required as a parameter. The ID of the user will be from the session and will have to be validated.
                                                                  // It is only provided as an example since u will have to provide parameters from the client to the server in AJAX calls for other controllers    
-        $data = getDailyEntry($userID);
+        $data = getDailyEntries($userID, true);
       error_log(print_r($data, true), 0);
         header('Content-type: application/json');
         //$tableData = json_encode($data);
@@ -61,7 +61,7 @@ switch ($method) {
     break;
 }
 
-function getDailyEntry($userID) {
+/*function getDailyEntry($userID) {
   return
     '{"DailyEntries":[
     {"entryId":"1", 
@@ -104,9 +104,9 @@ function getDailyEntry($userID) {
       "conditionGroupNum":"1", 
       "phaseNum":"2"}
       ]}';
-}
+}*/
 
-function getDailyEntryCG($conditionGroupNum) {
+/*function getDailyEntryCG($conditionGroupNum) {
   /* do a join of daily entries table & user table to get username for condition group ranking:
     ex: SELECT DailyEntries.entryId, DailyEntries.userId, Users.username, DailyEntries.date,
                DailyEntries.startTime, DailyEntries.startEnergy, DailyEntries.endTime,
@@ -116,7 +116,7 @@ function getDailyEntryCG($conditionGroupNum) {
         ON DailyEntries.userId = Users.userId
 
         TODO: remove numLikes, numShares, numPosts, numReminders from string?
-*/
+
   return  
     '{"DailyEntries":[
     {"entryId":"1", 
@@ -210,5 +210,5 @@ function getDailyEntryCG($conditionGroupNum) {
       "phaseNum":"2",
       "teamNumber":"1"}
       ]}';
-}
+}*/
 ?>
