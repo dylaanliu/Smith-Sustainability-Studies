@@ -1,3 +1,5 @@
+<?php
+
 require_once 'utils/utils.php';
 require_once 'model.php';
 
@@ -54,16 +56,16 @@ switch ($method) {
 }
 
 
-function updateProfile($userID, $userName, $toUpdate){
+/*function updateProfile($userID, $userName, $toUpdate){
   // do update here
 error_log("hello9", 0);
 
   $updatedData = json_encode($toUpdate);
   return $updatedData;
  
-}
+}*/
 
-function getUser($userID) {
+/*function getUser($userID) {
 
     return
     '{"User":[
@@ -72,6 +74,6 @@ function getUser($userID) {
 
       //return $userInfo;
  
-}
+}*/
 
 ?>

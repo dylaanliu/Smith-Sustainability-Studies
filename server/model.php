@@ -153,10 +153,14 @@ function updateUser($userID, $userName, $firstName, $lastName, $email, $studyID,
 
 // update a subset of the user record in the userTable table. Returns true if successful; otherwise returns false.
 // Probably a better way of doing this by combining this function with the updateUser function.
-function updateProfile($userID, $userName, $password, $email) {
+function updateProfile($userID, $toUpdate) {
     
     $conn = dbConnect();
     
+	$userName = toUpdate["userName"];
+	$encodedPW = $toUpdate["encodedPW"];
+	$email = $toUpdate["email"];
+	
     // TODO - centralize in one location for maintainability 
     $encodedPW = hash('sha512', $password);
      
@@ -166,9 +170,11 @@ function updateProfile($userID, $userName, $password, $email) {
            "encodedPW='".$encodedPW."',".
            "email='".$email."'".
            " WHERE userID='".$userID."';";
+		   
     $result = mysqli_query($conn, $sql);
 
     mysqli_close($conn);    
+	
     return $result;    
 }
 
