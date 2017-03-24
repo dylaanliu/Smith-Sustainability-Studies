@@ -527,15 +527,63 @@ function getConditionGroupPhase($studyID, $cgNum, $phaseNum) {
 ///////////////////////////////////////////////////////////////////////////////////////
 // postTable Table Functions
 ///////////////////////////////////////////////////////////////////////////////////////
+
+function createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum) {
+	
+	$conn = dbConnect();	// Close database connection
+	
+	$query = "INSERT INTO postTable (userID, dateTime, text, image, conditionGroupNum, phaseNum)
+			  VALUES ('".$userID."', '".$dateTime."', '".$text."', '".$image."', '".$conditionGroupNum."', '".$phaseNum."')";
+	
+    $result = mysqli_query($conn, $query);
+	
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        //$rows = null; // echo error message or return something?
+    
+    mysqli_close($conn);	// Close database connection
+
+	return $result;
+	
+}
+
 // Retreive posts made by all users.
 function getAllUserPosts() {
 	
 	$conn = dbConnect();	// Create database connection
 	
-	$query = "SELECT Posts.postId, Posts.userId, Users.username, Posts.dateTime,
-              Posts.text, Posts.image, Posts.conditionGroupNum, Posts.phaseNum
-			  FROM Posts INNER JOIN Users
-			  ON Posts.userId = Users.userId";
+	$query = "SELECT postTable.postId, postTable.userId, userTable.username, postTable.dateTime,
+              postTable.text, postTable.image, postTable.conditionGroupNum, postTable.phaseNum
+			  FROM postTable INNER JOIN userTable
+			  ON postTable.userId = userTable.userId";
+	
+    $result = mysqli_query($conn, $query);
+	
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        } // end while
+    } // end else
+    
+    mysqli_close($conn);	// Close database connection
+	
+    return $rows;
+	
+}
+
+function getUserPostsCG($conditionGroupNum) {
+	
+	$conn = dbConnect();	// Create database connection
+	
+	// use session if session stores both userid and cgnum
+	$query = "SELECT postTable.postId, postTable.userId, userTable.username, postTable.dateTime,
+              postTable.text, postTable.image, postTable.conditionGroupNum, postTable.phaseNum
+			  FROM postTable INNER JOIN userTable
+			  ON postTable.userId = userTable.userId AND userTable.conditionGroupNum = postTable.conditionGroupNum";
 	
     $result = mysqli_query($conn, $query);
 	

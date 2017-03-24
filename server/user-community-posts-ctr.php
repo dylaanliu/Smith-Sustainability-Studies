@@ -32,7 +32,7 @@ switch ($method) {
   case 'GET':
     error_log("getting condition group posts");
       
-      $conditionGroupPosts = getUserPosts("user id");
+      $conditionGroupPosts = getUserPostsCG("user id");
     error_log(print_r($conditionGroupPosts, true), 0);
       header('Content-type: application/json');
       echo $conditionGroupPosts;
@@ -62,7 +62,7 @@ switch ($method) {
 }
 
 
-function getUserPosts($userID) {
+/*function getUserPosts($userID) {
  /* do a join of posts table & user table to get username for post:
     ex: SELECT Posts.postId, Posts.userId, Users.username, Posts.dateTime,
                Posts.text, Posts.image, Posts.conditionGroupNum, Posts.phaseNum
@@ -72,7 +72,7 @@ function getUserPosts($userID) {
 
   function determines which posts the user can see based on permissions
       
-*/
+
     return
     '{"Posts":[
     {"postId":"1", 
@@ -103,9 +103,9 @@ function getUserPosts($userID) {
 
       //return $userInfo;
  
-}
+}*/
 
-function createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum) {
+/*function createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum) {
   error_log("creating post", 0);
   $newPostData = array("userID" => $userID,
                         "dateTime" => $dateTime,
@@ -117,7 +117,7 @@ function createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phas
 
 // do CREATE here
   return true;
-}
+}*/
 
 ?>
 
