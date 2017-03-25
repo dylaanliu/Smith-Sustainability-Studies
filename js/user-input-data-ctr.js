@@ -21,6 +21,8 @@ function loadUserInputDataIncomplete() {
     // need controller data, but the data here is not used in this case
     var ctrData = { q: "example", otherVar: "someOtherExample" };
 
+    $(".nav li").removeClass("active");
+    $(".nav li #inputData").addClass("active");
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = ""
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
@@ -38,40 +40,48 @@ function loadUserInputDataIncomplete() {
 
                 $.each(incompleteEntryArray.DailyEntries, function(key, entry) {
                     $("#input-mid").append("<div id='"+entry.entryId+"'>"+
-                    "<form class='form-horizontal' id='form-"+entry.entryId+"'>"+
-                        "<div class='form-group'>"+
-                            "<label class='control-label col-sm-2' for='entry-date-incomplete-"+entry.entryId+"'>Date</label>"+
-                            "<div class='col-sm-3'>"+
-                                "<input class='form-control' type='date' id='entry-date-incomplete-"+entry.entryId+"' value=' '>"+
-                            "</div>"+
-                        "</div>"+
-
-                        "<div class='form-group'>"+
-                            "<label class='control-label col-sm-2' for='start-time-incomplete-"+entry.entryId+"'>Start Time</label>"+
-                            "<div class='col-sm-3'>"+
-                                "<input class='form-control' type='time' id='start-time-incomplete-"+entry.entryId+"' value=' '>"+
+                        "<form class='form-horizontal' id='form-"+entry.entryId+"'>"+
+                            "<div class='form-group'>"+
+                                "<label class='control-label col-sm-2' for='entry-date-incomplete-"+entry.entryId+"'>Date</label>"+
+                                "<div class='col-sm-3'>"+
+                                    "<input class='form-control' type='date' id='entry-date-incomplete-"+entry.entryId+"' value=' '>"+
+                                "</div>"+
                             "</div>"+
 
-                            "<label class='control-label col-sm-2' for='start-energy-incomplete-"+entry.entryId+"'>Start Energy (kWH)</label>"+
-                            "<div class='col-sm-3'>"+
-                                "<input class='form-control' type='number' step='0.01' id='start-energy-incomplete-"+entry.entryId+"'>"+
-                            "</div>"+
-                        "</div>"+
-                        "<div class='form-group'>"+
-                            "<label class='control-label col-sm-2' for='end-time-incomplete-"+entry.entryId+"'>End Time</label>"+
-                            "<div class='col-sm-3'>"+
-                                "<input class='form-control' type='time' id='end-time-incomplete-"+entry.entryId+"'>"+
-                            "</div>"+
+                            "<div class='form-group'>"+
+                                "<label class='control-label col-sm-2' for='start-time-incomplete-"+entry.entryId+"'>Start Time</label>"+
+                                "<div class='col-sm-3'>"+
+                                    "<input class='form-control' type='time' id='start-time-incomplete-"+entry.entryId+"' value=' '>"+
+                                "</div>"+
 
-                            "<label class='control-label col-sm-2' for='end-energy-incomplete-"+entry.entryId+"'>End Energy (kWH)</label>"+
-                            "<div class='col-sm-3'>"+
-                                "<input class='form-control' type='number' step='0.01' id='end-energy-incomplete-"+entry.entryId+"'>"+
-                            "</div>"+          
-                        "</div>"+
-                        "<div class='form-group'>"+
-                            "<button type='submit' class='btn btn-default pull-right' id="+entry.entryId+">Save</button>"+
-                        "</div>"+
-                    "</form>"+
+                                "<label class='control-label col-sm-2' for='start-energy-incomplete-"+entry.entryId+"'>Start Energy (kWH)</label>"+
+                                "<div class='col-sm-3'>"+
+                                    "<input class='form-control' type='number' step='0.01' id='start-energy-incomplete-"+entry.entryId+"'>"+
+                                "</div>"+
+                            "</div>"+
+                            "<div class='form-group'>"+
+                                "<label class='control-label col-sm-2' for='end-time-incomplete-"+entry.entryId+"'>End Time</label>"+
+                                "<div class='col-sm-3'>"+
+                                    "<input class='form-control' type='time' id='end-time-incomplete-"+entry.entryId+"'>"+
+                                "</div>"+
+
+                                "<label class='control-label col-sm-2' for='end-energy-incomplete-"+entry.entryId+"'>End Energy (kWH)</label>"+
+                                "<div class='col-sm-3'>"+
+                                    "<input class='form-control' type='number' step='0.01' id='end-energy-incomplete-"+entry.entryId+"'>"+
+                                "</div>"+          
+                            "</div>"+
+                            "<div class='form-group'>"+
+                                "<button type='submit' class='btn btn-default pull-right' id="+entry.entryId+">Save</button>"+
+                            "</div>"+
+                        "</form>"+
+                        "<div class='row'>"+
+                            "<div class='col-md-12'>"+
+                                "<div class='separator'>"+
+                                    "<a href='#'>"+
+                                    "</a>"+
+                                "</div>"+
+                            "</div>"+ 
+                        "</div>"+   
                     "</div>");
                     document.getElementById("entry-date-incomplete-"+entry.entryId).value=entry.date;
                     document.getElementById("start-time-incomplete-"+entry.entryId).value=entry.startTime;

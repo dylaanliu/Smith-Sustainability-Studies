@@ -5,6 +5,8 @@
 }); // end function*/
 
 function loadUserCommunityView() {
+    $(".nav li").removeClass("active");
+    $(".nav li #communityPosts").addClass("active");
 
 //  var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/user-community-posts-ctr.php";
@@ -78,7 +80,7 @@ function insertHTML(postsString){
         $("#accordion").append(
             "<div class='media-footer'"+
                 "<p>where share buttons and like go</p>"+
-            "</div>"+
+            //"</div>"+
         "</div>");
 
  

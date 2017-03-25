@@ -1,4 +1,5 @@
 <?php
+session_start();
 /*
 THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
 AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
@@ -17,6 +18,9 @@ SEE
 https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/  
 */
 
+require_once 'utils/utils.php';
+require_once 'model.php';
+
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
 
@@ -25,29 +29,37 @@ $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POS
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
+    error_log("got into user-home - GET");
 
-/*  adminID is not required as a parameter. 
-    The ID of the user will be from the session and will have to be validated.
-    It is only provided as an example since we will have to provide parameters 
-    from the client to the server in AJAX calls for other controllers */ 
-
-    // need to check if this exists: ISSET?
-    if(!isset($_GET["q"])) {
-      htpp_response_code(500);
-    }
-
-    $queryType = $_GET["q"]; // don't need userID, as will use $_SESSION
+    $queryType = cleanInputGet('q');
+    $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
     switch ($queryType) {
-      case "user":
-        // need to check for error fromgetUser if the query was not succesfful
-        $userInfo = getUser("fakeUserID");
-        header('Content-type: application/json');
-        echo $userInfo;
-
+      case "getUser":
+        $userRecords = null;
+        $error = false;
+        if ($queryType === "getUser" && !empty($userID)) { 
+            $userRecords = getUser($userID);
+            if ($userRecords == null) {
+                $error = true;
+                $errorMsg = 'No user record found';
+            }
+            else
+                $errorMsg = 'User record found';
+        }
+        else {
+            $error = true;
+            $errorMsg = 'Unknown GET or userID';            
+        }
+        
+        echo json_encode(array(
+                  "error" => $error,
+                  "errorMsg" => $errorMsg, 
+                  "data" => $userRecords));
         break;
       case "condition_group_phase":
-        $studyID = $_GET["studyId"];
-        $conditionGroupNum = $_GET["CurrentConditionGroup"];
+    error_log("got into user-home - getting cg and phase permission");
+        $studyID = $_GET["studyID"];
+        $conditionGroupNum = $_GET["currentConditionGroup"];
         $phaseNum = $_GET["currentPhase"];
         $conditionGroupPhaseInfo = getConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum);
         header('Content-type: application/json');
@@ -74,7 +86,7 @@ probably make the SQL queries easier.
 
 At present, a static JSON object string. BE needs to return a JSON object (sorted by id) string
 This function should also be in a separate PHP file with all the other functions as per the Data Design*/
-function getUser($userID) {
+/*function getUser($userID) {
     return
     '{"User":[
       {"userId":"1", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
@@ -82,7 +94,7 @@ function getUser($userID) {
 
       //return $userInfo;
  
-}
+}*/
 
 function getConditionGroupPhase($studyID, $cgNum, $phaseNum) {
         return 

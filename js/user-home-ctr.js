@@ -2,40 +2,49 @@
 
 $(document).ready(function() {
 
-	loadUserHomeView();
-	
+    loadUserHomeView();
+    
 }); // end function
 
 function loadUserHomeView() {
-
     var view = "views/user-home-view.html";
     var controller = "server/user-home-ctr.php";
     // need controller data, but the data here is not used in this case
 
     // can use userData to see which cg and phase user is in
-    var userQuery= { q: "user"};
+    var userQuery= { q: "getUser"};
     var cgPhaseQuery = { q: "condition_group_phase", studyId: "", CurrentConditionGroup: "", currentPhase: ""};
     var rewardsQuery = { q: "reward", studyId: ""};
+    
+    //make link on nav active
+    $(".nav li #userHome").addClass("active");
     
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
             // Get and fill in user information from User Data table
-            $.getJSON(controller, userQuery, function(userArray) {
-                
+            console.log("page success");
+            $.getJSON(controller, userQuery, function(userString) {
+                console.log(userString);
+                var userArray = userString.data[0];
+                console.log(userArray);
                 // clear contents
                 document.getElementById("username").innerHTML = "";
 
                 // html injection
-                document.getElementById("username").textContent=userArray["User"][0]["firstName"];
+                document.getElementById("username").textContent=userArray.firstName;
+              
 
-                cgPhaseQuery["studyId"] = userArray["User"][0]["studyId"];
-                cgPhaseQuery["CurrentConditionGroup"] = userArray["User"][0]["CurrentConditionGroup"];
-                cgPhaseQuery["currentPhase"] = userArray["User"][0]["currentPhase"];
+                cgPhaseQuery["studyID"] = userArray.studyID;
+                cgPhaseQuery["currentConditionGroup"] = userArray.currentConditionGroup;
+                cgPhaseQuery["currentPhase"] = userArray.currentPhase;
 
-                $.getJSON(controller, cgPhaseQuery, function(conditionGroupPhaseArray){
-                    var phasePermission = conditionGroupPhaseArray["ConditionGroupPhase"][0]["phasePermission"];
+                $.getJSON(controller, cgPhaseQuery, function(conditionGroupPhaseString){
+            console.log(conditionGroupPhaseString);
+                    // modify to data[0] when use real function
+                    var conditionGroupPhaseArray = conditionGroupPhaseString.ConditionGroupPhase[0];
+                    var phasePermission = conditionGroupPhaseArray.phasePermission;
                     var permissionArray = phasePermission.split("");
                     var index = 0;
 
@@ -44,6 +53,7 @@ function loadUserHomeView() {
                     // permissionArray[8] to permssionArray[11] = statistics
                     // permissionArray[7] to permissionArray[3] = community posts
                     // permissionArray[0] to permissionArray[2] = rewards section
+                    console.log(permissionArray);
                     if(permissionArray[12] == '0'){
                         $("#inputData").hide();
                     } 
@@ -163,5 +173,5 @@ function loadUserHomeView() {
     
             
         }
-	});
+    });
 } // end function

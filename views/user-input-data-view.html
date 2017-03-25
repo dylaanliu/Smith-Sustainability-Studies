@@ -1,57 +1,80 @@
-    <div class="container">
-        <h1>Input Data</h1>
-        <!--Auto insert date and time using JS
-        <input id="date" name="date">
-
-<script type="text/javascript">
-  document.getElementById('date').value = Date();
-</script>-->
-        <div class="row" id="input-top">
-            <!--New Entry-->
-            <h3>New Entry</h3>
-            <form class="form-horizontal" id="new-entry">
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="entry-date-input">Date</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" type="date" id="entry-date-input" value="">
+<div class="container-fluid">
+    <h1 class="title"> Input Data</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h3>New Entry</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="separator">
+                            <a href="#">
+                            </a>
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="start-time-input">Start Time</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" type="time" id="start-time-input" value="">
-                    </div>
-
-                    <label class="control-label col-sm-2" for="start-energy-input">Start Energy (kWH)</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" type="number" step="0.01" value="00.00" id="start-energy-input">
+                <div class="row">
+                    <div class = "col-md-12" id="input-top">
+                        <!--New Entry-->
+                        
+                        <form class="form-horizontal" id="new-entry">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="entry-date-input">Date</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="date" id="entry-date-input" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="start-time-input">Start Time</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="time" id="start-time-input" value="">
+                                </div>
+                                <label class="control-label col-sm-2" for="start-energy-input">Start Energy (kWH)</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="number" step="0.01" value="00.00" id="start-energy-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="end-time-input">End Time</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="time" id="end-time-input">
+                                </div>
+                                <label class="control-label col-sm-2" for="end-energy-input">End Energy (kWH)</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="number" step="0.01" value="00.00" id="end-energy-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-default pull-right" id="input-submit">Save</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="end-time-input">End Time</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" type="time" id="end-time-input">
-                    </div>
-
-                    <label class="control-label col-sm-2" for="end-energy-input">End Energy (kWH)</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" type="number" step="0.01" value="00.00" id="end-energy-input" >
-                    </div>
-
-                </div>
-                <div class="form-group">
-                 <button type="submit" class="btn btn-default pull-right" id="input-submit">Save</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="row" id="input-mid">
-            <h3>Incomplete Entries</h3>
-            <!--Incomplete Entries show up if there are any - load from JS-->
-        </div>
-
-        <div class="row" id="input-bottom">
-            <!--Completed Entries show up if there any - load from JS-->
+            </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h3>Incomplete Entries</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="separator">
+                            <a href="#">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                <div class = "col-md-12" id="input-mid"> 
+                        <!--Incomplete Entries show up if there are any - load from JS-->
+                
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

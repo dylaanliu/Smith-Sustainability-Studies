@@ -1,42 +1,220 @@
-    <div class="container">
-            <h1>Welcome, <span id="username"></span>!</h1>
-        <div class="row" id="home-top">
-            
-            <h2>What's New</h2>
-            <!--"What's new" dynamically loaded from JS-->
-            <!--Basic-->
-            <p id="dataEntry">You can input your data from the watt meter on the <em><strong>Input Data page</strong></em></p>
-
-            <!--Statistics-->
-            <p id="personalStats">You can check your statistics on the <em><strong>Statistics page</strong></em></p>
-            <p id="conditionGroupStats">You can check your condition group statistics on the <em><strong>Statistics page</strong></em></p>
-            <p id="subTeamStats">You can check your sub-team statistics on the <em><strong>Statistics page</strong></em></p>
-            <p id="socialMediaStats">You can share your statistics on <em><strong>Social Media</strong></em></p>  
-                      
-            <!--Community Posts-->
-            <p id="submitTips">You can now submit tips on the <em><strong>Community Posts page</strong></em>!</p>
-            <p id="adminTips">You can now see Admin's tips on the <em><strong>Community Posts page</strong></em>!</p>
-            <p id="conditionGroupTips">You can now see tips from your fellow condition group members on the <em><strong>Community Posts page</strong></em>!</p>
-            <p id="subTeamTips">You can now see tips from your fellow sub-team members on the <em><strong>Community Posts page</strong></em>!</p>
-            <p id="socialMediaTips">You can now share tips on the <em><strong>Community Posts page</strong></em>!</p>
-
-            <!--Rewards Do we want to have an update about these, or no?-->
-            <p id="privateRewards">You can now earn <em><strong>Reward Badges</strong></em>!</p>
-            <p id="publicRewards">You can now earn <em><strong>Reward Badges</strong></em>!</p>
-            <p id="progression">You're now in the <em><strong>progression system</strong></em>!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h1 class="title">
+                    Welcome Back!</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="separator">
+                            <a href="#">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="whatsnew">
+                        <!-- <div class='col-sm-1'>
+                        Dynamically loaded from JS
+                    </div> -->
+                        <div id="dataEntry">
+                            <div class='col-xs-1'><i class="pe-7s-leaf"></i></div>
+                            <div class="col-xs-11">
+                                <p><strong>INPUT THE DATA</strong> FROM YOUR WATTMETER BY CLICKING ON THE <strong>INPUT DATA</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Statistics-->
+                        <div id="personalStats">
+                            <div class='col-xs-1'><i class="pe-7s-graph1"></i></div>
+                            <div class="col-xs-11">
+                                <p>CHECK YOUR <strong>PERSONAL STATISTICS</strong> BY CLICKING ON THE <strong>STATISTICS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="conditionGroupStats">
+                            <div class='col-xs-1'><i class="pe-7s-graph1"></i></div>
+                            <div class="col-xs-11">
+                                <p>ALSO, CHECK YOUR <strong>CONDITION GROUP'S STATISTISTICS</strong> BY CLICKING ON THE <strong>STATISTICS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="subTeamStats">
+                            <div class='col-xs-1'><i class="pe-7s-graph1"></i></div>
+                            <div class="col-xs-11">
+                                <p>ALSO, CHECK YOUR <strong>SUB-TEAM'S STATISTISTICS</strong> BY CLICKING ON THE <strong>STATISTICS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="socialMediaStats">
+                            <div class='col-xs-1'><i class="pe-7s-graph1"></i></div>
+                            <div class="col-xs-11">
+                                <p>YOU CAN NOW <strong>SHARE YOUR STATISTICS</strong> TO YOUR SOCIAL MEDIA.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Community Posts-->
+                        <div id="submitTips">
+                            <div class='col-xs-1'><i class="pe-7s-chat"></i></div>
+                            <div class="col-xs-11">
+                                <p>COMMENT AND SUBMIT ENERGY SAVING TIPS BY CLICKING ON THE <strong>COMMUNITY POSTS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="adminTips">
+                            <div class='col-xs-1'><i class="pe-7s-chat"></i></div>
+                            <div class="col-xs-11">
+                                <p>CHECK <strong>POSTS MADE BY THE ADMINS</strong> FOR ENERGY SAVING TIPS BY CLICKING ON THE <strong>COMMUNITY POSTS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="conditionGroupTips">
+                            <div class='col-xs-1'><i class="pe-7s-chat"></i></div>
+                            <div class="col-xs-11">
+                                <p>CHECK POSTS MADE BY YOUR <strong>CONDITION GROUP MEMBERS</strong> BY CLICKING ON THE <strong>COMMUNITY POSTS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="subTeamTips">
+                            <div class='col-xs-1'><i class="pe-7s-chat"></i></div>
+                            <div class="col-xs-11">
+                                <p>CHECK POSTS MADE BY YOUR <strong>SUB-TEAM MEMBERS</strong> BY CLICKING ON THE <strong>COMMUNITY POSTS</strong> TAB.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="socialMediaTips">
+                            <div class='col-xs-1'><i class="pe-7s-chat"></i></div>
+                            <div class="col-xs-11">
+                                <p>YOU CAN NOW <strong>SHARE COMMUNITY POSTS</strong> TO YOUR SOCIAL MEDIA.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="separator">
+                                        <a href="#">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Rewards Do we want to have an update about these, or no?-->
+                        <div id="privateRewards">
+                            <div class='col-xs-1'></div>
+                            <div class="col-xs-11">
+                                <p>YOU CAN NOW EARN<em><strong> PRIVATE REWARD BADGES</strong></em>!</p>
+                            </div>
+                            <div id="publicRewards">
+                                <div class='col-xs-1'></div>
+                                <div class="col-xs-11">
+                                    <p>YOU CAN NOW EARN<em><strong> PUBLIC REWARD BADGES</strong></em>!</p>
+                                </div>
+                                <p id="progression">YOU CAN NOW TRACK PROGRESS WITH A<em><strong> PROGRESSION</strong> BAR</em>!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- card -->
+                </div>
+                <!-- col-md-12 -->
+            </div>
+            <!-- row -->
         </div>
-
-        <div class="row" id="home-mid">
-            <!--TODO: "Rewards" dynamically loaded from JS
-                if # of tds = odd, then add another td; otherwise, new row-->
-            <h2>Your Rewards</h2>
-            <div class="col-sm-10 col-offset-1" id="rewards">
-                <table id="rewardTable">
-                    <tr ir="rewardRow">
-                        <td id="rewardCell"><p id="rewardDescr"><img src="images/yellow_star.png"> Entered 10 entries </p></td>
-                        <td id="second"><p id="rewardDescr"><img src="images/green_star.png"> Liked 10 tips </p></td>
-                    </tr>
-
-                </table>
     </div>
-
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h1 class="title">Your Rewards!</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="separator">
+                            <a href="#">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="rewards">
+                        <table id="rewardTable">
+                            <tr ir="rewardRow">
+                                <td id="rewardCell">
+                                    <p id="rewardDescr"><img src="img/yellow_star.png"> Entered 10 entries </p>
+                                </td>
+                                <td id="second">
+                                    <p id="rewardDescr"><img src="img/green_star.png"> Liked 10 tips </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!--row -->
+            </div>
+            <!-- card -->
+        </div>
+    </div>
+    <!-- row -->
+</div>

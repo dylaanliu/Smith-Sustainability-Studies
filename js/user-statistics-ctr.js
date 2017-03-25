@@ -6,14 +6,17 @@ $(document).ready(function(){
 
 function loadUserStatisticsView() {
 
-//	var data_file = "adminhome.json"; // path to temp json file
+    $(".nav li").removeClass("active");
+    $(".nav li #statistics").addClass("active");
+
+//  var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/user-statistics-ctr.php"
     var userDailyEntry = { q: "daily_entries_user"};
     var cgDailyEntry = {q: "daily_entries_condition_group", conditionGroupNum: ""};
     var cgUserDailyEntry = {q: "users_in_condition_group", conditionGroupNum: ""};
     var view = "views/user-statistics-view.html";
     
-	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
+    $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
@@ -39,26 +42,15 @@ function loadUserStatisticsView() {
             //loadPersonalStatistics();
             //loadConditionGroupStatistics();
         }
-	});
+    });
 } // end function
 
 function loadPersonalStatistics(userDailyEntryString){
     
     console.log("hello stats1");
 
-
-
-
-/*    $('#entries-table').DataTable({
-        "aaData": userDailyEntryArray,
-        "aoColumnDefs":[{
-            "sTitle":"Energy",
-            "aTargets": ["energy"]
-        }]
-    });*/
-
  // put into a table
-    var pastEntriesArray = [['Start Energy', 'End Energy', "Date"]];
+    //var pastEntriesArray = [['Start Energy', 'End Energy', "Date"]];
 
      $("#past-entries").append(
         "<div class='table-responsive'>"+          
@@ -78,66 +70,126 @@ function loadPersonalStatistics(userDailyEntryString){
     var personalDailyEntryArray = $.map(userDailyEntryString, function(el) {
         return el;
     });
+
     $.each(personalDailyEntryArray, function(key, entry){
-    console.log("adding personal entries");
-       $("#entries").append(
+        var tDate = entry.date.split(/[-]/);
+        var sDate = new Date(Date.UTC(tDate[0], tDate[1]-1, tDate[2]));
+        var strDate = sDate.toDateString().slice(3);
+        console.log("adding personal entries");
+        $("#entries").append(
             "<tr>"+
                 "<td>"+entry.startEnergy+"</td>"+
                 "<td>"+entry.endEnergy+"</td>"+
-                "<td>"+entry.date+"</td>"+
+                "<td>"+strDate+"</td>"+
             "</tr>");
-
     });    
 
+    $('#entryTable').dataTable({
+        "iDisplayLength": 5,
+        "bLengthChange": false,
+        "bFilter": false
+        
+    });
+
+
     // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('visualization', '1', {'packages':['corechart', 'controls']});
 
     // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(createChart);
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    //google.charts.setOnLoadCallback(drawDashboard);
+
+    
+    
 
     // Callback that creates and populates a data table,
     // instantiates the chart, passes in the data and
     // draws it.
-    function drawChart() {
+    function createChart() {
 
        //var jsonData = '';
        //console.log(result);
        
 
         var userDailyEntryArray = convertToPersonalTable(userDailyEntryString);
-        var data = new google.visualization.arrayToDataTable(userDailyEntryArray);
+        //var data = new google.visualization.arrayToDataTable(userDailyEntryArray);
 
+        var dash_container = document.getElementById('dashboard'),
+        myDashboard = new google.visualization.Dashboard(dash_container);
+
+        var myDateSlider = new google.visualization.ControlWrapper({
+            'controlType': 'ChartRangeFilter',
+            'containerId': 'control',
+            'options': {
+                'filterColumnLabel': 'Date'
+            }
+        });
+
+        var trendLine = new google.visualization.ChartWrapper({
+            chartType: 'Line',
+            containerId: 'trendChart',
+            options: {
+                title: 'Energy consumption per day (kWh)',
+                vAxis: {
+                    'title': "Energy (kWh)"
+                }
+            }
+
+        });
+
+        myDashboard.bind(myDateSlider, trendLine);  
+        
         // Set chart options
         var options = {
            
-                width: 600,
+        
                 height: 300,
                 title: 'Energy consumption per day',
                 subtitle: 'in KWs inputted',
-                legend: { position: 'bottom' }
-           
+                legend: { position: 'none' },
+                enableInteractivity: false,
+                
+            
+
+                vAxis: {
+                  'title': "Energy (kWh)"
+                }
 
         };
 
+        myDashboard.draw(userDailyEntryArray, options);
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.LineChart(document.getElementById('trendTable'));
-        chart.draw(data, options);
+        //var chart = new google.visualization.LineChart(document.getElementById('trendChart'));
+        //chart.draw(data, options);
         
       } // end drawChart
+
+    
 
 } // end loadPersonalStatistics
 
 function convertToPersonalTable(arr) {
-    console.log("convertToTable");
-    var array = [['Date', 'TotalEnergy']];
+    console.log("convertPersonalToTable");
+    //var array = [['Date', 'TotalEnergy']];
+    var array = new google.visualization.DataTable();
+    array.addColumn('date', 'Date');
+    array.addColumn('number', "Energy (kWh)");
     //console.log(array);
     //console.log(arr["DailyEntries"]);
     $.each(arr.DailyEntries, function(key, entry){
+        var tDate = entry.date.split(/[-]/);
+        var sDate = new Date(tDate[0], tDate[1]-1, tDate[2]);
+        //var strDate = sDate.toDateString().slice(3);
         //console.log("hit: "+entry);
-        array.push([entry.date, (entry.endEnergy - entry.startEnergy)]);
+        array.addRows([
+                        [sDate, (entry.endEnergy - entry.startEnergy)]
+        ]);
     });
-    //console.log(array);
+    console.log("table data:");
+    console.log(array);
     return array;
 }
 
@@ -149,7 +201,7 @@ function loadConditionGroupStatistics(cgDailyEntryString) {
     console.log(cgDailyEntryArray);
 
     // put into a table
-    var array = [['Rank', 'Username']];
+    //var array = [['Rank', 'Username']];
 
      $("#ranking").append(
         "<div class='table-responsive'>"+          
@@ -170,13 +222,16 @@ function loadConditionGroupStatistics(cgDailyEntryString) {
             "<tr>"+
                 "<td>"+(cgDailyEntryArray.indexOf(user) + 1)+"</td>"+
                 "<td>"+user.username+"</td>"+
-              "</tr>");
-              
-              
-
-        //array.push([cgDailyEntryArray.indexOf(cgDailyEntryArray.userId), cgDailyEntryArray.username]);
+              "</tr>"
+        );
+    });
+    $('#rankTable').dataTable({
+        "iDisplayLength": 5,
+        "bLengthChange": false,
+        "bFilter": false
     });
 
+        
 }
 
 function loadSubTeamStatistics(cgDailyEntryString) {
@@ -216,15 +271,17 @@ function loadSubTeamStatistics(cgDailyEntryString) {
         // Set chart options
         var options = {
            
-                width: 600,
-                height: 300
-           
-
+            height: 300,
+            title: 'Energy Consumption per Team', 
+            legend: { position: 'none' },            
+            vAxis: {
+              'title': "Sub-Teams"
+            }
         };
 
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.BarChart(document.getElementById('subTeamTable'));
+        var chart = new google.visualization.BarChart(document.getElementById('subTeamChart'));
         chart.draw(data, options);
         
       } // end drawChart
