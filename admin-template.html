@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li id="loadMonitorUsers">
-                            <a href="#" onclick="viewManager('views/admin-monitor-users-view.html')">
+                            <a href="#" onclick="loadAdminMonitorUsersView()">
                                 <i class="pe-7s-note2"></i>
                                 <p>MONITOR USERS</p>
                             </a>
@@ -114,11 +114,10 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="#" id="admin-logout">
                                         <i class="pe-7s-close-circle"></i>
                                         <p>Log out</p>
                                     </a>
-                                    <!-- TODO: Logout functionality -->
                                 </li>
                             </ul>
                         </div> 
@@ -150,9 +149,9 @@
     <!-- wrapper -->
 
     <!--JavaScript-->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.validate.js"></script>
+    <script src="vendor/jquery-3.1.1.min.js"></script>
+    <script src="vendor/bootstrap.min.js"></script>
+    <script src="vendor/jquery.validate.js"></script>
 
     <!-- DataTables JavaScript -->
     <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
@@ -168,15 +167,15 @@
     <!-- Controllers -->
     <script src="js/Template.js"></script>
     <script src="js/utilities.js"></script>
-    <script src="js/admin-template-ctr.js"></script>
+    <script src="js/admin-user-template-ctr.js"></script>
 
     <script src="js/admin-home-ctr.js"></script>
     <script src="js/admin-user-accounts-ctr.js"></script>
-    <script src="js/admin-create-study-ctr.js"></script>
-    
+    <script src="js/admin-monitor-users-ctr.js"></script>
+    <script src="js/admin-create-study-ctr.js"></script>    
+    <script src="js/admin-manage-studies-ctr.js"></script> 
     <script src="js/admin-monitor-studies-ctr.js"></script>
     <script src="js/admin-profile-ctr.js"></script> 
-    <script src="js/admin-manage-studies-ctr.js"></script> 
 
 
     </body>

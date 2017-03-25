@@ -20,6 +20,12 @@ CREATE TABLE `userTable` ( userID INTEGER NOT NULL AUTO_INCREMENT,
                            currentConditionGroup INTEGER DEFAULT 0, 
                            currentPhase INTEGER DEFAULT 0, 
                            teamNum INTEGER DEFAULT 1, 
+                           entriesNumPhase INTEGER NOT NULL DEFAULT 0, 
+                           postsNumPhase INTEGER NOT NULL DEFAULT 0, 
+                           likesNumPhase INTEGER NOT NULL DEFAULT 0, 
+                           entriesNumTotal INTEGER NOT NULL DEFAULT 0, 
+                           postsNumTotal INTEGER NOT NULL DEFAULT 0, 
+                           likesNumTotal INTEGER NOT NULL DEFAULT 0, 
                            PRIMARY KEY (userID));
 
 -- create super users
@@ -71,6 +77,10 @@ INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLeve
                         ('Happy_Fender', 
                          '9a28d599533d315dc93b23ac1974ba1f8e5ab728fc73979b0e91169ecc74a56701e9e3595f77421559eb4da1bdaa965f6237fe246faca73836a05deb29818b6e', 
                          'Happy', 'Fender', 'user', 1, 'Happy_Fender@yahoo.com', 2, 2);
+INSERT INTO `userTable` (userName, encodedPW, firstName, lastName, privilegeLevel, adminID, email, studyID, currentConditionGroup) VALUES 
+                        ('Teddy_Dixon', 
+                         SHA2('Teddy_Dixon', 512), 
+                         'Teddy', 'Dixon', 'user', 1, 'Teddy_Dixon@yahoo.com', 2, 2);
 
                          
 -- LOAD DATA LOCAL INFILE  '' 

@@ -8,7 +8,7 @@
 // go to content div and shove some stuff in
 
 var userAccountsTable;
-var adminUserAccountsController = "server/admin-user-accounts-ctr.php" + "?_=" + (new Date()).getTime();  // load from server always
+var adminUserAccountsController = "server/admin-user-accounts-ctr.php";
 
 // should not be using globals 
 var adminUserAccountsControllerEditRowPos;
@@ -19,7 +19,7 @@ $(document).ready(function() {
 });
 
 
-function renderTable(result){
+function renderUserAccountTable(result){
     document.getElementById("insertUserTable").innerHTML = "";
 
     $.each(result.data, function(key, user) {
@@ -67,7 +67,7 @@ function loadAdminUserAccountsView(createUserIn) {
             console.log("hello");
             $.getJSON(adminUserAccountsController, controllerData, function(result) {
                 console.log(JSON.stringify(result));
-                renderTable(result);
+                renderUserAccountTable(result);
                 if (createUser)
                     $("#create-new-account").trigger( "click" );
             });

@@ -29,9 +29,8 @@ require_once 'model.php';
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
 
-// TODO - TEMP just setting an admin ID that we know exists in the database. This should be 
-// retrieved from the session if the user is validated and has permission to this page.
-$adminID = '1';
+// $adminID = '1';
+$adminID = $_SESSION['userID'];
     
 // create SQL based on HTTP method
 switch ($method) {

@@ -20,37 +20,19 @@ function loadUserStatisticsView() {
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
-            //alert("success");
-            //console.log("before get");
             $.getJSON(controller, userDailyEntry, function(userDailyEntryString){
-                //console.log("hello get1");
-                //console.log(result["DailyEntries"]);
                 loadPersonalStatistics(userDailyEntryString);
                 cgDailyEntry["conditionGroupNum"] = userDailyEntryString["DailyEntries"][0]["conditionGroupNum"];
-                //console.log(cgDailyEntry["conditionGroupNum"]);
-                console.log("before getting cg stats");
                 $.getJSON(controller, cgDailyEntry, function(cgDailyEntryString){
-                    console.log("got cg stats");
                     loadConditionGroupStatistics(cgDailyEntryString);
-                    loadSubTeamStatistics(cgDailyEntryString);
+                    loadSubTeamStatistics(cgDailyEntryString); 
                 });
-
-
-
             });
-
-            //loadPersonalStatistics();
-            //loadConditionGroupStatistics();
         }
     });
 } // end function
 
 function loadPersonalStatistics(userDailyEntryString){
-    
-    console.log("hello stats1");
-
- // put into a table
-    //var pastEntriesArray = [['Start Energy', 'End Energy', "Date"]];
 
      $("#past-entries").append(
         "<div class='table-responsive'>"+          
@@ -98,12 +80,6 @@ function loadPersonalStatistics(userDailyEntryString){
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(createChart);
 
-    // Set a callback to run when the Google Visualization API is loaded.
-    //google.charts.setOnLoadCallback(drawDashboard);
-
-    
-    
-
     // Callback that creates and populates a data table,
     // instantiates the chart, passes in the data and
     // draws it.
@@ -142,67 +118,43 @@ function loadPersonalStatistics(userDailyEntryString){
         myDashboard.bind(myDateSlider, trendLine);  
         
         // Set chart options
-        var options = {
-           
-        
+        var options = {        
                 height: 300,
                 title: 'Energy consumption per day',
                 subtitle: 'in KWs inputted',
                 legend: { position: 'none' },
-                enableInteractivity: false,
-                
-            
-
                 vAxis: {
                   'title': "Energy (kWh)"
                 }
-
         };
 
-        myDashboard.draw(userDailyEntryArray, options);
-
-        // Instantiate and draw our chart, passing in some options.
-        //var chart = new google.visualization.LineChart(document.getElementById('trendChart'));
-        //chart.draw(data, options);
-        
+        myDashboard.draw(userDailyEntryArray, options);       
       } // end drawChart
 
-    
-
+    $(window).resize(function(){
+        createChart();
+    });
 } // end loadPersonalStatistics
 
 function convertToPersonalTable(arr) {
-    console.log("convertPersonalToTable");
-    //var array = [['Date', 'TotalEnergy']];
     var array = new google.visualization.DataTable();
     array.addColumn('date', 'Date');
     array.addColumn('number', "Energy (kWh)");
-    //console.log(array);
-    //console.log(arr["DailyEntries"]);
+
     $.each(arr.DailyEntries, function(key, entry){
         var tDate = entry.date.split(/[-]/);
         var sDate = new Date(tDate[0], tDate[1]-1, tDate[2]);
-        //var strDate = sDate.toDateString().slice(3);
-        //console.log("hit: "+entry);
         array.addRows([
                         [sDate, (entry.endEnergy - entry.startEnergy)]
         ]);
     });
-    console.log("table data:");
-    console.log(array);
     return array;
 }
 
 function loadConditionGroupStatistics(cgDailyEntryString) {
-    console.log("conditionGroup stats");
-
     var cgDailyEntryArray = convertToCGArray(cgDailyEntryString);
-    console.log("after sorting");
-    console.log(cgDailyEntryArray);
 
     // put into a table
-    //var array = [['Rank', 'Username']];
-
      $("#ranking").append(
         "<div class='table-responsive'>"+          
           "<table class='table' id='rankTable'>"+
@@ -229,9 +181,7 @@ function loadConditionGroupStatistics(cgDailyEntryString) {
         "iDisplayLength": 5,
         "bLengthChange": false,
         "bFilter": false
-    });
-
-        
+    });        
 }
 
 function loadSubTeamStatistics(cgDailyEntryString) {
@@ -259,7 +209,7 @@ function loadSubTeamStatistics(cgDailyEntryString) {
 
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(drawChart);
-     function drawChart() {
+    function drawChart() {
         console.log("drawChart");
        //var jsonData = '';
        //console.log(result);
@@ -284,7 +234,11 @@ function loadSubTeamStatistics(cgDailyEntryString) {
         var chart = new google.visualization.BarChart(document.getElementById('subTeamChart'));
         chart.draw(data, options);
         
-      } // end drawChart
+    } // end drawChart
+
+    $(window).resize(function(){
+        drawChart();
+    });
 }
 
 function convertToCGArray(cgDailyEntryString){
@@ -303,3 +257,4 @@ function convertToCGArray(cgDailyEntryString){
 
     return cgDailyEntryArray;
 }
+

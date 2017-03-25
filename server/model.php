@@ -24,7 +24,6 @@ function validateUser($usernameIn, $passwordIn) {
     $conn = dbConnect();
     
     $encodedPW = hash('sha512', $passwordIn);    // password hashing using SHA512      
-error_log($encodedPW, 0);
 
     $res = mysqli_query($conn, "SELECT * FROM userTable WHERE userName = '$usernameIn'");
     $row = mysqli_fetch_array($res);
@@ -648,9 +647,11 @@ function createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupN
     $conn = dbConnect();
     error_log("userID: ".$userID." dateTime: ".$dateTimeStamp." postText: ".$postText. " image: ". $image." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
 
-    $sql = "INSERT INTO postTable (userID, dateTimeStamp, postText, image, conditionGroupNum, phaseNum, studyID) ".
-            " VALUES ('".$userID."',".$dateTimeStamp.",'".$postText."','".$image."','".$conditionGroupNum."','".$phaseNum."','".$studyID."');";
-           //";";
+     $sql = "INSERT INTO postTable ".
+           "(userID, dateTimeStamp, postText, image, conditionGroupNum, phaseNum, studyID)".
+           " VALUES ".
+           "('".$userID."','".$dateTimeStamp."','".$postText."','".$image."','".$conditionGroupNum."','".$phaseNum."','".$studyID."')".
+           ";";
 
     $result = mysqli_query($conn, $sql);
     

@@ -105,17 +105,20 @@ switch ($method) {
         $error = false;
         $studyID = $_GET["studyID"];
         $study = getStudy($studyID);
-        if ($study == null) {
+        $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+        
+        if ($study == null || $conditionGroupPhase == null) {
             $error = true;
-            $errorMsg = 'No study found';
+            $errorMsg = 'No study or condition group phase found';
             error_log("some error", 0);
         }
         else
-            $errorMsg = 'Study found';
+            $errorMsg = 'Study and condition group phase found';
         echo json_encode(array(
                   "error" => $error,
                   "errorMsg" => $errorMsg, 
-                  "data" => $study));
+                  "study" => $study,
+                  "conditionGroupPhase" => $conditionGroupPhase));
         error_log("returned from study: ",0);
         error_log(print_r($study, true),0);
         break;
@@ -165,9 +168,12 @@ switch ($method) {
   case 'POST':
     error_log("Posting new post");
     $error = false;
-    $postRecord = null;
+    //$postRecord = null;
 
-    $dateTimeStamp = cleanInputPost("dateTime1");
+//    $dateTimeStamp = cleanInputPost("dateTime1");
+    date_default_timezone_set('America/Toronto');
+    $dateTimeStamp = date('Y-m-d H:i:s'); // when the study is made active
+
     $text = cleanInputPost("text1");
     $image = cleanInputPost("image1");
     $conditionGroupNum = cleanInputPost("conditionGroupNum1");

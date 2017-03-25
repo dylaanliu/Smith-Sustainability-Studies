@@ -45,9 +45,9 @@ error_log("index - SESSION userID = ".$_SESSION['userID']);
         // setup values for client
         $errorMsg = "Successfully Logged in...";
         if ($userRecord['privilegeLevel'] == "admin" || $userRecord['privilegeLevel'] == "super_admin") {
-            $redirect = "/498/admin-template.html";
+            $redirect = dirname(dirname($_SERVER['REQUEST_URI']))."/admin-template.html";
         } else {
-            $redirect = "/498/user-template.html";            
+            $redirect = dirname(dirname($_SERVER['REQUEST_URI']))."/user-template.html";
         }
     } else {
         $error = true;
