@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 /*
@@ -113,6 +114,27 @@ error_log("got into user-profile - PUT");
     break;
 }
 
-?>
 
+
+function updateProfile($userID, $userName, $toUpdate){
+  // do update here
+error_log("hello9", 0);
+
+  $updatedData = json_encode($toUpdate);
+  return $updatedData;
  
+}
+
+function getUser($userID) {
+
+    return
+    '{"User":[
+      {"userId":"1", "userName":"amy123", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "email":"amy_schumer@gmail.com", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
+      ]}';
+
+      //return $userInfo;
+ 
+}
+
+
+?>
