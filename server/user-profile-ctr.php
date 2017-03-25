@@ -16,6 +16,22 @@ switch ($method) {
     $userData = getUser("fakeUserID");
 //error_log('hello php2',0);
     header('Content-type: application/json');
+	
+	// $error = false;
+	
+	// if ( $userData == null ) {
+		// $error = true;
+		// $errorMsg = "Failed to retrieve user data";
+	// }
+	// else {
+		// $errorMsg = "Successfully retrieved user data";
+	// }
+		
+	// echo json_encode(array(
+				// "error" => $error,
+				// "errorMsg" => $errorMsg, 
+				// "data" => $userData));
+	
     echo $userData;
 //error_log($incompleteEntries,0);
     break;
@@ -41,6 +57,21 @@ switch ($method) {
     $updatedData = updateDailyEntry($userID, $toUpdate);
   error_log(gettype($updatedData),0);
    header("Content-Type: application/json", true);
+   
+   	// $error = false;
+	
+	// if ( ! $userData ) {
+		// $error = true;
+		// $errorMsg = "Failed to update user data";
+	// }
+	// else {
+		// $errorMsg = "Successfully updated user data";
+	// }
+		
+	// echo json_encode(array(
+				// "error" => $error,
+				// "errorMsg" => $errorMsg, 
+				// "data" => $updatedData));
 
     echo $updatedData;
     //

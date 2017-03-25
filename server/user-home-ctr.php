@@ -61,9 +61,26 @@ switch ($method) {
         $studyID = $_GET["studyID"];
         $conditionGroupNum = $_GET["currentConditionGroup"];
         $phaseNum = $_GET["currentPhase"];
+		//$error = false;
         $conditionGroupPhaseInfo = getConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum);
         header('Content-type: application/json');
-        echo $conditionGroupPhaseInfo;
+        
+		
+		// if ( conditionGroupPhaseInfo == null ) {
+			// $error = true;
+			// $errorMsg = "Unable to get condition group and phase permissions";
+		// }
+		// else {
+			// $errorMsg = "Successfully retrieved condition group and phase permissions";
+		// }
+		
+        // echo json_encode(array(
+                  // "error" => $error,
+                  // "errorMsg" => $errorMsg, 
+                  // "data" => $conditionGroupPhaseInfo));	
+				  
+		echo $conditionGroupPhaseInfo;
+		
         break;
       case "rewards":
         break;

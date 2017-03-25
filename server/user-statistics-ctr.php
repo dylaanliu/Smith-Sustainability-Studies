@@ -39,6 +39,22 @@ switch ($method) {
         //$tableData = json_encode($data);
       //error_log(print_r($tableData, true), 0);
     error_log($data, 0);
+	
+		// $error = false;
+		
+		// if ( $data == null ) {
+			// $error = true;
+			// $errorMsg = "Failed to retrieve daily entries";
+		// }
+		// else {
+			// $errorMsg = "Successfully retrieved daily entries";
+		// }
+			
+		// echo json_encode(array(
+					// "error" => $error,
+					// "errorMsg" => $errorMsg, 
+					// "data" => $data));
+	
         echo $data;
         break;
       case 'daily_entries_condition_group':
@@ -46,6 +62,22 @@ switch ($method) {
         error_log($conditionGroupNum,0);
         $conditionGroupData = getDailyEntryCG($conditionGroupNum);
         error_log($conditionGroupData,0);
+		
+		// $error = false;
+		
+		// if ( $conditionGroupData == null ) {
+			// $error = true;
+			// $errorMsg = "Failed to retrieve condition group daily entries";
+		// }
+		// else {
+			// $errorMsg = "Successfully retrieved condition group daily entries";
+		// }
+			
+		// echo json_encode(array(
+					// "error" => $error,
+					// "errorMsg" => $errorMsg, 
+					// "data" => $conditionGroupData));
+		
         echo $conditionGroupData;
         break;
 

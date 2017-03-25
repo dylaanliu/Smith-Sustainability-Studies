@@ -31,6 +31,22 @@ switch ($method) {
   case 'GET':
 
     $incompleteEntries = getDailyEntries("fakeUserID", false);
+	
+	// $error = false;
+	
+	// if ( $incompleteEntries == null ) {
+		// $error = true;
+		// $errorMsg = "Failed to retrieve daily entries";
+	// }
+	// else {
+		// $errorMsg = "Successfully retrieve daily entries";
+	// }
+		
+	// echo json_encode(array(
+				// "error" => $error,
+				// "errorMsg" => $errorMsg, 
+				// "data" => $incompleteEntries));
+				
 //error_log('hello php2',0);
     header('Content-type: application/json');
     echo $incompleteEntries;
@@ -66,6 +82,21 @@ switch ($method) {
   error_log(gettype($updatedData),0);
    header("Content-Type: application/json", true);
 
+   	// $error = false;
+	
+	// if ( ! $updatedData ) {
+		// $error = true;
+		// $errorMsg = "Failed to update daily entries";
+	// }
+	// else {
+		// $errorMsg = "Successfully updated daily entries";
+	// }
+		
+	// echo json_encode(array(
+				// "error" => $error,
+				// "errorMsg" => $errorMsg, 
+				// "data" => $updatedData));
+   
     echo $updatedData;
     //
     break;
@@ -102,6 +133,22 @@ switch ($method) {
   error_log($currentPhase_in);
     $success = createDailyEntry("fakeUserID", $entryDate_in, $startTime_in, $startEnergy_in, $endTime_in, $endEnergy_in, $CurrentConditionGroup_in, $currentPhase_in);
   error_log("yay!");
+  
+	// $error = false;
+	
+	// if ( ! $success ) {
+		// $error = true;
+		// $errorMsg = "Failed to create entry";
+	// }
+	// else {
+		// $errorMsg = "Successfully created entry";
+	// }
+		
+	// echo json_encode(array(
+				// "error" => $error,
+				// "errorMsg" => $errorMsg, 
+				// "success" => $success));
+  
     echo $success;
     break;
   case 'DELETE':                           // not required in this controller

@@ -35,6 +35,22 @@ switch ($method) {
       $conditionGroupPosts = getUserPostsCG("user id");
     error_log(print_r($conditionGroupPosts, true), 0);
       header('Content-type: application/json');
+	  
+	  	// $error = false;
+		
+		// if ( $conditionGroupPosts == null ) {
+			// $error = true;
+			// $errorMsg = "Failed to retrieve condition group posts";
+		// }
+		// else {
+			// $errorMsg = "Successfully retrieved condition group posts";
+		// }
+			
+		// echo json_encode(array(
+					// "error" => $error,
+					// "errorMsg" => $errorMsg, 
+					// "posts" => $conditionGroupPosts));
+	  
       echo $conditionGroupPosts;
       break;
 
@@ -51,6 +67,22 @@ switch ($method) {
 
     $success = createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum);
     error_log("succeeded");
+	
+	// $error = false;
+	
+	// if ( $success == null ) {
+		// $error = true;
+		// $errorMsg = "Failed to create post";
+	// }
+	// else {
+		// $errorMsg = "Successfully created post";
+	// }
+		
+	// echo json_encode(array(
+				// "error" => $error,
+				// "errorMsg" => $errorMsg, 
+				// "post" => $success));
+					
     echo $success;
 
     break;
