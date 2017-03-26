@@ -31,7 +31,7 @@ switch ($method) {
     $queryType = $_GET["q"]; // don't need userID, as will use $_SESSION
     switch ($queryType) {
       case 'daily_entries_user':
-        $userID = "1";                                     // adminID is not required as a parameter. The ID of the user will be from the session and will have to be validated.
+        $userID = $_SESSION['userID'];                                     // adminID is not required as a parameter. The ID of the user will be from the session and will have to be validated.
                                                                  // It is only provided as an example since u will have to provide parameters from the client to the server in AJAX calls for other controllers    
         $data = getDailyEntries($userID, true);
       error_log(print_r($data, true), 0);
@@ -58,7 +58,7 @@ switch ($method) {
         echo $data;
         break;
       case 'daily_entries_condition_group':
-        $conditionGroupNum = $_GET["conditionGroupNum"];
+        $conditionGroupNum = $_SESSION["currentConditionGroup"];
         error_log($conditionGroupNum,0);
         $conditionGroupData = getDailyEntryCG($conditionGroupNum);
         error_log($conditionGroupData,0);

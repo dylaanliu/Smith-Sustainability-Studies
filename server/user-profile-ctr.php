@@ -12,8 +12,9 @@ error_log($method,0);
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
-
-    $userData = getUser("fakeUserID");
+	
+	$userID = $userID = $_SESSION['userID'];
+    $userData = getUser($userID);
 //error_log('hello php2',0);
     header('Content-type: application/json');
 	
@@ -38,7 +39,7 @@ switch ($method) {
   case 'PUT':
   error_log('hello php2',0);
     parse_str(file_get_contents("php://input"), $put_vars);
-    $userID = "1"; // get from SESSION
+    $userID = $_SESSION['userID']; // get from SESSION
     $toUpdate = array("entryID" => $userID);
     $userName = $put_vars["userName1"];
     if ($userName != null) {
@@ -46,7 +47,7 @@ switch ($method) {
     } 
     $password = $put_vars["password1"];
     if ($password != "") {
-      $toUpdate["encodedPW"] = $startTime;
+      $toUpdate["encodedPW"] = $startTime;	// should this be $password?
     } 
     $email = $put_vars["email1"];
     if ($email != "") {
@@ -71,7 +72,7 @@ switch ($method) {
 	// echo json_encode(array(
 				// "error" => $error,
 				// "errorMsg" => $errorMsg, 
-				// "data" => $updatedData));
+				// "profileUpdated" => $updatedData));
 
     echo $updatedData;
     //

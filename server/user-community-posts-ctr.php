@@ -31,8 +31,9 @@ error_log($method,0);
 switch ($method) {
   case 'GET':
     error_log("getting condition group posts");
-      
-      $conditionGroupPosts = getUserPostsCG("user id");
+      $userID = $_SESSION['userID'];
+	  $conditionGroupNum = $_SESSION["currentConditionGroup"];
+      $conditionGroupPosts = getUserPostsCG($userID, $conditionGroupNum);
     error_log(print_r($conditionGroupPosts, true), 0);
       header('Content-type: application/json');
 	  
@@ -58,7 +59,7 @@ switch ($method) {
     break;
   case 'POST':
   error_log("Posting new post");
-    $userID = "fakeUserID"; // get from SESSIONS
+    $userID = $_SESSION['userID']; // get from SESSIONS
     $dateTime = cleanInputGet($_POST["dateTime1"]);
     $text = cleanInputGet($_POST["text1"]);
     $image = cleanInputGet($_POST["image1"]);

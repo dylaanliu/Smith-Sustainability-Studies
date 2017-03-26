@@ -98,7 +98,7 @@ switch ($method) {
 	// echo json_encode(array(
 				// "error" => $error,
 				// "errorMsg" => $errorMsg, 
-				// "data" => $updatedData));
+				// "entriesUpdated" => $updatedData));
    
     echo $updatedData;
     //
@@ -212,14 +212,14 @@ switch ($method) {
  
 }*/
 
-function updateDailyEntry($userID, $entryID, $toUpdate){
+/*function updateDailyEntry($userID, $entryID, $toUpdate){
   // do update here
 error_log("hello9", 0);
 
   $updatedData = json_encode($toUpdate);
   return $updatedData;
  
-}
+}*/
 
 /*function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, 
   $CurrentConditionGroup, $currentPhase) {

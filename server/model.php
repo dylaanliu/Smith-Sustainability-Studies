@@ -575,7 +575,7 @@ function getAllUserPosts() {
 	
 }
 
-function getUserPostsCG($conditionGroupNum) {
+function getUserPostsCG($userID, $conditionGroupNum) {
 	
 	$conn = dbConnect();	// Create database connection
 	
@@ -583,7 +583,8 @@ function getUserPostsCG($conditionGroupNum) {
 	$query = "SELECT postTable.postId, postTable.userId, userTable.username, postTable.dateTime,
               postTable.text, postTable.image, postTable.conditionGroupNum, postTable.phaseNum
 			  FROM postTable INNER JOIN userTable
-			  ON postTable.userId = userTable.userId AND userTable.conditionGroupNum = postTable.conditionGroupNum";
+			  ON postTable.userId = userTable.userId
+			  WHERE postTable.userId = '".$userID."' AND postTable.conditionGroupNum = '".$cgNum."';";
 	
     $result = mysqli_query($conn, $query);
 	
