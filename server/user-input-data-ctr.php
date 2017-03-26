@@ -30,7 +30,9 @@ error_log($method,0);
 switch ($method) {
   case 'GET':
 
-    $incompleteEntries = getDailyEntries("fakeUserID", false);
+	$userID = $_SESSION['userID'];
+	
+    $incompleteEntries = getDailyEntries($userID, false);
 	
 	// $error = false;
 	
@@ -78,7 +80,8 @@ switch ($method) {
       $toUpdate["endEnergy"] = $endEnergy;
     } 
   error_log(print_r($toUpdate, true), 0);
-    $updatedData = updateDailyEntry("fakeUserID", $entryID, $toUpdate);
+    $userID = $_SESSION['userID'];
+    $updatedData = updateDailyEntry($userID, $entryID, $toUpdate);
   error_log(gettype($updatedData),0);
    header("Content-Type: application/json", true);
 
@@ -131,7 +134,8 @@ switch ($method) {
     $currentPhase_in = strip_tags($currentPhase_in);
     $currentPhase_in = htmlspecialchars($currentPhase_in);
   error_log($currentPhase_in);
-    $success = createDailyEntry("fakeUserID", $entryDate_in, $startTime_in, $startEnergy_in, $endTime_in, $endEnergy_in, $CurrentConditionGroup_in, $currentPhase_in);
+    $userID = $_SESSION['userID'];
+    $success = createDailyEntry($userID, $entryDate_in, $startTime_in, $startEnergy_in, $endTime_in, $endEnergy_in, $CurrentConditionGroup_in, $currentPhase_in);
   error_log("yay!");
   
 	// $error = false;
