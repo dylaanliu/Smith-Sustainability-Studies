@@ -32,7 +32,7 @@ switch ($method) {
     error_log("got into user-home - GET");
 
     $queryType = cleanInputGet('q');
-    $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
+    $userID = $_SESSION['userID']; //isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
     switch ($queryType) {
       case "getUser":
         $userRecords = null;
@@ -58,9 +58,9 @@ switch ($method) {
         break;
       case "condition_group_phase":
     error_log("got into user-home - getting cg and phase permission");
-        $studyID = $_GET["studyID"];
-        $conditionGroupNum = $_GET["currentConditionGroup"];
-        $phaseNum = $_GET["currentPhase"];
+        $studyID = $_SESSION["studyID"];	//$_GET["studyID"];
+        $conditionGroupNum = $_SESSION["currentConditionGroup"];	//$_GET["currentConditionGroup"];
+        $phaseNum = $_SESSION["currentPhase"];	//$_GET["currentPhase"];
 		//$error = false;
         $conditionGroupPhaseInfo = getConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum);
         header('Content-type: application/json');
