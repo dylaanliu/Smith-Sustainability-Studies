@@ -357,6 +357,11 @@ function getStudy($studyID) {
     return $rows;
 }
 
+function progressPhase($studyID) {
+	// progress user by a phase after meeting condition (numPosts, likes, shares)
+	// need studyID to check number of phases in study
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // dailyEntriesTable Table Functions
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -583,8 +588,8 @@ function getUserPostsCG($userID, $conditionGroupNum) {
 	$query = "SELECT postTable.postId, postTable.userId, userTable.username, postTable.dateTime,
               postTable.text, postTable.image, postTable.conditionGroupNum, postTable.phaseNum
 			  FROM postTable INNER JOIN userTable
-			  ON postTable.userId = userTable.userId
-			  WHERE postTable.userId = '".$userID."' AND postTable.conditionGroupNum = '".$cgNum."';";
+			  ON postTable.userId = '".$userID."' AND userTable.userId = '".$userID."' AND
+			  postTable.conditionGroupNum = '".$cgNum."' AND userTable.currentConditionGroup = '".$cgNum."';";
 	
     $result = mysqli_query($conn, $query);
 	
