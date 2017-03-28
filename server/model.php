@@ -580,7 +580,34 @@ function getAllUserPosts() {
 	
 }
 
-function getUserPostsCG($userID, $conditionGroupNum) {
+// Retrieve all posts made by admin specified
+function getAdminPosts($userID) {
+	
+	$conn = dbConnect();	// Create database connection
+	
+	$query = "SELECT postID, postTable.userID, dateTimeStamp, postText, image
+			 FROM postTable INNER JOIN userTable
+			 ON postTable.userID = '".$userID."' AND userTable.userID = .'"$userID."' AND 
+			 userTable.privilegeLevel = ('admin' OR 'super_admin')";
+
+	$result = mysqli_query($conn, $query);
+	
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        } // end while
+    } // end else
+    
+    mysqli_close($conn);	// Close database connection
+	
+    return $rows;
+	
+}
+/* function getUserPostsCG($userID, $conditionGroupNum) {
 	
 	$conn = dbConnect();	// Create database connection
 	
@@ -623,11 +650,15 @@ function getPostCGPhase($studyID, $conditionGroupNum, $phaseNum) {
                postTable.postText, postTable.image, postTable.conditionGroupNum, postTable.phaseNum, postTable.studyID ".*/
 
 // TODO: Do join with matching study, phase and cg num params
-    $sql =  "SELECT *".
-            "FROM postTable ;";
+    //$sql =  "SELECT *".
+            //"FROM postTable ;";
            // "INNER JOIN userTable ".
            // "ON postTable.userID=userTable.userID ".
             //"WHERE studyID='".$studyID."' AND conditionGroupNum='".$conditionGroupNum."' AND phaseNum='".$phaseNum."';";
+	
+	$query = "SELECT *
+			 FROM postTable
+			 WHERE studyID='".$studyID."' AND conditionGroupNum='".$conditionGroupNum."' AND phaseNum='".$phaseNum."';";
  
     $result = mysqli_query($conn, $sql);
 
