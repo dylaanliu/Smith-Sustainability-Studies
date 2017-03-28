@@ -1,16 +1,13 @@
 function loadUserProfileView() {
 
     var controller = "server/user-profile-ctr.php"
-
     var controllerData = { q: "getUser"};
     var view = "views/user-profile-view.html";
-
 
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
-
             $.getJSON(controller, controllerData, function(profileString) {
                 console.log(JSON.stringify(profileString));
             
@@ -19,9 +16,6 @@ function loadUserProfileView() {
                 $('#profile-mid #userName').attr("value", user.userName);
                 $('#profile-mid #email').val(user.email);
                 $('#profile-mid #email').attr("value", user.email);
-
-				
-
             });
         } // end if
     });
@@ -86,7 +80,6 @@ console.log("got here 1");
                         $('#profile-mid #userName').attr("value", $('#profile-mid #userName').val());
                         $('#profile-mid #email').attr("value", $('#profile-mid #email').val());
 
-
                         if (result.error) {
                             alert("Error: " + result.errorMsg)
                         }
@@ -102,23 +95,3 @@ console.log("got here 1");
         });
     });
 }
-
-		$.ajax({
-			url: 'server/user-profile-ctr.php',
-			type: 'PUT',
-			dataType: 'text',
-			contentType: 'application/json; charset=utf-8',
-			data: {userName1: userName, email1: email, password1: password},
-			success: function(result) {
-				console.log(result);
-				console.log("updated!");
-			},
-			error: function(jqXHR, exception) {
-				console.log(jqXHR);
-				console.log(exception);
-				console.log("Update went wrong");
-			}
-		}); // end ajax
-	});
-}
-

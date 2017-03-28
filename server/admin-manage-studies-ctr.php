@@ -1,42 +1,12 @@
 <?php
-session_start();
-// THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-// AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-// OTHER POSSIBLE MISSING FEATURES ARE:
-//     No related data (automatic joins) supported
-//     No condensed JSON output supported
-//     No support for PostgreSQL or SQL Server
-//     No POST parameter support
-//     No JSONP/CORS cross domain support
-//     No base64 binary column support
-//     No permission system
-//     No search/filter support
-//     No pagination or sorting supported
-//     No column selection supported
-// SEE
-// https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
-//////////////////////////////////////////////////////////////////////////////////
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('admin');
 
-require_once 'utils/utils.php';
-require_once 'model.php';
-
-
-// TODO put in below just for DEBUGGING
-//$_SESSION['privilegeLevel'] = "super_admin";
-//$_SESSION['privilegeLevel'] = "admin";
-
-// only admins and super_admins are allowed to access this page
- if (!(authenticate("admin") || authenticate("super_admin"))) {
-    header('HTTP/1.0 403 Forbidden');
-    echo 'You are forbidden!';
-    die();
-}
-
+// get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-
-// TODO - TEMP just setting an admin ID that we know exists in the database. This should be 
-// retrieved from the session if the user is validated and has permission to this page.
-$adminID = '1';
+// $userID = '1';
+$userID = $_SESSION['userID'];
     
 error_log("got into admin-manage-studies. Method: ".$method);
 
@@ -49,7 +19,7 @@ error_log("got into admin-manage-studies - GET");
         $conditionGroupPhase = null;
         $q = cleanInputGet('q');
 
-        $studies = getAdminStudies($adminID);
+        $studies = getAdminStudies($userID);
         if ($studies == null) {
             $error = true;
             $errorMsg = 'No studies found';
@@ -57,7 +27,7 @@ error_log("got into admin-manage-studies - GET");
         else {
             $errorMsg = 'Admin studies found.';
 
-            $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+            $conditionGroupPhase = getAdminConditionGroupPhase($userID);
             if ($conditionGroupPhase == null) {
                 $error = true;
                 $errorMsg = 'Database error accessing conditionGroupTable';
@@ -287,7 +257,7 @@ error_log("got into admin-manage-studies - POST");
                 $errorMsg .= 'Database error: could not increment maximum condition group number in study. ';
             } 
             
-            $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+            $conditionGroupPhase = getAdminConditionGroupPhase($userID);
             if ($conditionGroupPhase == null) {
                 $error = true;
                 $errorMsg .= ' Database error accessing conditionGroupTable. ';
@@ -393,7 +363,7 @@ error_log("got into admin-manage-studies - DELETE: ".$_SERVER['QUERY_STRING']);
                         } else {
                             // get the condition group phase records to display
                             $errorMsg .= 'Condition Group deleted.';
-                            $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+                            $conditionGroupPhase = getAdminConditionGroupPhase($userID);
                             if ($conditionGroupPhase == null) {
                                 $error = true;
                                 $errorMsg .= 'Database error accessing conditionGroupTable';

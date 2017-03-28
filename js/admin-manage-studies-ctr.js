@@ -16,7 +16,11 @@ function loadAdminManageStudiesView(startStudyIDIn) {
 
     var controllerData = { q: "getStudies" }
     var view = "views/admin-manage-studies-view.html";
-    
+
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadManageStudies').addClass('active');
+  
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
@@ -35,7 +39,7 @@ function loadAdminManageStudiesView(startStudyIDIn) {
                             "<form id='editStudyForm" + studyRecord.studyID + "' class='form-horizontal' role='form'>" +
                             "<div class='panel-heading'>" + 
                                 "<div class='col-sm-12 panel-title'>" + 
-                                    "<h4>Study " + studyRecord.studyID + ": " + studyRecord.title + "</h4>" + 
+                                    "<h3 style='float: left;'>Study " + studyRecord.studyID + ": </h3><h4>" + studyRecord.title + "</h4>" + 
                                 "</div>" + 
                                 "<div class='form-group'>" +
                                     "<label for='description" + studyRecord.studyID + "' class='col-sm-2 control-label'>Study Summary:</label>" +
@@ -65,7 +69,14 @@ function loadAdminManageStudiesView(startStudyIDIn) {
                                     conditionGroupPhaseTabsEdit(studyRecord.studyID, conditionGroupPhaseArray) +
                                 "</div>" +      
                             "</div>" +
-                            "</form>";
+                            "</form>"+
+                            "<div class='row'>"+
+                                "<div class='col-md-12'>"+
+                                    "<div class='separator'>"+
+                                        "<a href='#'></a>"+
+                                    "</div>" +
+                                "</div>" + 
+                            "</div>";
                         $("#manageStudiesTable").append(insertStr);
                     }); // end each
                 }

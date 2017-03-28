@@ -42,7 +42,16 @@ $("#loginForm").submit(function( event ) {
                 localStorage.setItem("CurrentConditionGroup", data.currentConditionGroup);
                 localStorage.setItem("currentPhase", data.currentPhase);
                 localStorage.setItem("studyID", data.studyID);
+                localStorage.setItem("teamNumber", data.teamNum);
+              console.log(JSON.stringify(data));  
+                var userID = localStorage.getItem("userID");
+                var currentConditionGroup = localStorage.getItem("CurrentConditionGroup");
+                var currentPhase = localStorage.getItem("currentPhase");
+                var studyID = localStorage.getItem("studyID");
+                var teamNumber = localStorage.getItem("teamNumber");
 
+                console.log("user ID: "+userID + " condition group: "+currentConditionGroup+" phase: "+currentPhase +" study: "+studyID+" teamNumber: "+teamNumber);
+                alert("index.js user team: "+ teamNumber);
                 window.location.href = location.origin + data.redirect;
             }                        
         });

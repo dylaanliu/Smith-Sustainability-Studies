@@ -35,10 +35,17 @@ function validateUser($usernameIn, $passwordIn) {
 
 
 // get user from the userTable table
-function getUser($userID) {
+function getUser($userID, $hideEncodedPW = true) {
     
     $conn = dbConnect();
-    $result = mysqli_query($conn, "SELECT * FROM userTable WHERE userID='".$userID."';");
+    if ($hideEncodedPW)
+        $columns = "userID, userName, firstName, lastName, email, privilegeLevel, adminID, studyID, currentConditionGroup, ".
+                   "currentPhase, teamNum, entriesNumPhase, postsNumPhase, likesNumPhase, entriesNumTotal, postsNumTotal, likesNumTotal ";
+    else
+        $columns = "userID, userName, encodedPW, firstName, lastName, email, privilegeLevel, adminID, studyID, currentConditionGroup, ".
+                   "currentPhase, teamNum, entriesNumPhase, postsNumPhase, likesNumPhase, entriesNumTotal, postsNumTotal, likesNumTotal ";
+        
+    $result = mysqli_query($conn, "SELECT ".$columns." FROM userTable WHERE userID='".$userID."';");
 
     // check if any records found. If records found, gather them into an array and return the array
     if ($result == false)
@@ -46,7 +53,8 @@ function getUser($userID) {
     else {
         $rows = array();
         while($row = mysqli_fetch_assoc($result)) {
-            $row['encodedPW'] = '';             // don't send password to client for security reasons
+//            if ($hideEncodedPW)
+//                $row['encodedPW'] = '';             // don't send password to client for security reasons
             $rows[] = $row;
         }
     }
@@ -56,11 +64,14 @@ function getUser($userID) {
 }
 
 
+
 // get all the records from the userTable table
 function getAllUsers() {
     
     $conn = dbConnect();
-    $result = mysqli_query($conn, "SELECT * FROM userTable");
+    $columns = "userID, userName, firstName, lastName, email, privilegeLevel, adminID, studyID, currentConditionGroup, ".
+               "currentPhase, teamNum, entriesNumPhase, postsNumPhase, likesNumPhase, entriesNumTotal, postsNumTotal, likesNumTotal ";
+    $result = mysqli_query($conn, "SELECT ".$columns." FROM userTable");
 
     // check if any records found. If records found, gather them into an array and return the array
     if ($result == false)
@@ -68,7 +79,7 @@ function getAllUsers() {
     else {
         $rows = array();
         while($row = mysqli_fetch_assoc($result)) {
-            $row['encodedPW'] = '';             // don't send password to client for security reasons
+//            $row['encodedPW'] = '';             // don't send password to client for security reasons
             $rows[] = $row;
         }
     }
@@ -523,7 +534,7 @@ function getConditionGroupPhases($studyID, $conditionGroupNum) {
             "FROM conditionGroupPhaseTable ".
             "WHERE studyID='".$studyID."' AND conditionGroupNum='".$conditionGroupNum."';";
     $result = mysqli_query($conn, $sql);
-
+error_log($sql);
     // check if any records found. If records found, gather them into an array and return the array
     if ($result == false) {
         $rows = null;
@@ -539,6 +550,33 @@ function getConditionGroupPhases($studyID, $conditionGroupNum) {
     return $rows;    
 }
 
+function getUserConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum) {  
+    $conn = dbConnect();    // Create database connection
+error_log("study ".$studyID." ".$conditionGroupNum." ".$phaseNum);
+    // build string and get records    
+/*    $sql = "SELECT * ".
+              "FROM conditionGroupPhaseTable ".
+              "WHERE studyID='".$studyID."' AND condtionGroupNum='".$cgNum."' AND phaseNum = '".$phaseNum."';";*/
+    $sql =  "SELECT * ".
+        "FROM conditionGroupPhaseTable ".
+        "WHERE studyID='".$studyID."' AND conditionGroupNum='".$conditionGroupNum."' AND phaseNum = '".$phaseNum."';";
+
+    $result = mysqli_query($conn, $sql);
+    error_log("message1", 0);
+    error_log(print_r($result, true), 0);
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        } // end while
+    } // end else
+    
+    mysqli_close($conn);    // Close database connection   
+    return $rows;
+}
 
 // update a record in the conditionGroupPhaseTable table. Returns true if successful; otherwise returns false.
 function updateConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum, $fieldArray) {
@@ -631,6 +669,43 @@ function getPostCGPhase($studyID, $conditionGroupNum, $phaseNum) {
     return $rows;
 }   
 
+function getUserPostsCG($studyID, $conditionGroupNum, $phaseNum) { 
+    $conn = dbConnect();    // Create database connection
+    error_log("condtionGroupNum ".$conditionGroupNum, 0);
+    // use session if session stores both userid and cgnum
+    $sql = "SELECT postTable.postID, postTable.userID, userTable.userName, postTable.dateTimeStamp,
+              postTable.postText, postTable.image, postTable.conditionGroupNum, postTable.phaseNum ".
+              "FROM postTable ".
+              " INNER JOIN userTable ".
+              " ON postTable.userID = userTable.userID ".
+              " WHERE postTable.studyID='".$studyID."' AND postTable.conditionGroupNum='".$conditionGroupNum."' AND postTable.phaseNum='".$phaseNum."';";
+error_log($sql);
+/*    $sql = "SELECT *
+              FROM postTable INNER JOIN userTable
+              ON postTable.userID = userTable.userID AND userTable.conditionGroupNum = postTable.conditionGroupNum";*/
+
+    
+    $result = mysqli_query($conn, $sql);
+error_log("result: ");
+error_log(print_r($result, true), 0);
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false) {
+    error_log("no result for posts", 0);
+        $rows = null;
+    }
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        } // end while
+    } // end else
+    
+    mysqli_close($conn);    // Close database connection
+    
+    return $rows;
+    
+}
+
 // delete a post from the postTable 
 function deletePost($postID) {
     
@@ -654,7 +729,7 @@ function createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupN
            ";";
 
     $result = mysqli_query($conn, $sql);
-    
+error_log($sql);
     // return null if the creation was not successful
     if (!$result) {
         mysqli_close($conn);  
@@ -665,7 +740,7 @@ function createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupN
     error_log($result,0);
 
     // get the record and hence the ID if record was successfully created
-    $sql = "SELECT * from postTable ORDER BY ID DESC LIMIT 1;";
+    $sql = "SELECT * from postTable ORDER BY postID DESC LIMIT 1;";
     $result = mysqli_query($conn, $sql);
 
     // check if any record found. If records found, gather them into an array and return the array
@@ -677,14 +752,50 @@ function createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupN
     }
 
     mysqli_close($conn);
-    error_log("row: ",0);
-    error_log($row,0);        
+/*    error_log("row: ",0);
+    error_log(print_r($row, true),0);    */    
     return $row;    
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // DailyEntriesTable Functions
 ///////////////////////////////////////////////////////////////////////////////////////
+function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, $conditionGroupNum, $phaseNum, $studyID, $teamNumber) {
+    
+    $conn = dbConnect();    // Close database connection
+    
+    $sql = "INSERT INTO dailyEntriesTable ".
+            "(userID, entryDate, startTime, startEnergy, endTime, endEnergy, conditionGroupNum, phaseNum, studyID, teamNumber)".
+              " VALUES ".
+            "('".$userID."', '".$entryDate."', '".$startTime."', '".$startEnergy."', '".$endTime."', '".$endEnergy."', '".$conditionGroupNum."', '".$phaseNum."', '".$studyID."', '".$teamNumber."')".
+              ";";
+     
+    $result = mysqli_query($conn, $sql);
+    error_log($sql);
+
+    // return null if the creation was not successful
+    if (!$result) {
+        mysqli_close($conn);  
+        error_log("No result",0);  
+        return null;
+    }
+
+    // get the record and hence the ID if record was successfully created
+    $sql = "SELECT * from postTable ORDER BY postID DESC LIMIT 1;";
+    $result = mysqli_query($conn, $sql);
+
+    // check if any record found. If records found, gather them into an array and return the array
+    if ($result == false) {
+        error_log("No row",0);
+        $row = null;
+    } else {
+        $row = mysqli_fetch_array($result);
+    }
+
+    mysqli_close($conn);    // Close database connection   
+    return $result;   
+}
+
 function getStudyDailyEntries($studyID) {
 
     $conn = dbConnect();
@@ -709,6 +820,119 @@ error_log("getStudyDailyEntries: ".$studyID, 0);
     mysqli_close($conn);    
     return $rows;
 
+}
+
+function getDailyEntries($userID, $complete) {
+    
+    $conn = dbConnect();    // Create database connection
+    error_log("user ID: ".$userID." complete: ".$complete);
+    if ($complete) {    // Get all completed daily entries
+        $sql = "SELECT * ".
+                 " FROM dailyEntriesTable ".
+                 " WHERE userID = '".$userID."' AND endEnergy > '0'".
+                 " ORDER BY entryDate DESC".
+                 ";";
+    }       
+    else {  // Get all incomplete daily entries, most recent date first
+         $sql = "SELECT * ".
+                " FROM dailyEntriesTable ".
+                "  WHERE userID = '".$userID."' AND endEnergy = '0'". // AND endTime = '00:00:00'."
+                " ORDER BY entryDate DESC".
+                ";";
+    }
+    
+    $result = mysqli_query($conn, $sql);
+    error_log($sql);
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        } // end while
+    } // end else
+
+    mysqli_close($conn);    // Close database connection
+    
+    return $rows;
+    
+}
+
+// Retrieve all the daily entries for the specified condition group number.
+function getDailyEntryCG($conditionGroupNum, $studyID) {
+    
+    $conn = dbConnect();    // Create database connection
+    error_log("conditionGroupNum ".$conditionGroupNum,0);
+    error_log("studyID ".$studyID,0);
+    $sql = "SELECT dailyEntriesTable.entryID, dailyEntriesTable.userID, userTable.userName, dailyEntriesTable.entryDate,
+               dailyEntriesTable.startTime, dailyEntriesTable.startEnergy, dailyEntriesTable.endTime,
+               dailyEntriesTable.endEnergy, dailyEntriesTable.conditionGroupNum, dailyEntriesTable.phaseNum, dailyEntriesTable.studyID, dailyEntriesTable.teamNumber ".             
+             " FROM dailyEntriesTable ".
+             " INNER JOIN userTable ".
+             "  ON dailyEntriesTable.userID = userTable.userID AND dailyEntriesTable.studyID = '".$studyID."' AND dailyEntriesTable.conditionGroupNum = '".$conditionGroupNum."';";
+
+    $result = mysqli_query($conn, $sql);
+    error_log($sql);
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        } // end while
+    } // end else
+    
+    mysqli_close($conn);    // Close database connection
+    
+    return $rows;
+    
+}
+
+// get all the records from the dailyEntries table. Return results sorted by date
+function getAllAdminDailyEntries() {
+    
+    $conn = dbConnect();
+    $result = mysqli_query($conn, "SELECT * FROM dailyEntriesTable ORDER BY entryDate ASC");
+
+    // check if any records found. If records found, gather them into an array and return the array
+    if ($result == false)
+        $rows = null;
+    else {
+        $rows = array();
+        while($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    }
+    
+    mysqli_close($conn);    
+    return $rows;
+}
+
+function updateDailyEntry($userID, $entryID, $toUpdate) {
+    
+    $conn = dbConnect();    // Create database connection
+    
+    $entryDate = $toUpdate["entryDate"];
+    $startTime = $toUpdate["startTime"];
+    $startEnergy = $toUpdate["startEnergy"];
+    $endTime = $toUpdate["endTime"];
+    $endEnergy = $toUpdate["endEnergy"];
+    
+    $sql = "UPDATE dailyEntriesTable SET ".
+          "entryDate = '".$entryDate."',".
+          "startTime = '".$startTime."', ".
+          "endTime = '".$endTime."', ".
+          "startEnergy = '".$startEnergy."', ".
+          "endEnergy = '".$endEnergy."'".
+          " WHERE userID = '".$userID."' AND entryID = '".$entryID."';";
+    
+    $result = mysqli_query($conn, $sql);
+    error_log($sql);
+    mysqli_close($conn);    // Close database connection
+    
+    return $result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

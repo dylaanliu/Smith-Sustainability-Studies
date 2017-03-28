@@ -34,25 +34,32 @@ function renderUserAccountTable(result){
             "<td>" + user.currentPhase + "</td>" + 
             "<td>" + user.teamNum + "</td>" + 
             "<td>" + 
-                "<a href='#' name='edit' id='" + user.userID + "'><span class='glyphicon glyphicon-edit'></span></a>" +
-                "<a href='#' name='delete' id='" + user.userID + "'> <span class='glyphicon glyphicon-remove'></span></a></td>" +
+                "<a href='#' class='btn btn-simple btn-warning btn-icon edit' name='edit' id='" + user.userID + "'><i class='pe-7s-note'></i></a>" +
+                "<a href='#' class='btn btn-simple btn-danger btn-icon remove' name='delete' id='" + user.userID + "'><i class='pe-7s-close'></i></a>"+
+            "</td>" +
         "</tr>"
         );
     });
     
     // no sorting on columns with class="Action"
     userAccountsTable = $("#userAccountsTable").dataTable({
+        "pagingType": "full_numbers",
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        responsive: true,
         "aoColumnDefs" : [
             {'bSortable' : false, 'aTargets' : [ 'Action']}
         ]
     }); 
 }
 
-
 function loadAdminUserAccountsView(createUserIn) {
     var createUser = createUserIn || false;
     var view = "views/admin-user-accounts-view.html";
     var controllerData = { q: "getAllUsers", userID: "" };
+
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadAdminUserAccounts').addClass('active');
 
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";

@@ -1,27 +1,12 @@
 <?php
-/*
-THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-OTHER POSSIBLE MISSING FEATURES ARE:
-    No related data (automatic joins) supported
-    No condensed JSON output supported
-    No support for PostgreSQL or SQL Server
-    No POST parameter support
-    No JSONP/CORS cross domain support
-    No base64 binary column support
-    No permission system
-    No search/filter support
-    No pagination or sorting supported
-    No column selection supported
-SEE
-https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/  
-*/
-
-require_once 'utils/utils.php';
-require_once 'model.php';
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('user');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
+$userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used 
+
 error_log('hello php1',0);
 error_log($method,0);    
 //$userInfo = ""; // global var for user info
@@ -29,12 +14,23 @@ error_log($method,0);
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
-
-    $incompleteEntries = getDailyEntries("fakeUserID", false);
-//error_log('hello php2',0);
-    header('Content-type: application/json');
-    echo $incompleteEntries;
-//error_log($incompleteEntries,0);
+    $complete = false;
+    $incompleteEntries = getDailyEntries($userID, $complete);
+    error_log(print_r($incompleteEntries, true), 0);
+    $error = false;
+    error_log("in get - user input", 0);
+    if ( $incompleteEntries == null ) {
+      $error = true;
+      $errorMsg = "Failed to retrieve daily entries";
+    }
+    else {
+      $errorMsg = "Successfully retrieve daily entries";
+    }
+      
+    echo json_encode(array(
+          "error" => $error,
+          "errorMsg" => $errorMsg, 
+          "data" => $incompleteEntries));
     break;
   case 'PUT':
   error_log('hello php2',0);
@@ -62,19 +58,30 @@ switch ($method) {
       $toUpdate["endEnergy"] = $endEnergy;
     } 
   error_log(print_r($toUpdate, true), 0);
-    $updatedData = updateDailyEntry("fakeUserID", $entryID, $toUpdate);
+    $updatedData = updateDailyEntry($userID, $entryID, $toUpdate);
   error_log(gettype($updatedData),0);
-   header("Content-Type: application/json", true);
-
-    echo $updatedData;
-    //
+    $error = false;
+  
+    if ( ! $updatedData ) {
+      $error = true;
+      $errorMsg = "Failed to update daily entries";
+    }
+    else {
+      $errorMsg = "Successfully updated daily entries";
+    }
+      
+    echo json_encode(array(
+          "error" => $error,
+          "errorMsg" => $errorMsg, 
+          "data" => $updatedData));
+      
     break;
   case 'POST':
     error_log("posting");
-    $entryDate_in = cleanInputGet($_POST["entryDate1"]);
+    $entryDate_in = cleanInputPost("entryDate1");
+    $studyID_in = cleanInputPost("studyID1");
+    $teamNumber_in = cleanInputPost("teamNumber1");
     // to do: user cleanInputGet function
-    /*$entryDate_in = strip_tags($entryDate_in);
-    $entryDate_in = htmlspecialchars($entryDate_in);*/
   error_log($entryDate_in);
     $startTime_in = trim($_POST["startTime1"]);
     $startTime_in = strip_tags($startTime_in);
@@ -99,10 +106,29 @@ switch ($method) {
     $currentPhase_in = trim($_POST["currentPhase1"]);
     $currentPhase_in = strip_tags($currentPhase_in);
     $currentPhase_in = htmlspecialchars($currentPhase_in);
-  error_log($currentPhase_in);
-    $success = createDailyEntry("fakeUserID", $entryDate_in, $startTime_in, $startEnergy_in, $endTime_in, $endEnergy_in, $CurrentConditionGroup_in, $currentPhase_in);
-  error_log("yay!");
-    echo $success;
+/*  error_log($studyID_in);
+    $studyID_in = trim($_POST["studyID1"]);
+    $studyID_in = strip_tags($studyID_in);
+    $studyID_in = htmlspecialchars($studyID_in);
+    */ 
+    error_log("study: ",0);
+    error_log($studyID_in);
+  $success = createDailyEntry($userID, $entryDate_in, $startTime_in, $startEnergy_in, $endTime_in, $endEnergy_in, $CurrentConditionGroup_in, $currentPhase_in, $studyID_in, $teamNumber_in);
+  $error = false;
+  
+  if (!$success ) {
+    $error = true;
+    $errorMsg = "Failed to create entry";
+  }
+  else {
+    $errorMsg = "Successfully created entry";
+  }
+    
+  echo json_encode(array(
+        "error" => $error,
+        "errorMsg" => $errorMsg, 
+        "success" => $success));
+  
     break;
   case 'DELETE':                           // not required in this controller
   default:
@@ -113,7 +139,7 @@ switch ($method) {
 }
 
 
-function getDailyEntries($userID, $complete) {
+/*function getDailyEntries($userID, $complete) {
     return
     '{"DailyEntries":[
     {"entryId":"1", 
@@ -160,17 +186,17 @@ function getDailyEntries($userID, $complete) {
       //return $userInfo;
  
 }
-
-function updateDailyEntry($userID, $entryID, $toUpdate){
+*/
+/*function updateDailyEntry($userID, $entryID, $toUpdate){
   // do update here
 error_log("hello9", 0);
 
   $updatedData = json_encode($toUpdate);
   return $updatedData;
  
-}
+}*/
 
-function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, 
+/*function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTime, $endEnergy, 
   $CurrentConditionGroup, $currentPhase) {
   error_log("creating entry", 0);
   $newEntryData = array("userId" => $userID,
@@ -185,7 +211,7 @@ function createDailyEntry($userID, $entryDate, $startTime, $startEnergy, $endTim
 
   // do CREATE here
   return true;
-}
+}*/
 
 ?>
 

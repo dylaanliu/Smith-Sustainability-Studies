@@ -1,38 +1,13 @@
 <?php
-session_start();
-// THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-// AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-// OTHER POSSIBLE MISSING FEATURES ARE:
-//     No related data (automatic joins) supported
-//     No condensed JSON output supported
-//     No support for PostgreSQL or SQL Server
-//     No POST parameter support
-//     No JSONP/CORS cross domain support
-//     No base64 binary column support
-//     No permission system
-//     No search/filter support
-//     No pagination or sorting supported
-//     No column selection supported
-// SEE
-// https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
-
-require_once 'utils/utils.php';
-require_once 'model.php';
-
-// only admins and super_admins are allowed to access this page
- if (!(authenticate("admin") || authenticate("admin"))) {
-    header('HTTP/1.0 403 Forbidden');
-    echo 'You are forbidden!';
-    die();
-}
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('admin');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
+// $userID = '1';
+$userID = $_SESSION['userID'];
 
-// TODO - TEMP just setting an admin ID that we know exists in the database. This should be 
-// retrieved from the session if the user is validated and has permission to this page.
-$adminID = '3';
-    
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
@@ -45,7 +20,7 @@ switch ($method) {
     switch ($queryType) {
       case 'get_admin_studies':
         $error = false;
-        $studies = getAdminStudies($adminID);
+        $studies = getAdminStudies($userID);
       //error_log(print_r($studies, true), 0);
         if ($studies == null) {
             $error = true;
@@ -72,7 +47,7 @@ switch ($method) {
               $errorMsg = 'Expecting studyID';
           }
           
-          $studies = getAdminStudies($adminID);
+          $studies = getAdminStudies($userID);
           if ($studies == null) {
               $error = true;
               $errorMsg = 'No studies found';
@@ -80,7 +55,7 @@ switch ($method) {
           else {
               $errorMsg = 'Admin studies found.';
 
-              $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+              $conditionGroupPhase = getAdminConditionGroupPhase($userID);
               if ($conditionGroupPhase == null) {
                   $error = true;
                   $errorMsg = 'Database error accessing conditionGroupTable';
@@ -105,7 +80,7 @@ switch ($method) {
         $error = false;
         $studyID = $_GET["studyID"];
         $study = getStudy($studyID);
-        $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+        $conditionGroupPhase = getAdminConditionGroupPhase($userID);
         
         if ($study == null || $conditionGroupPhase == null) {
             $error = true;
@@ -174,15 +149,15 @@ switch ($method) {
     date_default_timezone_set('America/Toronto');
     $dateTimeStamp = date('Y-m-d H:i:s'); // when the study is made active
 
-    $text = cleanInputPost("text1");
+    $postText = cleanInputPost("text1");
     $image = cleanInputPost("image1");
     $conditionGroupNum = cleanInputPost("conditionGroupNum1");
     $phaseNum = cleanInputPost("phaseNum1");
     $studyID = cleanInputPost("studyID1");
 
-    error_log("userID: ".$adminID." dateTime: ".$dateTimeStamp." postText: ".$text. " image: ". $image." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
+    error_log("userID: ".$userID." dateTime: ".$dateTimeStamp." postText: ".$postText. " image: ". $image." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
 
-    if (empty($text)) {
+    if (empty($postText)) {
         $error = true;
         $errorMsg = 'Text is required.';
     }
@@ -196,9 +171,7 @@ switch ($method) {
     }
 
     if(!$error) {
-        // TODO - last parameter is adminID which should be from the $_SESSION 
-        //$userRecords = createUser($userNameIn, $firstNameIn, $lastNameIn, $passwordIn, 'user', $_SESSION['userID']);
-        $postRecord = createPost($adminID, $dateTimeStamp, $text, $image, $conditionGroupNum, $phaseNum, $studyID);  
+        $postRecord = createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupNum, $phaseNum, $studyID);  
         
         if ($postRecord == null) {
             $error = true;

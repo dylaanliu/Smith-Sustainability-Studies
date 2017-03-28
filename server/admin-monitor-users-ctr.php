@@ -1,37 +1,12 @@
 <?php
-session_start();
-// THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-// AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-// OTHER POSSIBLE MISSING FEATURES ARE:
-//     No related data (automatic joins) supported
-//     No condensed JSON output supported
-//     No support for PostgreSQL or SQL Server
-//     No POST parameter support
-//     No JSONP/CORS cross domain support
-//     No base64 binary column support
-//     No permission system
-//     No search/filter support
-//     No pagination or sorting supported
-//     No column selection supported
-// SEE
-// https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
-
-require_once 'utils/utils.php';
-require_once 'model.php';
-
-// only admins and super_admins are allowed to access this page
- if (!(authenticate("admin") || authenticate("super_admin"))) {
-    header('HTTP/1.0 403 Forbidden');
-    echo 'You are forbidden!';
-    die();
-}
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('admin');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-
-// TODO - TEMP just setting an admin ID that we know exists in the database. This should be 
-// retrieved from the session if the user is validated and has permission to this page.
-$adminID = '1';
+// $userID = '1';
+$userID = $_SESSION['userID'];
     
 switch ($method) {
   case 'GET':
@@ -39,17 +14,19 @@ switch ($method) {
     $errorMsg = "";
     
     // get all studies the admin can see
-    $studies = getAdminStudies($adminID);
+    $studies = getAdminStudies($userID);
     if ($studies == null) {
         $error = true;
         $errorMsg .= 'No studies found. ';
+        error_log("no studies found", 0);
     }
 
     // get all condition groups this admin can see
-    $conditionGroupPhases = getAdminConditionGroupPhase($adminID);
+    $conditionGroupPhases = getAdminConditionGroupPhase($userID);
     if ($conditionGroupPhases == null) {
         $error = true;
         $errorMsg .= 'No condition groups found. ';
+        error_log("no condition groups found", 0);
     }
     
     // get all users this admin can see.
@@ -58,14 +35,16 @@ switch ($method) {
     if ($users == null) {
         $error = true;
         $errorMsg .= 'No users found. ';
+        error_log("no users found",0);
     }
 
     // get all daily entries this admin can see ordered by the entry date.
     // TO DO - daily entries of users that are not visible to admin should be filtered
-    $dailyEntries = getAllDailyEntries();
+    $dailyEntries = getAllAdminDailyEntries();
     if ($users == null) {
         $error = true;
         $errorMsg .= 'No daily entries found. ';
+        error_log("no daily entries found", 0);
     }
 
     echo json_encode(array(
@@ -86,24 +65,3 @@ switch ($method) {
 }
 
 
-
-
-// get all the records from the dailyEntries table. Return results sorted by date
-function getAllDailyEntries() {
-    
-    $conn = dbConnect();
-    $result = mysqli_query($conn, "SELECT * FROM dailyEntriesTable ORDER BY entryDate ASC");
-
-    // check if any records found. If records found, gather them into an array and return the array
-    if ($result == false)
-        $rows = null;
-    else {
-        $rows = array();
-        while($row = mysqli_fetch_assoc($result)) {
-            $rows[] = $row;
-        }
-    }
-    
-    mysqli_close($conn);    
-    return $rows;
-}

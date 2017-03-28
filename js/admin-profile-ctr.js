@@ -4,6 +4,11 @@ function loadAdminProfileView() {
     var controllerData = { q: "getUser" };
 	var view = "views/admin-profile-view.html";
 
+    $('.nav li').removeClass('active');
+    $('#profileView').addClass('active');
+
+    document.getElementById("viewGoesHere").innerHTML = ""
+
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
 		if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);

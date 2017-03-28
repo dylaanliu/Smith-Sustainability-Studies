@@ -1,15 +1,8 @@
 <?php  
 
-session_start();//session is a way to store information (in variables) to be used across multiple pages.  
-require_once 'utils/utils.php';
-require_once 'model.php';
-
-// only admins and super_admins are allowed to access this page
- if (!(authenticate("admin") || authenticate("super_admin"))) {
-    header('HTTP/1.0 403 Forbidden');
-    echo 'You are forbidden!';
-    die();
-}
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('user');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];               

@@ -13,6 +13,10 @@ function loadAdminMonitorStudiesView() {
 //	var data_file = "adminhome.json"; // path to temp json file
     var adminStudyQuery = { q: "get_admin_studies", otherVar: "something" };
     var view = "views/admin-monitor-studies-view.html";
+
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadMonitorStudies').addClass('active');
     
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
@@ -630,7 +634,7 @@ function displayPostData(data, dataFormat, selectedConditionGroups, selectedPhas
                     multiBarArray.push([selectedConditionGroups[i], 0]);
                 }
 
-                // fill multiBarArray with energy from each condition group
+                // fill multiBarArray with numPosts from each condition group
                 for (var i = 0; i < data.length; i++) { // add data that has same date
                     for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
                         for (var p = 0; p < selectedPhases.length; p++) {
@@ -1120,87 +1124,78 @@ function displayPost(studyID, cg, ph, postsArray) {
     var post = "";
     var noPosts = true;
 console.log("cg: "+ cg + " ph: " + ph);
- /*    $.getJSON(monitorStudiesController, postQuery, function(result) {
-        if (!result.error) {
-            // html injection
-            console.log("successful get");
-            //console.log(result);
-            var postsArray = $.map(result.data, function(el){
-                return el;
-            });
+          // sort by date
 
- */            // sort by date
- 
-            postsArray.sort(function(postA, postB){
-                return postA.dateTimeStamp - postB.dateTimeStamp;
-            });
+        postsArray.sort(function(postA, postB){
+            return postA.dateTimeStamp - postB.dateTimeStamp;
+        });
 
-            post += "<div class='panel panel-primary'>";
-            post +=     "<div class='panel-heading; id='outer'>Latest Posts</div>";
-            post +=     "<div class='panel-body'>";
-            post +=         "<div class='panel-group id='accordion'>";
-            
-            $.each(postsArray, function(key, postData){
+        post += "<div class='panel panel-primary'>";
+        post +=     "<div class='panel-heading; id='outer'>Latest Posts</div>";
+        post +=     "<div class='panel-body'>";
+        post +=         "<div class='panel-group id='accordion'>";
+        
+        $.each(postsArray, function(key, postData){
 console.log(postData);            
-                // skips record if the condition group and phase does not match the TAB we are currently
-                // working on
-                if (cg != postData["conditionGroupNum"] ||  ph != postData["phaseNum"])
-                    return true;
-                noPosts = false;
-            //var postData = result.data[0];
-                var date = new Date(postData.dateTimeStamp);
-                console.log("date: "+date.toLocaleString());
-                console.log("post ID "+postData.postID);
-                console.log("post image: " + postData.image);
-                console.log("post text: " + postData.postText);
-                if(postData.image != "") {
-                    console.log("there's an image");
-                    post +=            "<div class='panel panel-default' id='panel-"+postData.ID+"'>";
-                    post +=                 "<div class='panel-heading'>";
-                    post +=                     "<h4 class='panel-title'>";
-                    post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
-                    post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
-                    post +=                          "</a>";
-                    post +=                          "<a href='#'>"; 
-                    post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+")'></i>";
-                    post +=                           "</a>";
-                    post +=                      "</h4>";
-                    post +=                  "</div>"; //10
-                    post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
-                    post +=                         "<div class='panel-body'>";
-                    post +=                             "<p id='text'>"+postData.postText+"</p>";
-                    post +=                             "<img src="+postData.image+" class='media-object' style='width:80px'>";
-                    post +=                         "</div>";
-                    post +=                   "</div>";
-                    post +=             "</div>";
+            // skips record if the condition group and phase does not match the TAB we are currently
+            // working on
+            if (cg != postData["conditionGroupNum"] ||  ph != postData["phaseNum"])
+                return true;
+            noPosts = false;
+        //var postData = result.data[0];
+            var date = new Date(postData.dateTimeStamp);
+            console.log("date: "+date.toLocaleString());
+            console.log("post ID "+postData.postID);
+            console.log("post image: " + postData.image);
+            console.log("post text: " + postData.postText);
+            if(postData.image != "" && image != null) {
+                console.log("there's an image");
+                post +=            "<div class='panel panel-default' id='panel-"+postData.ID+"'>";
+                post +=                 "<div class='panel-heading'>";
+                post +=                     "<h4 class='panel-title'>";
+                post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
+                post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
+                post +=                          "</a>";
+                post +=                          "<a href='#'>"; 
+                post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+")'></i>";
+                post +=                           "</a>";
+                post +=                      "</h4>";
+                post +=                  "</div>"; //10
+                post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
+                post +=                         "<div class='panel-body'>";
+                post +=                             "<p id='text'>"+postData.postText+"</p>";
+                post +=                             "<img src="+postData.image+" class='media-object' style='width:80px'>";
+                post +=                         "</div>";
+                post +=                   "</div>";
+                post +=             "</div>";
 
-                } else {
-                    console.log("no image");
-                    post +=            "<div class='panel panel-default' id='panel-"+postData.postID+"'>";
-                    post +=                 "<div class='panel-heading'>";
-                    post +=                     "<h4 class='panel-title'>";
-                    post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
-                    post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
-                    post +=                          "</a>";
-                    post +=                          "<a href='#'>"; 
-                    post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+")'></i>";
-                    post +=                           "</a>";                    
-                    post +=                      "</h4>";
-                    post +=                  "</div>"; //10
-                    post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
-                    post +=                         "<div class='panel-body'>";
-                    post +=                            "<p id='text'>"+postData.postText+"</p>";
-                    post +=                         "</div>";
-                    post +=                   "</div>";
-                    post +=             "</div>";
-                }
-
-            }); // end each
-            
-            // TODO - better message
-            if (noPosts) {
-                post += "<p>No Posts</p>";
+            } else {
+                console.log("no image");
+                post +=            "<div class='panel panel-default' id='panel-"+postData.postID+"'>";
+                post +=                 "<div class='panel-heading'>";
+                post +=                     "<h4 class='panel-title'>";
+                post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
+                post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
+                post +=                          "</a>";
+                post +=                          "<a href='#'>"; 
+                post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+")'></i>";
+                post +=                           "</a>";                    
+                post +=                      "</h4>";
+                post +=                  "</div>"; //10
+                post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
+                post +=                         "<div class='panel-body'>";
+                post +=                            "<p id='text'>"+postData.postText+"</p>";
+                post +=                         "</div>";
+                post +=                   "</div>";
+                post +=             "</div>";
             }
+
+        }); // end each
+        
+        // TODO - better message
+        if (noPosts) {
+            post += "<p>No Posts</p>";
+        }
 
         post +=            "</div> <!--End panel-group-->";
         post +=         "</div> <!--end panel-body-->";

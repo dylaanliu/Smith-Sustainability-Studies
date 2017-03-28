@@ -26,7 +26,6 @@ function loadUserHomeView() {
             // Get and fill in user information from User Data table
             console.log("page success");
             $.getJSON(controller, userQuery, function(userString) {
-                console.log(userString);
                 var userArray = userString.data[0];
                 console.log(userArray);
                 // clear contents
@@ -39,12 +38,11 @@ function loadUserHomeView() {
                 cgPhaseQuery["studyID"] = userArray.studyID;
                 cgPhaseQuery["currentConditionGroup"] = userArray.currentConditionGroup;
                 cgPhaseQuery["currentPhase"] = userArray.currentPhase;
-
                 $.getJSON(controller, cgPhaseQuery, function(conditionGroupPhaseString){
-            console.log(conditionGroupPhaseString);
-                    // modify to data[0] when use real function
-                    var conditionGroupPhaseArray = conditionGroupPhaseString.ConditionGroupPhase[0];
-                    var phasePermission = conditionGroupPhaseArray.phasePermission;
+                    var conditionGroupPhaseArray = conditionGroupPhaseString.data[0];
+                    console.log(" array: "+JSON.stringify(conditionGroupPhaseArray));
+                    var permissionInt = parseInt(conditionGroupPhaseArray.phasePermission);
+                    var phasePermission = (permissionInt >>> 0).toString(2);
                     var permissionArray = phasePermission.split("");
                     var index = 0;
 
@@ -53,7 +51,6 @@ function loadUserHomeView() {
                     // permissionArray[8] to permssionArray[11] = statistics
                     // permissionArray[7] to permissionArray[3] = community posts
                     // permissionArray[0] to permissionArray[2] = rewards section
-                    console.log(permissionArray);
                     if(permissionArray[12] == '0'){
                         $("#inputData").hide();
                     } 
@@ -159,8 +156,6 @@ function loadUserHomeView() {
 
 
                     })
-                    //document.getElementById("home-top").innerHTML = "";
-                    //alert(permissionArray[0]);
                 });
                 
             /*   TODO: Fill in for rewards query            

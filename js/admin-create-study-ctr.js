@@ -17,6 +17,10 @@ function loadAdminCreateStudyView() {
     var view = "views/admin-create-study-view.html";
     var controllerData = { };
 
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadAdminCreateStudy').addClass('active');
+
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";
 

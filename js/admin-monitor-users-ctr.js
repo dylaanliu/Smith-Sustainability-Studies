@@ -26,6 +26,10 @@ function loadAdminMonitorUsersView() {
     var view = "views/admin-monitor-users-view.html";
     var controllerData = { q: "getAll" };
 
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadMonitorUsers').addClass('active');
+
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";
 
