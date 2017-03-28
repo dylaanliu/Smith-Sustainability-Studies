@@ -634,7 +634,7 @@ function getAdminPosts($userID) {
 	
     return $rows;
 	
-}
+} */
 
 // This function access the "studyTable" first to get the study specified 
 // Then it access the "adminStudiesTable" to get the records of interest. This is done using a JOIN.
