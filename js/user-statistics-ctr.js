@@ -7,7 +7,7 @@ $(document).ready(function(){
 function loadUserStatisticsView() {
 
     $(".nav li").removeClass("active");
-    $(".nav li #statistics").addClass("active");
+    $("#statistics").addClass("active");
 
 //  var data_file = "adminhome.json"; // path to temp json file
     var controller = "server/user-statistics-ctr.php"
@@ -21,15 +21,22 @@ function loadUserStatisticsView() {
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
             $.getJSON(controller, userDailyEntry, function(userDailyEntryString){
-                console.log("statistics info: "+ JSON.stringify(userDailyEntryString.data));
-                loadPersonalStatistics(userDailyEntryString);
-                cgDailyEntry["conditionGroupNum"] = userDailyEntryString.data[0]["conditionGroupNum"];
+               // console.log("statistics info: "+ JSON.stringify(userDailyEntryString.data));
 
-                cgDailyEntry["studyID"] = localStorage.getItem("studyID");
-                $.getJSON(controller, cgDailyEntry, function(cgDailyEntryString){
-                    loadConditionGroupStatistics(cgDailyEntryString);
-                    loadSubTeamStatistics(cgDailyEntryString); 
-                });
+                    if (userDailyEntryString.data.length == 0) {
+                        $("#past-entries").append("<p>No Data to Display</p>");
+                        $("#dashboard").hide();
+                    } else {
+                        loadPersonalStatistics(userDailyEntryString);
+                        cgDailyEntry["conditionGroupNum"] = userDailyEntryString.data[0]["conditionGroupNum"];
+
+                        cgDailyEntry["studyID"] = localStorage.getItem("studyID");
+                        $.getJSON(controller, cgDailyEntry, function(cgDailyEntryString){
+                            loadConditionGroupStatistics(cgDailyEntryString);
+                            loadSubTeamStatistics(cgDailyEntryString); 
+                        });
+                    }
+
             });
         }
     });
@@ -57,11 +64,11 @@ function loadPersonalStatistics(userDailyEntryString){
     });
 
     $.each(personalDailyEntryArray, function(key, entry){
-        console.log(JSON.stringify(entry));
+       // console.log(JSON.stringify(entry));
         var tDate = entry.entryDate.split(/[-]/);
         var sDate = new Date(Date.UTC(tDate[0], tDate[1]-1, tDate[2]));
         var strDate = sDate.toDateString().slice(3);
-        console.log("adding personal entries");
+       // console.log("adding personal entries");
         $("#entries").append(
             "<tr>"+
                 "<td>"+entry.startEnergy+"</td>"+
@@ -76,7 +83,6 @@ function loadPersonalStatistics(userDailyEntryString){
         "bFilter": false
         
     });
-
 
     // Load the Visualization API and the corechart package.
     google.charts.load('visualization', '1', {'packages':['corechart', 'controls']});
@@ -131,6 +137,10 @@ function loadPersonalStatistics(userDailyEntryString){
                 }
         };
 
+/*      google.visualization.events.addListener(myDashboard, 'error', function (googleError) {
+      google.visualization.errors.removeError(googleError.id);
+      //document.getElementById("error_msg").innerHTML = "Message removed = '" + googleError.message + "'";
+    });*/
         myDashboard.draw(userDailyEntryArray, options);       
       } // end drawChart
 
@@ -190,8 +200,6 @@ function loadConditionGroupStatistics(cgDailyEntryString) {
 function loadSubTeamStatistics(cgDailyEntryString) {
     var table = subTeamArrayFormat(cgDailyEntryString);
 
-    console.log("sub team table");
-    console.log(table);
 
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
@@ -199,7 +207,7 @@ function loadSubTeamStatistics(cgDailyEntryString) {
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-        console.log("drawChart");
+       // console.log("drawChart");
        //var jsonData = '';
        //console.log(result);
         //var userDailyEntryArray = convertToPersonalTable(userDailyEntryString);
@@ -245,9 +253,6 @@ function convertToCGArray(cgDailyEntryString){
         uniqueUsers.push(cgDailyEntryArray[i].userName);
     }
 
-    console.log("as an array");
-    console.log(cgDailyEntryArray);
-
     // add up user's total energys then sort
 
     for (var i = 0; i < uniqueUsers.length; i++) {
@@ -263,7 +268,6 @@ function convertToCGArray(cgDailyEntryString){
     }
 
     userEnergy.sort(function(a, b){
-        console.log("sorting...");
         var userA = a[1].endEnergy - a[1].startEnergy;
         var userB = b[1].endEnergy - b[1].startEnergy;
         return userA - userB;
@@ -287,9 +291,6 @@ function subTeamArrayFormat(cgDailyEntryString){
         uniqueTeams.push(cgDailyEntryArray[i].teamNumber);
     }
 
-    console.log("as an array");
-    console.log(cgDailyEntryArray);
-
     // add up user's total energys then sort
 
     for (var i = 0; i < uniqueTeams.length; i++) {
@@ -303,14 +304,6 @@ function subTeamArrayFormat(cgDailyEntryString){
             }
         }
     }
-
-/*    teamEnergy.sort(function(a, b){
-        console.log("sorting...");
-        var userA = a[1].endEnergy - a[1].startEnergy;
-        var userB = b[1].endEnergy - b[1].startEnergy;
-        return userA - userB;
-    });*/
-console.log(JSON.stringify(teamEnergy));
     return teamEnergy;
 }
 

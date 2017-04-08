@@ -18,7 +18,7 @@ switch ($method) {
     if ($studies == null) {
         $error = true;
         $errorMsg .= 'No studies found. ';
-        error_log("no studies found", 0);
+        //error_log("no studies found", 0);
     }
 
     // get all condition groups this admin can see
@@ -26,7 +26,7 @@ switch ($method) {
     if ($conditionGroupPhases == null) {
         $error = true;
         $errorMsg .= 'No condition groups found. ';
-        error_log("no condition groups found", 0);
+       // error_log("no condition groups found", 0);
     }
     
     // get all users this admin can see.
@@ -35,7 +35,7 @@ switch ($method) {
     if ($users == null) {
         $error = true;
         $errorMsg .= 'No users found. ';
-        error_log("no users found",0);
+       // error_log("no users found",0);
     }
 
     // get all daily entries this admin can see ordered by the entry date.
@@ -44,7 +44,7 @@ switch ($method) {
     if ($users == null) {
         $error = true;
         $errorMsg .= 'No daily entries found. ';
-        error_log("no daily entries found", 0);
+       // error_log("no daily entries found", 0);
     }
 
     echo json_encode(array(

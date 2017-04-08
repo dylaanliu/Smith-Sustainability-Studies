@@ -5,9 +5,7 @@ verifyUserPrivilage('admin');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-
-error_log("got into admin-user-accounts. Method");
-error_log($method);
+//error_log("got into admin-user-accounts. Method: ".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
@@ -15,78 +13,151 @@ switch ($method) {
         $q = cleanInputGet('q');
         $userIDIn = cleanInputGet('userID');
         $userRecords = null;
+        $userStudies = null;
+        $allAdminStudies = null;
         $error = false;
+        $errorMsg = "";
         if ($q === "getAllUsers") {
             // check if there was an error or nothing returned
             $userRecords = getAllUsers();
             if ($userRecords == null) {
                 $error = true;
-                $errorMsg = 'No user records found';
+                $errorMsg .= 'No user records found. ';
             }
             else
-                $errorMsg = 'User records found';
+                $errorMsg .= 'User records found. ';            
         } 
         else if ($q === "getUser" && !empty($userIDIn)) { 
+
             $userRecords = getUser($userIDIn);
             if ($userRecords == null) {
                 $error = true;
-                $errorMsg = 'No user record found';
+                $errorMsg .= 'No user record found. ';
             }
             else
-                $errorMsg = 'User record found';
+                $errorMsg .= 'User record found. ';
+
+            $selectStudies = getAdminStudies($_SESSION['userID']);
+            if ($selectStudies == null) {
+                $error = true;
+                $errorMsg .= 'No user studies found. ';
+            }
+            else
+                $errorMsg .= 'User studies found. ';
+            
+            // if this is a super user than provide all the studies so that 
+            // a super user can add and remove admins from a study
+            if ($_SESSION['privilegeLevel'] == 'super_admin') {
+                $userStudies = getAdminStudies($userIDIn);
+                if ($userStudies == null) {
+                    $error = true;
+                    $errorMsg .= 'No studies found. ';
+                }
+                else
+                    $errorMsg .= 'Studies found. ';
+            }
         }
         else {
             $error = true;
-            $errorMsg = 'Unknown GET or userID';            
+            $errorMsg .= 'Unknown GET or userID. ';            
         }
         
         echo json_encode(array(
                   "error" => $error,
                   "errorMsg" => $errorMsg, 
-                  "data" => $userRecords));
+                  "privilegeLevel" => $_SESSION['privilegeLevel'],
+                  "users" => $userRecords,
+                  "selectStudies" => $selectStudies,
+                  "userStudies" => $userStudies)
+                  );
         break;
         
     case 'PUT':
-error_log("got into admin-user-accounts - PUT");
+//error_log("got into admin-user-accounts - PUT");
         $error = false;
+        $errorMsg = "";
         $userRecords = null;
         
         // get user parameters/prevent sql injections/clear user invalid input
         parse_str(file_get_contents("php://input"), $put_vars);
-        $userIDIn = cleanInputPut($put_vars['userID']);
-        $userNameIn = cleanInputPut($put_vars['userName']);
-        $emailIn = cleanInputPut($put_vars['email']);
-        $firstNameIn = cleanInputPut($put_vars['firstName']);
-        $lastNameIn = cleanInputPut($put_vars['lastName']);          
-        $studyIDIn = cleanInputPut($put_vars['studyID']);
-        $currentConditionGroupIn = cleanInputPut($put_vars['currentConditionGroup']);  
-        $currentPhaseIn = cleanInputPut($put_vars['currentPhase']); 
-        $teamNumIn = cleanInputPut($put_vars['teamNum']);  
-error_log($userIDIn);error_log($userNameIn);error_log($emailIn);
+        $formNameIn = cleanInputPut($put_vars['formName']);
+        
+        if ($formNameIn == "editUserAccountModalForm") {
+            $userIDIn = cleanInputPut($put_vars['userID']);
+            $userNameIn = cleanInputPut($put_vars['userName']);
+            $emailIn = cleanInputPut($put_vars['email']);
+            $firstNameIn = cleanInputPut($put_vars['firstName']);
+            $lastNameIn = cleanInputPut($put_vars['lastName']);          
+            $studyIDIn = cleanInputPut($put_vars['studyIDSelector']);
+            $currentConditionGroupIn = cleanInputPut($put_vars['currentConditionGroupSelector']);  
+            $currentPhaseIn = cleanInputPut($put_vars['currentPhaseSelector']); 
+            $teamNumIn = cleanInputPut($put_vars['teamNum']);  
 
-        // If the string is not empty, string should be validated.
-        //
-        // TODO:
-        // Should really check all fields for validity (valid characters, email format, length, etc)
-        // may want to force first character of first and last name to be upper case.
-        if (empty($userIDIn)) {
-            $error = true;
-            $errorMsg = 'UserID is required.';
-        }
-        if (empty($userNameIn)) {
-            $error = true;
-            $errorMsg = 'User name is required.';
-        }
- 
-        if (!$error) {
-            $success = updateUser($userIDIn, $userNameIn, $firstNameIn, $lastNameIn, $emailIn, $studyIDIn, $currentConditionGroupIn, $currentPhaseIn, $teamNumIn);
-            if (!$success) {
+            // If the string is not empty, string should be validated.
+            //
+            // TODO:
+            // Should really check all fields for validity (valid characters, email format, length, etc)
+            // may want to force first character of first and last name to be upper case.
+            if (empty($userIDIn)) {
                 $error = true;
-                $errorMsg = 'Database error: Could not update user: '.$userNameIn;
-            } else {
-                $errorMsg = 'User record updated.';
+                $errorMsg .= 'UserID is required. ';
             }
-        }        
+            if (empty($userNameIn)) {
+                $error = true;
+                $errorMsg .= 'User name is required. ';
+            }
+     
+            if (!$error) {
+                $success = updateUser($userIDIn, $userNameIn, $firstNameIn, $lastNameIn, $emailIn, $studyIDIn, $currentConditionGroupIn, $currentPhaseIn, $teamNumIn);
+                if (!$success) {
+                    $error = true;
+                    $errorMsg .= 'Database error: Could not update user: '.$userNameIn;
+                } else {
+                    $errorMsg .= 'User record updated. ';
+                }
+            }                    
+        }
+        else if ($formNameIn == "manageStudiesUserAccountModalForm") {
+            
+            // check input
+            $actionIn = cleanInputPut($put_vars['action']);
+            $studyIDIn = cleanInputPut($put_vars['studyID']);
+            $userIDIn = cleanInputPut($put_vars['userID']);
+            if (empty($actionIn)) {
+                $error = true;
+                $errorMsg .= 'Action is required. ';
+            }
+            if (empty($studyIDIn)) {
+                $error = true;
+                $errorMsg .= 'StudyID is required. ';
+            }
+            if (empty($userIDIn)) {
+                $error = true;
+                $errorMsg .= 'userID is required. ';
+            }
+            
+            if (!$error && $actionIn == 'add') {
+                $numAdminStudyRecords = createAdminStudies($userIDIn, $studyIDIn);
+                if ($numAdminStudyRecords == 0) {
+                    $error = true;
+                    $errorMsg = 'Database error: Could not create any Admin Study records';
+                } 
+                else {
+                    $errorMsg = 'Number of Admin Study records created = '.$numAdminStudyRecords;
+                }            
+            }
+            else if (!$error && $actionIn == 'remove') {
+                $numAdminStudyRecords = deleteAdminStudies($userIDIn, $studyIDIn);
+                if ($numAdminStudyRecords == 0) {
+                    $error = true;
+                    $errorMsg = 'Database error: Could not delete any Admin Study records';
+                } 
+                else {
+                    $errorMsg = 'Number of Admin Study records deleted = '.$numAdminStudyRecords;
+                }            
+            }
+        }
+        
         echo json_encode(array(
                   "error" => $error,
                   "errorMsg" => $errorMsg, 
@@ -94,8 +165,9 @@ error_log($userIDIn);error_log($userNameIn);error_log($emailIn);
         break;
                 
     case 'POST':
-error_log("got into admin-user-accounts - POST");
+//error_log("got into admin-user-accounts - POST");
         $error = false;
+        $errorMsg = "";
         $userRecords = null;
         
         // get user parameters/prevent sql injections/clear user invalid input
@@ -112,37 +184,44 @@ error_log("got into admin-user-accounts - POST");
         // may want to force first character of first and last name to be upper case
         if (empty($userNameIn)) {
             $error = true;
-            $errorMsg = 'User name and password are required.';
+            $errorMsg .= 'User name and password are required. ';
         }
         if (empty($passwordIn)) {
             $error = true;
-            $errorMsg = 'User name and password are required.';
+            $errorMsg .= 'User name and password are required. ';
         }
         // only super_admin's are allowed to create super_admin
         if($privilegeLevelIn == "super_admin" && $_SESSION['privilegeLevel'] != "super_admin") {
             $error = true;
-            $errorMsg = 'You do not have privileges to create a super admin account.';
+            $errorMsg .= 'You do not have privileges to create a super admin account. ';
         }
 
+        // create user
         if (!$error) {
-            // TODO - last parameter is adminID which should be from the $_SESSION 
-            //$userRecords = createUser($userNameIn, $firstNameIn, $lastNameIn, $passwordIn, 'user', $_SESSION['userID']);
-            $userRecords = createUser($userNameIn, $firstNameIn, $lastNameIn, $passwordIn, $emailIn, $privilegeLevelIn, '-1');
+            $userRecords = createUser($userNameIn, $firstNameIn, $lastNameIn, $passwordIn, $emailIn, $privilegeLevelIn, $_SESSION['userID']);
             if ($userRecords == null) {
                 $error = true;
-                $errorMsg = 'Database error: Could not create user: '.$userNameIn.', password: '.$passwordIn;
+                $errorMsg .= 'Database error: Could not create user: '.$userNameIn.', password: '.$passwordIn;
             } else {
-                $errorMsg = 'User record created.';
+                $errorMsg .= 'User record created. ';
             }
         }        
+        
+        // special case of a created super admin. The super admin should be able to see all existing studies. Hence add all the new super admin
+        // into the adminStudiesTable for all studies
+        if (!$error && $privilegeLevelIn == 'super_admin') {
+            createAdminStudiesAll($userRecords[0]['userID']);      
+        }        
+
         echo json_encode(array(
                   "error" => $error,
                   "errorMsg" => $errorMsg, 
+                  "privilegeLevel" => $_SESSION['privilegeLevel'],
                   "data" => $userRecords));
         break;
         
     case 'DELETE':                           
-error_log("got into admin-user-accounts - DELETE");
+//error_log("got into admin-user-accounts - DELETE");
         $error = false;
         // get parameters
         parse_str($_SERVER['QUERY_STRING'], $query_params);

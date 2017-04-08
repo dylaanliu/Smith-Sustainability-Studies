@@ -4,12 +4,12 @@ require_once 'utils/authenticateUser.php';
 verifyUserPrivilage('admin');
 
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-error_log("got into admin-create-study. Method".$method);
+//error_log("got into admin-create-study. Method".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
     case 'POST':
-error_log("got into admin-create-study - POST");
+//error_log("got into admin-create-study - POST");
         $error = false;
         
         // get user parameters/prevent sql injections/clear user invalid input
@@ -17,7 +17,7 @@ error_log("got into admin-create-study - POST");
         $descriptionIn = cleanInputPost('description');
         $conditionGroupsIn = cleanInputPost('conditionGroupSelector');
         $phaseIn = cleanInputPost('phaseSelector');
-error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
+//error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
         // basic input validation. 
         // TODO:
         // Should really check all fields for validity (valid characters, maxlength, valid ranges, etc)
@@ -44,10 +44,7 @@ error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
         }        
         // create the admin-study records in the adminStudiesTable table
         if (!$error) {
-            // to facilatate testing, if $_SESSION['userID'] does not exist, just set the user to the 
-            // super_admin whose userID should be 1.
-            $userID = (isset($_SESSION['userID'])) ? $_SESSION['userID'] : '1';
-            $numAdminStudyRecords = createAdminStudies($userID, $newStudy['studyID']);
+            $numAdminStudyRecords = createAdminStudies($_SESSION['userID'], $newStudy['studyID']);
             if ($numAdminStudyRecords == 0) {
                 $error = true;
                 $errorMsg = 'Database error: Could not create any Admin Study records';
@@ -97,13 +94,13 @@ error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
        break;
         
     case 'GET':
-error_log("got into admin-create-study - GET");
+//error_log("got into admin-create-study - GET");
         $error = false;
     case 'PUT':
-error_log("got into admin-create-study - PUT");
+//error_log("got into admin-create-study - PUT");
         $error = false;
     case 'DELETE':                           
-error_log("got into admin-create-study - DELETE");
+//error_log("got into admin-create-study - DELETE");
         $error = false;
     default:
         http_response_code(404);

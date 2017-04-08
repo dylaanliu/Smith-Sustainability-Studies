@@ -6,11 +6,11 @@ verifyUserPrivilage('user');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];               
-error_log("SESSION userID = ".$_SESSION['userID']);
+//error_log("SESSION userID = ".$_SESSION['userID']);
 
 switch ($method) {
     case 'GET':
-error_log("got into logout - GET");
+//error_log("got into logout - GET");
         $q = cleanInputGet('q');
 
         // set session data to empty and destroy session. 

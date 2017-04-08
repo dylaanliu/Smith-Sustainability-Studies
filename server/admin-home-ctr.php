@@ -5,7 +5,7 @@ verifyUserPrivilage('admin');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-// $userID = '1';
+
 $userID = $_SESSION['userID'];
     
 // create SQL based on HTTP method
@@ -16,7 +16,7 @@ switch ($method) {
     $studies = null;
     $conditionGroupPhase = null;
     $queryTypeIn = cleanInputGet('q');
-error_log("in GET - admin-home",0);
+//error_log("in GET - admin-home",0);
   
     if (empty($queryTypeIn)) {
         $error = true;
@@ -28,11 +28,11 @@ error_log("in GET - admin-home",0);
         if ($studies == null) {
             $error = true;
             $errorMsg = 'No studies found';
-error_log("no studies found", 0);
+//error_log("no studies found", 0);
         }
         else {
             $errorMsg = 'Admin studies found';
-error_log(print_r($studies, true), 0);
+//error_log(print_r($studies, true), 0);
         }
         echo json_encode(array(
                   "error" => $error,
@@ -116,24 +116,6 @@ error_log(print_r($studies, true), 0);
 }
 
 
-// get all the records from the postTable table
-function getAllPosts() {
-    
-    $conn = dbConnect();
-    $result = mysqli_query($conn, "SELECT * FROM postTable");
 
-    // check if any records found. If records found, gather them into an array and return the array
-    if ($result == false)
-        $rows = null;
-    else {
-        $rows = array();
-        while($row = mysqli_fetch_assoc($result)) {
-            $rows[] = $row;
-        }
-    }
-    
-    mysqli_close($conn);    
-    return $rows;
-}
 
 

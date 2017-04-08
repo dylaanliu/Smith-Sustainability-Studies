@@ -8,12 +8,12 @@ $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POS
 // $userID = '1';
 $userID = $_SESSION['userID'];
 
-error_log("got into admin-user-accounts. Method=".$method);
+//error_log("got into admin-user-accounts. Method=".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
     case 'GET':
-error_log("got into admin-profile - GET");
+//error_log("got into admin-profile - GET");
         $q = cleanInputGet('q');
         $userRecords = null;
         $error = false;
@@ -39,14 +39,16 @@ error_log("got into admin-profile - GET");
         break;
 
     case 'PUT':
-error_log("got into admin-profile - PUT");
+//error_log("got into admin-profile - PUT");
         $error = false;
+        $errorMsg = "";
         
         // get user parameters/prevent sql injections/clear user invalid input
         parse_str(file_get_contents("php://input"), $put_vars);
-        $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : 2;  // TODO - used to debug. Should be $userID = $_SESSION['userID']
+       // $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : 2;  // TODO - used to debug. Should be $userID = $_SESSION['userID']
         $userNameIn = cleanInputPut($put_vars['userName']);
         $emailIn = cleanInputPut($put_vars['email']);
+        $current_passwordIn = cleanInputPut($put_vars['current_password']);
         $passwordIn = cleanInputPut($put_vars['password']);
         $confirm_passwordIn = cleanInputPut($put_vars['confirm_password']);
 
@@ -55,17 +57,28 @@ error_log("got into admin-profile - PUT");
         // Some validation examples below.
         if (empty($userNameIn)) {
             $error = true;
-            $errorMsg = 'UserID is required.';
+            $errorMsg .= 'User name is required. ';
         }
-        if (empty($passwordIn)) {
+        if (empty($current_passwordIn)) {
             $error = true;
-            $errorMsg = 'User name is required.';
+            $errorMsg .= 'Current password is required. ';
         }
-        if ($passwordIn != $confirm_passwordIn) {
+
+        // either change password or change email or both
+        if (empty($passwordIn) && !empty($confirm_passwordIn)) {
             $error = true;
-            $errorMsg = 'Password fields miss-match';
-        }
- 
+            $errorMsg .= 'New password is required. ';
+        } else if ($passwordIn != $confirm_passwordIn) {
+            $error = true;
+            $errorMsg .= 'Password fields miss-match. ';
+        } /*else if (empty($passwordIn) && empty($confirm_passwordIn)) {
+            
+        }*/
+        if (validateUser($userNameIn, $current_passwordIn) == null) {
+            $error = true;
+            $errorMsg .= 'Current password and/or user name could not be validated. Try again. ';            
+        } 
+
         if (!$error) {
             $success = updateProfile($userID, $userNameIn, $passwordIn, $emailIn);
             if (!$success) {

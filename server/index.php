@@ -1,19 +1,25 @@
 <?php
 // start a session to determine if there is currently a session. In addition, establish connection
 // to the database.
-session_start();
+/*session_start();
 require_once 'utils/utils.php';
-require_once 'model.php';
+require_once 'model.php';*/
+require_once 'utils/authenticateUser.php';
 $error = false;
 
 // prevent sql injections/clear user invalid inputs
 $usernameIn = cleanInputPost('username1');        // Fetching Values from URL.
 if (empty($usernameIn))
     $error = true;
-
+//error_log("username: ".$usernameIn, 0);
 $passwordIn = cleanInputPost('password1');        // Fetching Values from URL.
+
+
 if (empty($passwordIn))
     $error = true;
+
+//error_log("password: ".$passwordIn, 0);
+
 
 if (!$error) {
     // if password is correct, save session information and send JSON data to 

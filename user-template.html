@@ -68,6 +68,12 @@
                                 <p>COMMUNITY POSTS</p>
                             </a>
                         </li>
+                        <li id="contact">
+                            <a href="#" data-toggle="modal" data-target="#policyModal">
+                                <i class="pe-7s-lock"></i>
+                                <p>Privacy Policy</p>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -95,7 +101,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="index.html" id="user-logout">
+                                    <a href="#" id="user-logout">
                                         <i class="pe-7s-close-circle"></i>
                                         <p>Log out</p>
                                     </a>
@@ -109,15 +115,27 @@
                         <!-- Inputs Home View -->
                     </div>
                 </div>
+                <div class="modal fade" id="policyModal" role="dialog">
+                    <div class="modal-dialog">        
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Privacy Policy</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Your responses will be kept secure and your confidentiality will be respected. For more information, please see the Letter of Information provided at the beginning of the study. Any questions about study participation may be directed to jwebster@queensu.ca and any ethical concerns about the study may be directed to the Chair of the General Research Ethics Board at chair.GREB@queensu.ca.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
                 <footer class="footer">
                     <div class="container-fluid" id="user-footer">
                         <nav class="pull-left">
                             <ul>
-                                <li>
-                                    <a href="#" style="color: #66615B; font-size: 14px">
-                                                If you have any questions or concerns about the study, please email the admins at queens.smith.env@gmail.com.
-                                        </a>
-                                </li>
                                 <li>
                                     <a href="#" style="color: #66615B; font-size: 11px">
                                         &quot;We don't inherit the earth from our ancestors, we borrow it from our children.&quot; ― David Brower
@@ -140,10 +158,6 @@
         <script src="vendor/bootstrap-table.js"></script>
         <script src="vendor/jquery.datatables.js"></script>
 
-<!--         <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
- -->        
         <!-- ADDons -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.7/js/min/perfect-scrollbar.jquery.min.js"></script>
 
@@ -156,10 +170,12 @@
         <script src="js/Template.js"></script>
         <script src="js/utilities.js"></script>
         <script src="js/user-home-ctr.js"></script>
+        
         <script src="js/admin-user-template-ctr.js"></script>
         <script src="js/user-input-data-ctr.js"></script>
         <script src="js/user-statistics-ctr.js"></script>
         <script src="js/user-community-posts-ctr.js"></script>
         <script src="js/user-profile-ctr.js"></script>
+        <script src="js/user-contact-ctr.js"></script>
     </body>
 </html>

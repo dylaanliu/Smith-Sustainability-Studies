@@ -14,65 +14,66 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="container">
-                <div class="row" id="top">
+                <div class="row">
+                    <label class="col-sm-1 col-sm-offset-1 control-label big">Ignored Studies:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="addStudySelector" name="addStudySelector">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-default" id="addStudyButton" name="addStudyButton"><i class='btn-new pe-7s-plus'></i></button>
+                            <button type="button" class="btn btn-default" id="removeStudyButton" name="removeStudyButton"><i class='btn-new pe-7s-less'></i></button>
+                        </div>
+                    </div>
+                    <label class="col-sm-1 control-label big">Visible Studies:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="removeStudySelector" name="removeStudySelector">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="text-left">Monitor Users and Data Inputs:</h1>
-                    </div> -->
-                <div class="row justify-content-between ">
-                    <div class="col-sm-8">
-                        <label class="col-sm-1 control-label align-left">Study:</label>
-                        <div class="col-sm-3">
-                            <select class="form-control" id="addStudySelector" name="addStudySelector">
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2 text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <button type="button" class="btn btn-default" id="addStudyButton" name="addStudyButton"><i class='glyphicon glyphicon-plus'></i></button>
-                                <button type="button" class="btn btn-default" id="removeStudyButton" name="removeStudyButton"><i class='glyphicon glyphicon-minus'></i></button>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <select class="form-control" id="removeStudySelector" name="removeStudySelector">
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <label class="col-sm-2">Save Filename:</label>
-                        <input class="col-sm-2" id="adminMonitorUserToSaveAsFilename"></input>
+                        <br>
                     </div>
                 </div>
-                <div class="row justify-content-between ">
-                    <div class="col-sm-8 container">
-                        <label class="col-sm-1 control-label align-left">User:</label>
-                        <div class="col-sm-3">
-                            <select class="form-control" id="addUserSelector" name="addUserSelector">
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2 text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <button type="button" class="btn btn-default" id="addUserButton" name="addUserButton"><i class='glyphicon glyphicon-plus'></i></button>
-                                <button type="button" class="btn btn-default" id="removeUserButton" name="removeUserButton"><i class='glyphicon glyphicon-minus'></i></button>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <select class="form-control" id="removeUserSelector" name="removeUserSelector">
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
-                            </select>
+                <div class="row">
+                    <label class="col-sm-1 col-sm-offset-1 control-label big">Ignored Users:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="addUserSelector" name="addUserSelector">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-default btn-new" id="addUserButton" name="addUserButton"><i class='pe-7s-plus'></i></button>
+                            <button type="button" class="btn btn-default btn-new" id="removeUserButton" name="removeUserButton"><i class='pe-7s-less'></i></button>
                         </div>
                     </div>
+                    <label class="col-sm-1 control-label big">Visible Users:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="removeUserSelector" name="removeUserSelector">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="row justify-content-between ">
-                    <div class="col-sm-5 col-sm-offset-2 text-right">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 col-sm-offset-1" >
                         <button type="button" class="btn btn-default pull-left long" id="adminMonitorUserExtractRawData" name="adminMonitorUserExtractRawData"><i class="pe-7s-download" aria-hidden="true"></i>DOWNLOAD ALL DATA</button>
                     </div>
+                    <label class="col-sm-2 control-label text-right big formStyle">Save Filename:</label>
+                    <input class="col-sm-3 inputfield" id="adminMonitorUserToSaveAsFilename"></input>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -83,9 +84,9 @@
                     </div>
                 </div>
                 <div class="row" id="top">
-                    <div class="col-sm-12">
+                    <div class="col-md-12">
                         <p style="padding:6px;"></p>
-                        <table id="monitorUserTable" class="table table-bordered" cellspacing="0" width="100%">
+                        <table id="monitorUserTable" class="table table-scroll table-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                             <!-- dynamically insert header here -->
                             <thead>
                                 <tr id="insertMonitorUserTableHeader">

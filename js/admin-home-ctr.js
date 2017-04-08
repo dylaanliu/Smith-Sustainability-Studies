@@ -3,7 +3,7 @@
 
 // go to content div and shove some stuff in
 $(document).ready(function() {
-    
+   
 }); // end function
 
 function loadAdminHomeView() {
@@ -15,13 +15,13 @@ function loadAdminHomeView() {
     //make link on nav active
     $('.nav li').removeClass('active');
     $('#adminHome').addClass('active');
-    
+
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
             $.getJSON(controller, controllerData, function(result) {
-                console.log(JSON.stringify(result));
+
                 //alert(result);
                 var studyArray = result.data;
                 // var studyContent = "";
@@ -62,9 +62,9 @@ function loadAdminHomeView() {
                         "</div>"); 
                     }); // end each
                 }
-                else {
+/*                else {
                     console.log(result.errorMsg);
-                }
+                }*/
             });
         }
     });
@@ -77,8 +77,8 @@ $("#viewGoesHere").on( "click", "#extractRawData", function(event){
     var controllerData = { q: "getAll" }
 
     $.getJSON(controller, controllerData, function(result) {
-        console.log(JSON.stringify(result));
-        console.log('errorMsg=' + result.errorMsg);
+/*        console.log(JSON.stringify(result));
+        console.log('errorMsg=' + result.errorMsg);*/
         if (result.error)
             alert(result.errorMsg);
         else {
@@ -110,19 +110,19 @@ $("#viewGoesHere").on( "click", "#extractRawData", function(event){
 
 // for Create New Study Button click event
 $("#viewGoesHere").on( "click", "#createNewStudy", function(event){
-    console.log("going to create study page");
+    //console.log("going to create study page");
     loadAdminCreateStudyView();
 });
 
 // for Create User Account Button click event
 $("#viewGoesHere").on( "click", "#createUserAccount", function(event){
-    console.log("create user");
+    //console.log("create user");
     loadAdminUserAccountsView(true);
 });
 
 // for Manage User Account Button click event
 $("#viewGoesHere").on( "click", "#manageUserAccount", function(event){
-    console.log("going to manage user page");
+    //console.log("going to manage user page");
     loadAdminUserAccountsView(false);
 });
     

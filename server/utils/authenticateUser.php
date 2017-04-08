@@ -30,6 +30,7 @@ function verifyUserPrivilage($pagePrivilage) {
 error_log("pagePrivilage=".$pagePrivilage);
 error_log("log_privilegeLevel=".$log_privilegeLevel);
         header('HTTP/1.0 403 Forbidden: Not Authorized');
+        header('location:index.html');
         echo 'You are forbidden!';
         die();        
     }

@@ -25,11 +25,11 @@ switch ($method) {
         if ($studies == null) {
             $error = true;
             $errorMsg = 'No studies found';
-            error_log("some error", 0);
+            //error_log("some error", 0);
         }
         else
             $errorMsg = 'Admin studies found';
-        error_log("through", 0);
+        //error_log("through", 0);
         echo json_encode(array(
                   "error" => $error,
                   "errorMsg" => $errorMsg, 
@@ -42,15 +42,18 @@ switch ($method) {
           $posts = null;
 
           $studyIDIn = cleanInputGet('studyID');
+         // error_log("get study data");
           if (empty($studyIDIn)) {
               $error = true;
               $errorMsg = 'Expecting studyID';
+             // error_log("missing study id");
           }
           
           $studies = getAdminStudies($userID);
           if ($studies == null) {
               $error = true;
               $errorMsg = 'No studies found';
+             // error_log("no studies found");
           }
           else {
               $errorMsg = 'Admin studies found.';
@@ -59,16 +62,18 @@ switch ($method) {
               if ($conditionGroupPhase == null) {
                   $error = true;
                   $errorMsg = 'Database error accessing conditionGroupTable';
+                 // error_log("no condition group phase");
               }
               else {
                   $posts = getStudyPosts($studyIDIn);
                   if ($posts == null) {
                       $error = true;
                       $errorMsg = 'Database error accessing postTable';
+                     // error_log("no posts");
                   }
               }
           }
-          
+         // error_log(print_r($posts, true), 0);
           echo json_encode(array(
                     "error" => $error,
                     "errorMsg" => $errorMsg, 
@@ -85,7 +90,7 @@ switch ($method) {
         if ($study == null || $conditionGroupPhase == null) {
             $error = true;
             $errorMsg = 'No study or condition group phase found';
-            error_log("some error", 0);
+           // error_log("some error", 0);
         }
         else
             $errorMsg = 'Study and condition group phase found';
@@ -94,29 +99,8 @@ switch ($method) {
                   "errorMsg" => $errorMsg, 
                   "study" => $study,
                   "conditionGroupPhase" => $conditionGroupPhase));
-        error_log("returned from study: ",0);
-        error_log(print_r($study, true),0);
-        break;
-      case 'get_posts':
-        error_log("GET posts - admin monitor studies",0);
-        $error = false;
-        $studyID = cleanInputGet("studyID");
-        $conditionGroup = cleanInputGet("conditionGroup");
-        $phaseNum = cleanInputGet("phaseNum");
-        $posts = getPostCGPhase($studyID, $conditionGroup, $phaseNum);
-        if ($posts == null) {
-            $error = true;
-            $errorMsg = 'No post found';
-            error_log("some error", 0);
-        }
-        else
-            $errorMsg = 'Posts found';
-        error_log("before echo", 0);
-        echo json_encode(array(
-                  "error" => $error,
-                  "errorMsg" => $errorMsg, 
-                  "data" => $posts));
-        error_log("after echoed",0);
+       // error_log("returned from study: ",0);
+       // error_log(print_r($study, true),0);
         break;
       case 'get_results':
         error_log("GET daily entries - admin monitor studies", 0);
@@ -141,25 +125,34 @@ switch ($method) {
     break;
   case 'PUT':                              // not required in this controller
   case 'POST':
-    error_log("Posting new post");
+   // error_log("Posting new post");
     $error = false;
     //$postRecord = null;
 
 //    $dateTimeStamp = cleanInputPost("dateTime1");
     date_default_timezone_set('America/Toronto');
     $dateTimeStamp = date('Y-m-d H:i:s'); // when the study is made active
-
+//error_log("testing ".$FILES[])
     $postText = cleanInputPost("text1");
-    $image = cleanInputPost("image1");
+    //$imageName = $_FILES["image1"]["name"];//cleanInputPost("image1");
+    $image = cleanInputPost("image1"); //addslashes(file_get_contents($_FILES['image1']['tmp_name']));
     $conditionGroupNum = cleanInputPost("conditionGroupNum1");
     $phaseNum = cleanInputPost("phaseNum1");
     $studyID = cleanInputPost("studyID1");
 
-    error_log("userID: ".$userID." dateTime: ".$dateTimeStamp." postText: ".$postText. " image: ". $image." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
+/*    $postText = $_FILES['text1'];
+    $image = $_FILES['image1'];
+    $conditionGroupNum = $_FILES['conditionGroupNum1'];
+    $phaseNum = $_FILES['phaseNum1'];
+    $studyID = $_FILES['studyID1'];*/
+    error_log("userID: ".$userID." dateTime: ".$dateTimeStamp." postText: ".$postText." conditionGroupNum: ".$conditionGroupNum." phase: ".$phaseNum." study: ".$studyID, 0);
+
+    //error_log(print_r($image, true), 0);
 
     if (empty($postText)) {
         $error = true;
         $errorMsg = 'Text is required.';
+       // error_log("text required");
     }
     if (empty($conditionGroupNum)) {
         $error = true;
@@ -170,8 +163,20 @@ switch ($method) {
         $errorMsg = 'phase required.';
     }
 
+    // image code
+    
+    /*$uploadImage = $_FILES['image']['tmp_name'];
+error_log("image: ".$uploadImage);
+    if($uploadImage =="") {
+error_log("image is '' ");
+      $uploadImage = " ";
+    }*/
+    
+
     if(!$error) {
+     // error_log("no error");
         $postRecord = createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupNum, $phaseNum, $studyID);  
+//error_log("image is: ".$postRecord['image']);
         
         if ($postRecord == null) {
             $error = true;
@@ -189,7 +194,7 @@ switch ($method) {
     break;
                             
   case 'DELETE':
-    error_log("got into admin-monitor-users - DELETE");
+   // error_log("got into admin-monitor-users - DELETE");
         $error = false;
         // get parameters
         parse_str($_SERVER['QUERY_STRING'], $query_params);
@@ -232,12 +237,13 @@ function getStudyPosts($studyID) {
 
 
 // TODO: Do join with matching study, phase and cg num params
-    $sql =  "SELECT *".
+    $sql =  "SELECT * ".
             "FROM postTable ".
-            "WHERE studyID=".$studyID.";";
+            "WHERE studyID='".$studyID."'".
+            " ORDER BY postTable.postID DESC ;";
  
     $result = mysqli_query($conn, $sql);
-
+//error_log($sql);
     // check if any records found. If records found, gather them into an array and return the array
     if ($result == false)
         $rows = null;

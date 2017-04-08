@@ -8,12 +8,12 @@ $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POS
 // $userID = '1';
 $userID = $_SESSION['userID'];
     
-error_log("got into admin-manage-studies. Method: ".$method);
+//error_log("got into admin-manage-studies. Method: ".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
     case 'GET':
-error_log("got into admin-manage-studies - GET");
+//error_log("got into admin-manage-studies - GET");
         $error = false;
         $studies = null;
         $conditionGroupPhase = null;
@@ -42,15 +42,15 @@ error_log("got into admin-manage-studies - GET");
         break;
         
     case 'PUT':
-error_log("got into admin-manage-studies - PUT");
+//error_log("got into admin-manage-studies - PUT");
         $error = false;
         $errorMsg = "";
         $userRecords = null;
         
         // get parameters. Get form string from client and convert to associated array 
         // unique array names
-        error_log("output");
-        error_log(file_get_contents("php://input"));
+/*        error_log("output");
+        error_log(file_get_contents("php://input"));*/
         $nameVal = json_decode(file_get_contents("php://input"), true);
         foreach($nameVal as $pair){
             //error_log("key=".$pair['name'].", value=".$pair['value']);
@@ -115,7 +115,7 @@ error_log("got into admin-manage-studies - PUT");
                 foreach($userRecords as $userRecord) {
                     if ($userRecord["studyID"] == $studyIDIn && $userRecord["currentConditionGroup"] == $conditionGroupIn) {
                         if ($odd) {
-                            if (!operateUserTable($userRecord["userID"], "incr_teamNum")) {
+                            if (!operateUserTable($userRecord["userID"], "incr", "teamNum")) {
                                 $error = true;
                                 $errorMsg .= ' Database error: could not increment team number.';
                             }    
@@ -200,7 +200,7 @@ error_log("got into admin-manage-studies - PUT");
         break;
                 
     case 'POST':
-error_log("got into admin-manage-studies - POST");
+//error_log("got into admin-manage-studies - POST");
         $error = false;
         $errorMsg = "";
         $studyRecord = null;
@@ -231,9 +231,9 @@ error_log("got into admin-manage-studies - POST");
                 $maxConditionGroupNum = $studyRecord["maxConditionGroupNum"] + 1;
                 $conditionGroups = $studyRecord["conditionGroups"];
                 $phases = $studyRecord["phases"];
-                if ($conditionGroups >= 6) {
+                if ($conditionGroups >= 3) {
                     $error = true;
-                    $errorMsg .= 'Error, maximum number of supported condition groups is 6. ';
+                    $errorMsg .= 'Error, maximum number of supported condition groups is 3. ';
                 }
             }
         }
@@ -271,7 +271,7 @@ error_log("got into admin-manage-studies - POST");
         break;
         
     case 'DELETE':                           
-error_log("got into admin-manage-studies - DELETE: ".$_SERVER['QUERY_STRING']);
+//error_log("got into admin-manage-studies - DELETE: ".$_SERVER['QUERY_STRING']);
         $error = false;
         $conditionGroupPhaseRecords = null;
         $conditionGroupPhase = null;

@@ -41,8 +41,6 @@ function loadAdminMonitorUsersView() {
         if(statusTxt == "success") {
            
             $.getJSON(adminMonitorUsersController, controllerData, function(result) {
-                // console.log(JSON.stringify(result));
-                console.log('errorMsg='+result.errorMsg);
                 if (result.error)
                     alert(result.errorMsg);
                 else {
@@ -130,7 +128,7 @@ function renderMonitorUserTable() {
     
     // insert the column headers into the table
     $("#insertMonitorUserTableHeader").empty();
-    tableHeaderStr = "<th>Study ID</th><th>Group</th><th>User ID</th><th class='no-sort'></th>";
+    tableHeaderStr = "<th>Study ID</th><th>Group</th><th>UserName</th><th>User ID</th><th class='no-sort'></th>";
     colHeaders.forEach(function(colName, index) {
         tableHeaderStr += "<th class='no-sort'>" + colName + "</th>";
     });
@@ -185,8 +183,9 @@ function renderMonitorUserTable() {
                 for (i = 0; i < 5; i++) {                    // 5 rows per user (start,end,share,post,likes)
                     for (j = 0; j < colHeaders.length; j++) {
                         if (j == 0) {
-                            tableBodyStr += "<tr><td>" + study.studyID + "</td><td>" 
+                            tableBodyStr += "<tr><td><i class='pe-7s-angle-down-circle'></i> Study: " + study.studyID + "</td><td>" 
                                                    + conditionGroupPhase.conditionGroupNum + "</td><td>" 
+                                                   + user.userName + "</td><td>"
                                                    + user.userID + "</td>"
                             switch (i) {
                                 case 0: tableBodyStr += "<td>Start</td>"; break;
@@ -218,8 +217,60 @@ function renderMonitorUserTable() {
     });
     $("#insertMonitorUserTableBody").empty();
     $("#insertMonitorUserTableBody").append(tableBodyStr);
+// new code starts here
+/*    monitorUsersTable = $("#monitorUserTable").dataTable({
+        scrollY:        "400px",
+        scrollX:        true,                               // allow horizontal scrolling
+        scrollCollapse: true,
+        paging:         false,
+        //ordering:       false,
+        fixedColumns:   {
+            leftColumns: 4,                                 // left columns fixed
+        },
+         aoColumnDefs : [
+            {
+             'bSortable' : false, 'aTargets' : ['no-sort']}
+        ]
+    });*/
 
-    monitorUsersTable = $("#monitorUserTable").DataTable({
+/*    monitorUsersTable = $('#monitorUserTable').dataTable({
+        bExpandableGrouping: true, 
+        bUseFilteringForGrouping: true, 
+        bHideGroupingColumn: true,
+        responsive: true,
+        scrollY:        "400px",
+        scrollX:        true,                               // allow horizontal scrolling
+        scrollCollapse: true
+
+    });*/
+
+        monitorUsersTable = $('#monitorUserTable').dataTable({
+        aoColumnDefs : [{
+               'bSortable' : false, 'aTargets' : ['no-sort']}
+          ],
+        "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+                if ( aData[4] == "Start")
+                {
+                    $('td', nRow).css('background-color', 'rgba(173, 213, 247, 0.3)');
+                }
+                // else if ( aData[1] == "2" )
+                else
+                {
+                    $('td', nRow).css('background-color', 'rgba(173, 213, 247, 0.1)');
+                    // $('td', nRow).css('background-color', '#f9f9f9');
+                }
+        },
+        "bLengthChange": false, 
+        "bPaginate": false,         
+        // responsive: true,
+        scrollY:        "400px",
+        scrollX:        true,                               // allow horizontal scrolling
+        scrollCollapse: true 
+        }).rowGrouping({
+            bExpandableGrouping: true
+        });
+// new code ends here
+/*    monitorUsersTable = $("#monitorUserTable").DataTable({
 
         scrollY:        "400px",
         scrollX:        true,                               // allow horizontal scrolling
@@ -233,7 +284,7 @@ function renderMonitorUserTable() {
             {
              'bSortable' : false, 'aTargets' : ['no-sort']}
         ]
-    });                    
+    });    */                
 }
 
 
@@ -330,10 +381,10 @@ function getFileData() {
 // and add it into the hiddenStudiesArray Array so it wont get displayed.
 $("#viewGoesHere").on( "click", "#removeStudyButton", function() {
     var studyID = $( "#removeStudySelector" ).val();
-    console.log('remove study=' + studyID); 
+   // console.log('remove study=' + studyID); 
 
     hiddenStudiesArray.push(studyID);
-    monitorUsersTable.destroy();
+    monitorUsersTable.api().destroy();
     renderSelectors();
     renderMonitorUserTable();
 }); 
@@ -344,12 +395,12 @@ $("#viewGoesHere").on( "click", "#removeStudyButton", function() {
 // so that the study will be displayed.
 $("#viewGoesHere").on( "click", "#addStudyButton", function() {
     var studyID = $( "#addStudySelector" ).val();
-    console.log('add study=' + studyID);
+   // console.log('add study=' + studyID);
     
     var i = hiddenStudiesArray.indexOf(studyID);
     if(i != -1) 
         hiddenStudiesArray.splice(i, 1);
-    monitorUsersTable.destroy();
+    monitorUsersTable.api().destroy();
     renderSelectors();
     renderMonitorUserTable();
 }); 
@@ -360,10 +411,10 @@ $("#viewGoesHere").on( "click", "#addStudyButton", function() {
 // hiddenUsersArray so it wont be displayed.
 $("#viewGoesHere").on( "click", "#removeUserButton", function() {
     var userID = $( "#removeUserSelector" ).val();
-    console.log('remove user=' + userID); 
+   // console.log('remove user=' + userID); 
 
     hiddenUsersArray.push(userID);
-    monitorUsersTable.destroy();
+    monitorUsersTable.api().destroy();
     renderSelectors();
     renderMonitorUserTable();
 }); 
@@ -374,12 +425,12 @@ $("#viewGoesHere").on( "click", "#removeUserButton", function() {
 // hiddenUsersArray so it will be displayed.
 $("#viewGoesHere").on( "click", "#addUserButton", function() {
     var userID = $( "#addUserSelector" ).val();
-    console.log('add user=' + userID); 
+   // console.log('add user=' + userID); 
 
     var i = hiddenUsersArray.indexOf(userID);
     if(i != -1) 
         hiddenUsersArray.splice(i, 1);
-    monitorUsersTable.destroy();
+    monitorUsersTable.api().destroy();
     renderSelectors();
     renderMonitorUserTable();
 }); 
@@ -389,7 +440,7 @@ $("#viewGoesHere").on( "click", "#addUserButton", function() {
 $("#viewGoesHere").on( "click", "#adminMonitorUserExtractRawData", function() {
     var filename = $("#adminMonitorUserToSaveAsFilename").val();
     filename = filename.trim();
-    console.log('extract raw data button clicked, filename=' + filename); 
+   // console.log('extract raw data button clicked, filename=' + filename); 
     
     if (filename == "") {
         alert("Please provide file name.")

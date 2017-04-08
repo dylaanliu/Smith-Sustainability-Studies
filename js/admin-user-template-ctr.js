@@ -1,4 +1,4 @@
-$("#admin-logout").click(function(){
+$("#admin-logout, #user-logout").click(function(){
     var logoutController = "server/admin-user-template-ctr.php";
     var controllerData = { q: "logout"};
 
@@ -13,7 +13,7 @@ $("#admin-logout").click(function(){
 
             // inform server to logout
     $.getJSON(logoutController, controllerData, function(result) {
-        console.log(JSON.stringify(result));
+       // console.log(JSON.stringify(result));
         if (result.error) {
             alert ("Logout Failed!");
         }
