@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
-        <!-- bootstrap -->
-        <meta   charset="uX-8"> 
-        <meta   h@p-equiv="X-UA-Compa]ble"  content="IE=edge">  
-        <meta   name="viewport" content="width=device-width, initial-scale=1">  
-        <!--The above 3 lines must be included-->
+        <!--Default Home Page-->
+        <meta charset="UTF-8">
+        <meta h@p-equiv="X-UA-Compa]ble" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Smith Sustainability Studies</title>
-
-        <link   href="css/bootstrap.min.css"    rel="stylesheet">   
-        <link   href="css/Template.css" rel="stylesheet">
-
-        <!-- Load Fonts -->
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- Smith core CSS -->
+        <link rel="stylesheet" href="css/Template.css">
+        <!-- Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Londrina+Solid" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Cabin|Raleway" rel="stylesheet">
@@ -21,89 +22,75 @@
 
     <body>
         <div class="page-wrap">
-        <!--Navigation-->
-        <nav class="navbar navbar-fixed">
-            <div class="container">
-                <div class="navbar-header" id="navbar">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main" >
-                        <span class="icon-bar1"></span>
-                        <span class="icon-bar2"></span>
-                        <span class="icon-bar3"></span>
-                    </button>
-                    <a class="navbar-brand" href="index.html">SMITH SUSTAINABILITY STUDIES</a>
-                </div>
-                <!-- <center> -->
-                <div class="navbar-collapse collapse" id="navbar-main">
-                    
-                    <form class="navbar-form navbar-right" role="search" id="loginForm">
-                        <div class="form-group">
-                            <label class="sr-only" for="text">Username:</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="sr-only" for="pwd">Password:</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="remember-me"> Remember me 
-                            </label>
-                        </div>
-                        <button type="submit" class="btn pull-right" id="login" name="login" value="Login">Login</button>
-                    </form>
-                </div>
-                <!-- </center> -->
-            </div>
-        </nav>
-
-        <div class="modal fade" id="infoModal" role="dialog">
-            <div class="modal-dialog">        
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Want to learn more about participating in a study?</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Contact us at queens dot smith dot env at gmail dot com.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>    
-            </div>
-        </div>
-        <div class="content">
-            <div class="jumbotron hero">
+            <!--Navigation-->
+            <nav class="navbar navbar-fixed">
                 <div class="container-fluid">
-                    <div class="row" id="info">
-                        <div class="col-md-5 col-md-push-6 col-xs-10 col-xs-push-1 box">
-                            <h1>Welcome!</h1>
-                            <p style="text-align: center;">The <strong>Smith Sustainability Studies</strong> is a system provided and run by researchers at Queen&#39;s University.</p> <p> We run ongoing studies related to pro-environmental behaviours and hope that you will consider participating in one of our studies.</p>
-                            <p>If you would like to find out more about participating, please contact xyz@gmail.com. If you are already registered in a study, please sign in above. If you are starting a new study and need to register, please click on the &quot;Not yet in a study?&quot; button below</p>
-
-                            <div class="pull-right">
-                                <button type="button" class="btn" data-toggle="modal" data-target="#infoModal">Not yet in a study?</button>
+                    <div class="navbar-header" id="navbar">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main">
+                                <span class="icon-bar bar1"></span>
+                                <span class="icon-bar bar2"></span>
+                                <span class="icon-bar bar3"></span>
+                            </button>
+                        <a class="navbar-brand" href="index.html">SMITH SUSTAINABILITY STUDIES</a>
+                    </div>
+                    <!-- <center> -->
+                    <div class="navbar-collapse collapse" id="navbar-main">
+                        <form class="nav navbar-form navbar-right" role="search" id="loginForm">
+                            <div class="form-group">
+                                <label class="sr-only" for="text">Username:</label>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
                             </div>
-                        </div>                    
+                            <div class="form-group">
+                                <label class="sr-only" for="pwd">Password:</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="remember" id="remember" value="1"> Remember me
+                                </label>
+                            </div>
+                            <button type="submit" class="btn pull-right" id="login" name="login" value="Login">Login</button>
+                        </form>
+                    </div>
+                    <!-- </center> -->
+                </div>
+            </nav>
+            <div class="content">
+                <div class="jumbotron hero">
+                    <div class="container-fluid">
+                        <div class="row" id="info">
+                            <div class="col-md-5 col-md-push-6 col-xs-10 col-xs-push-1 box">
+                                <h1>Welcome!</h1>
+                                <p style="text-align: center;">The <strong>Smith Sustainability Studies</strong> is a system provided and run by researchers at Queen&#39;s University.</p>
+                                <p><strong>What do we do?</strong>
+                                    <br>We run ongoing studies related to pro-environmental behaviours and hope that you will consider participating in one of our studies.</p>
+                                <p><strong>Want to get involved?</strong>
+                                    <br>To find out more about participating, please email us at <em>queens.smith.env@gmail.com</em>.</p>
+                                <p><strong>Already registered?</strong>
+                                    <br>If you are already registered in a study, please <strong>login</strong> above.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <footer class="footer" id="indexfooter">
+                <div class="container-fluid">
+                    <p class="pull-left"><a href="#" style="color: #66615B; font-size: 11px">
+                                        &ldquo;We don&#39;t inherit the earth from our ancestors, we borrow it from our children.&rdquo; &#45; David Brower
+                                </a></p>
+                    <p class="copyright pull-right"> &copy; Copyright 2017</p>
+                </div>
+            </footer>
         </div>
-        <footer class="footer">
-            <div class="container-fluid">
-                <p class="copyright pull-right"> &copy; Copyright 2017</p>
-            </div>
-        </footer>
-    </div> <!--page wrap-->
-        <!--JavaScript-->
+
         <!--jQuery and Bootstrap Imports-->
-<!--         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-        <script src="js/jquery-3.1.1.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.validate.js"></script>
+        <script src="vendor/jquery-3.1.1.min.js"></script>
+        <script src="vendor/jquery-ui.min.js"></script>
+        <script src="vendor/bootstrap.min.js"></script>
+        <script src="vendor/jquery.validate.js"></script>
+        <!-- ADDons -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.7/js/min/perfect-scrollbar.jquery.min.js"></script>
+
         <script src="js/index.js"></script>
     </body>
 

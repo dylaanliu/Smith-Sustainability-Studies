@@ -13,15 +13,19 @@ function loadAdminMonitorStudiesView() {
 //	var data_file = "adminhome.json"; // path to temp json file
     var adminStudyQuery = { q: "get_admin_studies", otherVar: "something" };
     var view = "views/admin-monitor-studies-view.html";
+
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadMonitorStudies').addClass('active');
     
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
-            console.log("success");
+            /*console.log("success");*/
             $.getJSON(monitorStudiesController, adminStudyQuery, function(result) {
-                console.log("in Get");
-                console.log(JSON.stringify(result));
+               /* console.log("in Get");
+                console.log(JSON.stringify(result));*/
                 //alert(result);
                 var studyArray = result.data;
                 // var studyContent = "";
@@ -31,32 +35,36 @@ function loadAdminMonitorStudiesView() {
                 if (!result.error) {
                     // html injection
                     $.each(studyArray, function(index, studyRecord) {
-                        console.log("inserting html");
+                        /*console.log("inserting html");*/
                         $("#currentStudiesTable").append(
-                            "<div class='panel panel-info'>" +
+                            //"<div class='panel panel-info'>" +
                                 "<div class='panel-heading'>"+ 
-                                    "<div class='row'>"+
+/*                                    "<div class='row'>"+
                                         "<h3 class='panel-title'>"+
                                             "Study " + studyRecord.studyID + " " + studyRecord.title + ":" +
 
-                                        "</h3>"+
-                                        "<p> "+ studyRecord.description +"</p>"+    
+                                        "</h3>"+*/
+                                       "<div class='col-sm-12 panel-title'>" + 
+                                            "<h3 style='float: left;'>Study " + studyRecord.studyID + ": </h3><h4>" + studyRecord.title + "</h4>" + 
+                                        "</div>" + 
+
+                                        //"<p> "+ studyRecord.description +"</p>"+ 
+                                      "<label for='description" + studyRecord.studyID + "' class='col-sm-2 control-label'>Study Summary:</label>" +
+                                        "<div class='col-sm-9'>" +
+                                            "<p>" + studyRecord.description + "</p>" +
+                                        "</div>" +
+
                                         "<div class='col-sm-3 col-sm-offset-3'>"+
                                             "<a class='accordion-toggle btn btn-info pull-left' data-toggle='collapse' name='viewResults' id='results-" + studyRecord.studyID + "' href='#collapse-"+studyRecord.studyID+"''>"+
-                                                // "<button type='button' name='viewResults' class='btn btn-info pull-left' id='" + studyRecord.studyID +
-                                                // "'>View Results</button>"+
                                             "View Results</a>"+
                                         "</div>" +
                                         "<div class='col-sm-3 col-sm-offset-1'>"+
                                             "<a class='accordion-toggle btn btn-info pull-left' data-toggle='collapse'  name='communityPosts' id='posts-" + studyRecord.studyID + "' href='#collapse-"+studyRecord.studyID+"'>"+
-//                                                "<button type='button' name='communityPosts' class='btn btn-info pull-left' id='" + studyRecord.studyID +
-//                                                "'>Manage Community Posts</button>"+
                                             "Manage Community Posts</a>"+
                                         "</div>" +  
                                     "</div>"+                                  
                                 "</div>"+
                                 "<div class='row' id='row-"+studyRecord.studyID+"'>"+
-
                                     "<div id='collapse-"+studyRecord.studyID+"' class='panel-collapse collapse'>"+
                                         "<div class='panel-body'>"+
                                             "<div id='infoGoesHere-"+studyRecord.studyID+"'>"+
@@ -64,24 +72,26 @@ function loadAdminMonitorStudiesView() {
                                         "</div>"+
                                     "</div>"+
                                 "</div>"+
-                                
-
-                            "</div>"); 
-                            //viewResults(studyRecord.studyID);
+                                "<div class='row'>"+
+                                    "<div class='col-md-12'>"+
+                                        "<div class='separator'>"+
+                                        "<a href='#'></a>"+
+                                        "</div>" +
+                                    "</div>" + 
+                                "</div>"
+                            //"</div>"
+                            ); 
                     }); // end each
-
-
                 }
-                else {
+               /* else {
                     console.log(result.errorMsg);
-                }
+                }*/
             });
         }
 	});
 } // end function
 
 	
-
 // *****************************************
 // This section to do with button management 
 // *****************************************
@@ -89,8 +99,8 @@ function loadAdminMonitorStudiesView() {
 // for individual View Results Buttons in Current Studies Table
 $("#viewGoesHere").on( "click", "#currentStudiesTable a[name='viewResults']", function(event){
     var studyID = this.id.slice(8);
-    console.log("going to view results");
-    console.log("studyID = " + studyID);
+    /*console.log("going to view results");
+    console.log("studyID = " + studyID);*/
     viewResults(studyID);
 
 });
@@ -98,27 +108,26 @@ $("#viewGoesHere").on( "click", "#currentStudiesTable a[name='viewResults']", fu
 // for individual Manage Community Buttons in Current Studies Table
 $("#viewGoesHere").on( "click", "#currentStudiesTable a[name='communityPosts']", function(event){
     var studyID = this.id.slice(6);
-    console.log("going to monitor a community");
-    console.log("studyID = " + studyID);
+   /* console.log("going to monitor a community");
+    console.log("studyID = " + studyID);*/
     //var conditionGroup = "1";
     //var phase = "2";
     viewCommunityPosts(studyID);
     //alert("NOT IMPLEMENTED");
 });
 
-
 $("#viewGoesHere").on("click", "#cgCheckAll", function (event) {
     var temp = this.className;
-    console.log(temp);
+    /*console.log(temp);*/
     var studyID = temp.slice(8);
-    console.log("cg All: " + studyID);
+   /* console.log("cg All: " + studyID);*/
     $(".checkCG-"+studyID).prop('checked', $(this).prop('checked'));
 }); 
 
 $("#viewGoesHere").on("click", "#phaseCheckAll", function (event) {
     var temp = this.className;
     var studyID = temp.slice(11);
-    console.log("phase All: " + studyID);
+  /*  console.log("phase All: " + studyID);*/
     $(".checkPhase-"+studyID).prop('checked', $(this).prop('checked'));
 });
 
@@ -129,12 +138,10 @@ $("#viewGoesHere").on("click", "#phaseCheckAll", function (event) {
 
 $("#viewGoesHere").on( "click", "#select-form button[name='submitParameters']", function(event){
     var studyID = this.id;
-    //console.log("going to load diagram");
-   // console.log("studyID = " + studyID);
     event.preventDefault();
 
-    var dataFormatInput = $("input[name=dataFormat]:checked");
-    var dataChoiceInput = $("input[name=dataChoice]:checked");
+    var dataFormatInput = $("input[name=dataFormat-"+studyID+"]:checked");
+    var dataChoiceInput = $("input[name=dataChoice-"+studyID+"]:checked");
     var dataChoice = dataChoiceInput.attr('id'); //get which type of data
     var dataFormat = dataFormatInput.attr('id'); 
     var selectedConditionGroups = [];
@@ -143,8 +150,7 @@ $("#viewGoesHere").on( "click", "#select-form button[name='submitParameters']", 
     // create a common controller
     var dataQuery = {q: "get_results", studyID: studyID}; //conditionGroupArray: selectedConditionGroups, phaseArray: selectedPhases,
 
-
-    $("input:checkbox[name=cgCheck]:checked").each(function(){
+    $("input:checkbox[name=cgCheck-"+studyID+"]:checked").each(function(){
         //console.log("cg checked: "+$(this).attr('id'));
         // ensure adding the correct checkboxes to be passed
         var temp = this.className;
@@ -153,7 +159,9 @@ $("#viewGoesHere").on( "click", "#select-form button[name='submitParameters']", 
             selectedConditionGroups.push($(this).attr('id'));
     });
 
-    $("input:checkbox[name=phaseCheck]:checked").each(function(){
+    console.log(selectedConditionGroups);
+
+    $("input:checkbox[name=phaseCheck-"+studyID+"]:checked").each(function(){
         //console.log("phase checked: "+$(this).attr('id'));
         var temp = this.className;
         var checkStudyID = temp.slice(11);
@@ -161,99 +169,87 @@ $("#viewGoesHere").on( "click", "#select-form button[name='submitParameters']", 
             selectedPhases.push($(this).attr('id'));
     });
 
-
-
     if(selectedConditionGroups.length == 0 || selectedPhases.length == 0) {
         alert("Please select at least one condition group and/or phase");
     } else {
-        //dataQuery['conditionGroupArray'] = selectedConditionGroups;
-        //dataQuery['phaseArray'] = selectedPhases;
-
         // get all of the data from a study
-        formatData(dataQuery, selectedConditionGroups, selectedPhases, dataFormat, dataChoice);
-
-
-
+        formatData(dataQuery, selectedConditionGroups, selectedPhases, dataFormat, dataChoice, studyID);
     }
-
-    // get the checked boxes
-
-    //console.log(dataID);
-    console.log(selectedConditionGroups);
-    console.log(selectedPhases);
-    console.log(dataFormat);
-    console.log(dataChoice);
-    //alert("Getting view");
 });
 	
 	
 function viewResults(studyID){
    // var controller = "server/admin-monitor-studies-ctr.php";
     var singleStudyQuery = { q: "get_single_study_data", studyID: studyID};
-    console.log("getting view results"+studyID);
+  /*  console.log("getting view results"+studyID);*/
 
     document.getElementById("infoGoesHere-"+studyID).innerHTML = "";
     // append initial html not dependent on study
     $("#infoGoesHere-"+studyID).append(
-            "<h3>Select Parameters</h3>"+
+        "<div class='container-fluid'> " + 
+            "<div class='row'>" +
+                "<div class='col-sm-12'>"+
+                    "<h3>Select Parameters</h3>"+ 
+                "</div>"+
+
             "<form class='form-inline' id='select-form'>"+
                 "<div class='form-group col-sm-3'>"+
                     "<div id='conditionGroups-"+studyID+"'>"+
-                        "<h4>Condition Groups</h4>"+
+                        "<h5>Condition Groups</h5>"+
                         "<div class='form-check' id='all'>"+
                             "<label><input type='checkbox' class='checkCG-"+studyID+"' id='cgCheckAll'>"+
-                            "All</label>"+
+                            "   All</label>"+
                         "</div>"+                        
                     "</div>"+
                 "</div>"+
                 "<div class='form-group col-sm-2'>"+
                     "<div id='phases-"+studyID+"'>"+
-                        "<h4>Phases</h4>"+
+                        "<h5>Phases</h5>"+
                         "<div class='form-check' id='all'>"+
                             "<label><input type='checkbox' class='checkPhase-"+studyID+"' id='phaseCheckAll'>"+
-                            "All</label>"+
+                            "   All</label>"+
                         "</div>"+                        
                     "</div>"+                    
                 "</div>"+     
                 "<div class='form-group col-sm-3' id='data'>"+
-                    "<h4>Data Content</h4>"+
+                    "<h5>Data Content</h5>"+
                     "<div class='form-check'>"+
                         "<label class='form-check-label'>"+
-                            "<input class='form-check-input' type='radio' name='dataChoice' id='energy' checked>"+
-                                "Energy"+
+                            "<input class='form-check-input' type='radio' name='dataChoice-"+studyID+"' id='energy' checked>"+
+                                "   Energy"+
                             "</label>"+
                     "</div>"+   
                     "<div class='form-check'>"+ 
                         "<label class='form-check-label'>"+
-                            "<input class='form-check-input' type='radio' name='dataChoice' id='posts'>"+
-                                "Posts"+
+                            "<input class='form-check-input' type='radio' name='dataChoice-"+studyID+"' id='posts'>"+
+                                "   Posts"+
                         "</label>"+
                     "</div>"+
                     "<div class='form-check'>"+ 
                         "<label class='form-check-label'>"+                     
-                            "<input class='form-check-input' type='radio' name='dataChoice' id='numLikes'>"+
+                            "<input class='form-check-input' type='radio' name='dataChoice-"+studyID+"' id='numLikes'>"+
                             "Number of likes"+
                         "</label>"+
                     "</div>"+                                                                                         
                 "</div>"+ 
                 "<div class='form-group col-sm-3' id='format'>"+
-                    "<h4>Data Format</h4>"+
+                    "<h5>Data Format</h5>"+
                     "<div class='form-check'>"+
                         "<label class='form-check-label'>"+
-                            "<input class='form-check-input' type='radio' name='dataFormat' id='lineChart' checked>"+
-                                "Line Chart"+
+                            "<input class='form-check-input' type='radio' name='dataFormat-"+studyID+"' id='lineChart-"+studyID+"' checked>"+
+                                "   Line Chart"+
                             "</label>"+
                     "</div>"+   
                     "<div class='form-check'>"+ 
                         "<label class='form-check-label'>"+
-                            "<input class='form-check-input' type='radio' name='dataFormat' id='barGraph'>"+
-                                "Bar Graph"+
+                            "<input class='form-check-input' type='radio' name='dataFormat-"+studyID+"' id='barGraph-"+studyID+"'>"+
+                                "   Bar Graph"+
                         "</label>"+
                     "</div>"+
                     "<div class='form-check'>"+ 
                         "<label class='form-check-label'>"+                     
-                            "<input class='form-check-input' type='radio' name='dataFormat' id='tableOfData'>"+
-                            "Table"+
+                            "<input class='form-check-input' type='radio' name='dataFormat-"+studyID+"' id='tableOfData-"+studyID+"'>"+
+                            "   Table"+
                         "</label>"+
                     "</div>"+ 
                 "</div>"+       
@@ -261,265 +257,724 @@ function viewResults(studyID){
                     "<button type='submit' class='btn btn-primary' id="+studyID+" name='submitParameters'>Get Data</button>"+
                 "</div>"+                          
             "</form>"+
-            "<div class='row col-sm-12' id='dataSpace'>"+
+        "</div>" +
 
-            "</div>"
+        "<div class='row col-sm-12' id='dataSpace-"+studyID+"'>"+
+
+        "</div>"
     );
 
     $.getJSON(monitorStudiesController, singleStudyQuery, function(result) {
         if (!result.error) {
             // html injection
-            console.log("successful get");
-            console.log(result.data.conditionGroups);
+            /*console.log("successful get");*/
 
-            for(var cNum = 0; cNum < result.data.conditionGroups; cNum++){
-                console.log("filling in cg "+(cNum+1));
+            // need to get CGs from conditionGroupPhaseTable and sort for unique cg nums
+            var uniqueConditionGroups = [];
+
+            for(var cNum = 0; cNum < result.conditionGroupPhase.length; cNum++){
+                if (studyID != result.conditionGroupPhase[cNum].studyID || 
+                    uniqueConditionGroups.indexOf(result.conditionGroupPhase[cNum].conditionGroupNum) != -1 ) {
+                    continue;
+                }
+
+                uniqueConditionGroups.push(result.conditionGroupPhase[cNum].conditionGroupNum);
+
                 $("#conditionGroups-"+studyID).append(
                     "<div class='checkbox'>"+
-                        "<label><input type='checkbox' class='checkCG-"+studyID+"' name='cgCheck' id='"+(cNum+1)+"'>Condition Group "+(cNum+1)+
+                        "<label><input type='checkbox' class='checkCG-"+studyID+"' name='cgCheck-"+studyID+"' id='"+
+                                result.conditionGroupPhase[cNum].conditionGroupNum+"'>   Condition Group "+result.conditionGroupPhase[cNum].conditionGroupNum+
                         "</label>"+
                     "</div>"  
                 );
             }
 
-            for(var pNum = 0; pNum < result.data.phases; pNum++){
-                console.log("filling in phase "+(pNum+1));
+            for(var pNum = 0; pNum < result.study.phases; pNum++){
+                /*console.log("filling in phase "+(pNum+1));*/
                 $("#phases-"+studyID).append(
                     "<div class='checkbox'>"+
-                        "<label><input type='checkbox' class='checkPhase-"+studyID+"' name='phaseCheck' id='"+(pNum+1)+"'>Phase "+(pNum+1)+
+                        "<label><input type='checkbox' class='checkPhase-"+studyID+"' name='phaseCheck-"+studyID+"' id='"+(pNum+1)+"'>   Phase "+(pNum+1)+
                         "</label>"+
                     "</div>"  
                 );
             }
         }
-        else {
+        /*else {
             console.log(result.errorMsg);
-        }
+        }*/
     });
 }
 
 
-function formatData(dataQuery, selectedConditionGroups, selectedPhases, dataFormat, dataChoice) {
+function formatData(dataQuery, selectedConditionGroups, selectedPhases, dataFormat, dataChoice, studyID) {
     var data = [];
 
     $.getJSON(monitorStudiesController, dataQuery, function(result) {
-        console.log(result.data[0]);
         for (var i = 0; i < result.data.length; i++) {
             if(selectedConditionGroups.indexOf(result.data[i].conditionGroupNum) != -1 &&
                 selectedPhases.indexOf(result.data[i].phaseNum) != -1){
-                console.log(result.data[i]);
                 data.push(result.data[i]);
             }
         }
-        console.log(data[0]);
-/*        $.each(result, function(index, entryRecord){
-            console.log("current entry record "+entryRecord.data);
-            if(entryRecord.conditionGroupNum.indexOf(selectedConditionGroups) != -1 &&
-                entryRecord.phaseNum.indexOf(selectedPhases) != -1){
-                console.log("entry record pushed: "+entryRecord);
-                data.push(entryRecord);
-            }
-        });*/
 
         if (dataChoice == 'energy'){
-            displayEnergyData(data, dataFormat, selectedConditionGroups);
+            displayEnergyData(data, dataFormat, selectedConditionGroups, selectedPhases, studyID);
+        } else if (dataChoice == 'posts'){
+            displayPostData(data, dataFormat, selectedConditionGroups, selectedPhases, studyID);
+        } else if (dataChoice == 'numLikes'){
+            displayLikesData(data, dataFormat, selectedConditionGroups, selectedPhases, studyID);
         } else {
-            alert("Not IMPLEMENTED");
+            alert("Data Choice not Supported!"); // should never get this error
         }
     });
 
 }
 
-function displayEnergyData(data, dataFormat, selectedConditionGroups) { // data is an array, dataFormat is a string
+function displayEnergyData(data, dataFormat, selectedConditionGroups, selectedPhases, studyID) {
+    // Load the Visualization API and the corechart package.
+    google.charts.load('visualization', '1', {'packages':['corechart', 'controls']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    document.getElementById("dataSpace-"+studyID).innerHTML = "";
+/*    console.log("clearing dataSpace-"+studyID);
+    console.log("data format: "+dataFormat);*/
+    if(data.length == 0){
+        $("#dataSpace-"+studyID).append(
+            "<div id='dashboard'>"+
+
+                    "<h4>No Data to Display</h4>"+
+               
+            "</div>"
+        );
+    } else {
+        if(dataFormat == 'lineChart-'+studyID) {        
+            $("#dataSpace-"+studyID).append(
+                "<div class='row'>"+
+                    "<div class='col-md-12'>"+
+                        "<div class='separator'>"+
+                            "<a href='#'></a>"+
+                        "</div>" +
+                    "</div>" + 
+                "</div>"+
+                "<div id='dashboard'>"+
+                    "<div id='control'>"+
+                        "<h4>Trend Line</h4>"+
+                    "</div>"+
+                    "<div class='chart' id='trendChart-"+studyID+"'>"+
+                        "<h4>No Data to Display</h4>"+
+                    "</div>"+
+                "</div>"
+            );
+
+            google.charts.setOnLoadCallback(createChart);
+            function createChart() { // need to figure out multi-series
+                // prepare data for line chart
+               /* console.log("create energy line chart");*/
+                var lineChartArray = new google.visualization.DataTable();
+                lineChartArray.addColumn('date', 'Date'); // x-axis
+
+                for (var i = 0; i < selectedConditionGroups.length; i++){
+                    lineChartArray.addColumn('number', 'conditionGroup '+selectedConditionGroups[i]);
+                }
+
+                // need unique date
+                var uniqueDates = [];
+
+                for(var i = 0; i < data.length; i++){
+                    if (uniqueDates.indexOf(data[i].entryDate) != -1 ) {
+                        continue;
+                    }
+
+                    uniqueDates.push(data[i].entryDate);
+                }
+
+                for (var k = 0; k < uniqueDates.length; k++) { // rows
+                    var multiPointArray = [new Date(uniqueDates[k])];
+                    for (var l = 0; l < selectedConditionGroups.length; l++) {
+                        multiPointArray[l+1] = 0;
+                    }
+
+                    // fill multiPointArray with energy from each condition group
+                    for (var i = 0; i < data.length; i++) { // add data that has same date
+                        if (uniqueDates[k] != data[i].entryDate) {
+                            continue;
+                        }
+                        for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                            for (var p = 0; p < selectedPhases.length; p++) {
+                                if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                                    selectedPhases[p] == data[i].phaseNum){ 
+                                    multiPointArray[j+1] += (parseInt(data[i].endEnergy) - parseInt(data[i].startEnergy));
+                                    break;
+                                } 
+                            }
+                            
+                        }
+                    }
+                    // add multiPointArray to lineChartArray
+                    lineChartArray.addRows([multiPointArray]);
+                }
+
+                // Set chart options
+                var options = {                           
+                    height: 300,
+                    title: 'Energy consumption per day',
+                    subtitle: 'in KWs inputted',
+                    legend: { position: 'none' },
+                    
+                    vAxis: {
+                      'title': "Energy (kWh)"
+                    },
+                    hAxis: {
+                        //ticks: lineChartArray.getDistinctValues(0)
+/*                        ticks: [{v: 1, f: "Jan"}, {v:2 , f: "Feb"}, {v:3, f: "March"}, 
+                                {v: 4, f: "Apr"}, {v: 5, f: "May"}, {v: 6, f: "June"}, 
+                                {v: 7, f: "Jul"}, {v: 8, f: "Aug"}, {v: 9, f: "Sept"}, 
+                                {v: 10, f: "Oct"}, {v: 11, f: "Nov"}, {v: 12, f: "Dec"}]*/
+                    }
+
+                };
+
+                var trendLine = new google.visualization.LineChart(document.getElementById('trendChart-'+studyID));
+
+                trendLine.draw(lineChartArray, options);
+            } // end createChart
+
+            $(window).resize(function(){
+                createChart();
+            });
+        } else if (dataFormat == 'barGraph-'+studyID) {
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+               /* console.log('create energy bar chart');*/
+
+                // prepare data for bar chart
+                var multiBarArray = [["Condition Group", "Energy"]];
+                for (var i = 0; i < selectedConditionGroups.length; i++) {
+                    multiBarArray.push([selectedConditionGroups[i], 0]);
+                }
+
+                // fill multiBarArray with energy from each condition group
+                for (var i = 0; i < data.length; i++) { // add data that has same date
+                    for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                        for (var p = 0; p < selectedPhases.length; p++) {
+                            if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                                selectedPhases[p] == data[i].phaseNum){
+                                multiBarArray[j+1][0] = "Group " +data[i].conditionGroupNum;
+                                multiBarArray[j+1][1] += (parseInt(data[i].endEnergy) - parseInt(data[i].startEnergy));
+                                break;
+                            } 
+                        }
+                    }
+                }
+                
+                var barChartArray = google.visualization.arrayToDataTable(multiBarArray);
+                var options = {
+                    title: 'Energy by Condition Groups',
+                    width: 600,
+                    height: 300
+                   
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.BarChart(document.getElementById('dataSpace-'+studyID));
+                chart.draw(barChartArray, options);
+            
+            } // end drawChart
+
+            $(window).resize(function(){
+                drawChart();
+            });
+        } else if (dataFormat == 'tableOfData-'+studyID){
+            /*console.log('create energy table');*/
+
+            $("#dataSpace-"+studyID).append(
+                "<div class='row'>"+
+                    "<div class='col-md-12'>"+
+                        "<div class='separator'>"+
+                        "<a href='#'></a>"+
+                        "</div>" +
+                    "</div>" + 
+                "</div>"+
+                "<div class='table-responsive'>"+
+                    "<h4>Data Table</h4>"+
+                    "<table class='table' id='energyTable'>"+
+                        "<thead>"+
+                            "<tr>"+
+                                "<th>Condition Group</th>"+
+                                "<th>Energy</th>"+
+                            "</tr>"+
+                        "</thead>"+
+                        "<tbody id='energyData'>"+
+                        "</tbody>"+
+                    "</table>"+
+                "</div>"
+            );
+
+            // set up table entries
+            var tableArray = [];
+            for (var i = 0; i < selectedConditionGroups.length; i++) {
+                tableArray.push([selectedConditionGroups[i], 0]);
+            }
+            
+            // fill table with energy from each condition group
+            for (var i = 0; i < data.length; i++) { // add data that has same date
+                for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                    for (var p = 0; p < selectedPhases.length; p++) {
+                        if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                            selectedPhases[p] == data[i].phaseNum){
+                            tableArray[j][0] = data[i].conditionGroupNum;
+                            tableArray[j][1] += (parseInt(data[i].endEnergy) - parseInt(data[i].startEnergy));
+                            break;
+                        } 
+                    }
+
+                }
+            }
+
+            // insert rows
+            for (var i = 0; i < tableArray.length; i++) { // add data that has same date
+              /*  console.log("condition group: "+tableArray[i][0] + " energy: "+tableArray[i][1]);*/
+                $("#energyData").append(
+                    "<tr>"+
+                        "<td>"+tableArray[i][0]+"</td>"+
+                        "<td>"+tableArray[i][1]+"</td>"+
+                    "</tr>"
+                );
+
+            }
+
+            $("#energyTable").dataTable({
+                "iDisplayLength":5,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
+        } else {
+            alert("Invalid Data Format Choice!"); // should never get this message
+        }
+    }
+
+}
+
+function displayPostData(data, dataFormat, selectedConditionGroups, selectedPhases, studyID) { 
+    // Load the Visualization API and the corechart package.
+    google.charts.load('visualization', '1', {'packages':['corechart', 'controls']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    document.getElementById("dataSpace-"+studyID).innerHTML = "";
+    if(data.length == 0){
+        $("#dataSpace-"+studyID).append(
+            "<div id='dashboard'>"+
+
+                    "<h4>No Data to Display</h4>"+
+               
+            "</div>"
+        );
+    } else {
+        if(dataFormat == 'lineChart-'+studyID) {        
+            $("#dataSpace-"+studyID).append(
+                "<div id='dashboard'>"+
+                    "<div id='control'>"+
+                        "<h4>Trend Line</h4>"+
+                    "</div>"+
+                    "<div class='chart' id='trendChart-"+studyID+"'>"+
+                        "<h4>No Data to Display</h4>"+
+                    "</div>"+
+                "</div>"
+            );
+
+            google.charts.setOnLoadCallback(createChart);
+            function createChart() { // need to figure out multi-series
+                // prepare data for line chart
+            /*    console.log("create post line chart");*/
+                var lineChartArray = new google.visualization.DataTable();
+                lineChartArray.addColumn('date', 'Date'); // x-axis
+
+                for (var i = 0; i < selectedConditionGroups.length; i++){
+                    lineChartArray.addColumn('number', 'conditionGroup '+selectedConditionGroups[i]);
+                }
+
+                // need unique date
+                var uniqueDates = [];
+
+                for(var i = 0; i < data.length; i++){
+                    if (uniqueDates.indexOf(data[i].entryDate) != -1 ) {
+                        continue;
+                    }
+
+                    uniqueDates.push(data[i].entryDate);
+                }
+
+                for (var k = 0; k < uniqueDates.length; k++) { // rows
+                    var multiPointArray = [new Date(uniqueDates[k])];
+                    for (var l = 0; l < selectedConditionGroups.length; l++) {
+                        multiPointArray[l+1] = 0;
+                    }
+
+                    // fill multiPointArray with energy from each condition group
+                    for (var i = 0; i < data.length; i++) { // add data that has same date
+                        if (uniqueDates[k] != data[i].entryDate) {
+                            continue;
+                        }
+                        for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                            for (var p = 0; p < selectedPhases.length; p++) {
+                                if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                                    selectedPhases[p] == data[i].phaseNum){ 
+                                    multiPointArray[j+1] += (parseInt(data[i].numPosts));
+                                    break;
+                                } 
+                            }
+                            
+                        }
+                    }
+                    // add multiPointArray to lineChartArray
+                    lineChartArray.addRows([multiPointArray]);
+                }
+
+                // Set chart options
+                var options = {                           
+                    height: 300,
+                    title: 'Posts per day',
+                    subtitle: 'By Condition Groups',
+                    legend: { position: 'none' },
+                    
+                    vAxis: {
+                      'title': "Number of Posts"
+                    },
+                    hAxis: {
+                        //ticks: lineChartArray.getDistinctValues(0)
+/*                        ticks: [{v: 1, f: "Jan"}, {v:2 , f: "Feb"}, {v:3, f: "March"}, 
+                                {v: 4, f: "Apr"}, {v: 5, f: "May"}, {v: 6, f: "June"}, 
+                                {v: 7, f: "Jul"}, {v: 8, f: "Aug"}, {v: 9, f: "Sept"}, 
+                                {v: 10, f: "Oct"}, {v: 11, f: "Nov"}, {v: 12, f: "Dec"}]*/
+                    }
+
+                };
+
+                var trendLine = new google.visualization.LineChart(document.getElementById('trendChart-'+studyID));
+
+                trendLine.draw(lineChartArray, options);
+            } // end createChart
+
+            $(window).resize(function(){
+                createChart();
+            });
+        } else if (dataFormat == 'barGraph-'+studyID) {
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+               /* console.log('create posts bar chart');*/
+
+                // prepare data for bar chart
+                var multiBarArray = [["Condition Group", "Posts"]];
+                for (var i = 0; i < selectedConditionGroups.length; i++) {
+                    multiBarArray.push([selectedConditionGroups[i], 0]);
+                }
+
+                // fill multiBarArray with numPosts from each condition group
+                for (var i = 0; i < data.length; i++) { // add data that has same date
+                    for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                        for (var p = 0; p < selectedPhases.length; p++) {
+                            if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                                selectedPhases[p] == data[i].phaseNum){
+                                multiBarArray[j+1][0] = "Group " +data[i].conditionGroupNum;
+                                multiBarArray[j+1][1] += (parseInt(data[i].numPosts));
+                                break;
+                            } 
+                        }
+                    }
+                }
+                
+                var barChartArray = google.visualization.arrayToDataTable(multiBarArray);
+                var options = {
+                    title: 'Posts by Condition Groups',
+                    width: 600,
+                    height: 300
+                   
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.BarChart(document.getElementById('dataSpace-'+studyID));
+                chart.draw(barChartArray, options);
+            
+            } // end drawChart
+
+            $(window).resize(function(){
+                drawChart();
+            });
+        } else if (dataFormat == 'tableOfData-'+studyID){
+            /*console.log('create posts table');*/
+
+            $("#dataSpace-"+studyID).append(
+                "<div class='table-responsive'>"+
+                    "<table class='table' id='postsTable'>"+
+                        "<thead>"+
+                            "<tr>"+
+                                "<th>Condition Group</th>"+
+                                "<th>Posts</th>"+
+                            "</tr>"+
+                        "</thead>"+
+                        "<tbody id='postsData'>"+
+                        "</tbody>"+
+                    "</table>"+
+                "</div>"
+            );
+
+            // set up table entries
+            var tableArray = [];
+            for (var i = 0; i < selectedConditionGroups.length; i++) {
+                tableArray.push([selectedConditionGroups[i], 0]);
+            }
+            
+            // fill table with energy from each condition group
+            for (var i = 0; i < data.length; i++) { // add data that has same date
+                for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                    for (var p = 0; p < selectedPhases.length; p++) {
+                        if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                            selectedPhases[p] == data[i].phaseNum){
+                            tableArray[j][0] = data[i].conditionGroupNum;
+                            tableArray[j][1] += (parseInt(data[i].numPosts));
+                            break;
+                        } 
+                    }
+
+                }
+            }
+
+            // insert rows
+            for (var i = 0; i < tableArray.length; i++) { // add data that has same date
+                $("#postsData").append(
+                    "<tr>"+
+                        "<td>"+tableArray[i][0]+"</td>"+
+                        "<td>"+tableArray[i][1]+"</td>"+
+                    "</tr>"
+                );
+            }
+
+            $("#postsTable").dataTable({
+                "iDisplayLength":5,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
+        } else {
+            alert("Invalid Data Format Choice!"); // should never get this message
+        }
+    }
+}
+
+
+function displayLikesData(data, dataFormat, selectedConditionGroups, selectedPhases, studyID) { // data is an array, dataFormat is a string
 
     // Load the Visualization API and the corechart package.
     google.charts.load('visualization', '1', {'packages':['corechart', 'controls']});
 
     // Set a callback to run when the Google Visualization API is loaded.
-    console.log("data: "+data);
-    document.getElementById("dataSpace").innerHTML = "";
-
-    if(dataFormat == 'lineChart') {
-        $("#dataSpace").append(
+    document.getElementById("dataSpace-"+studyID).innerHTML = "";
+    if(data.length == 0){
+        $("#dataSpace-"+studyID).append(
             "<div id='dashboard'>"+
-                "<strong>Use the slider control</strong>"+
-                "<div id='control'>"+
-                    "<h4>HELLO</h4>"+
-                "</div>"+
-                "<div class='chart' id='trendChart'>"+
-                    "<h4>HELLO2</h4>"+
-                "</div>"+
+
+                    "<h4>No Data to Display</h4>"+
+               
             "</div>"
         );
-        google.charts.setOnLoadCallback(createChart);
-        console.log('line chart');
-        function createChart() { // need to figure out multi-series
-            // prepare data for line chart
-            console.log("create chart");
-            var lineChartArray = new google.visualization.DataTable();
-            lineChartArray.addColumn('date', 'Date'); // x-axis
+    } else {
+        if(dataFormat == 'lineChart-'+studyID) {        
+            $("#dataSpace-"+studyID).append(
+                "<div id='dashboard'>"+
+                    "<div id='control'>"+
+                        "<h4>Trend Line</h4>"+
+                    "</div>"+
+                    "<div class='chart' id='trendChart-"+studyID+"'>"+
+                        "<h4>No Data to Display</h4>"+
+                    "</div>"+
+                "</div>"
+            );
 
-            for (var i = 0; i < selectedConditionGroups.length; i++){
-                lineChartArray.addColumn('number', 'conditionGroup '+selectedConditionGroups[i]);
-            }
+            google.charts.setOnLoadCallback(createChart);
+            function createChart() { // need to figure out multi-series
+                // prepare data for line chart
+              /*  console.log("create likes line chart");*/
+                var lineChartArray = new google.visualization.DataTable();
+                lineChartArray.addColumn('date', 'Date'); // x-axis
 
-            var partialArray = []; // keep track of date and each CG's energy
-            var cgArray = []; // keep track of CGs in partial array
-            //console.log("line chart array "+lineChartArray);
-            console.log("data length: "+data.length);
-            console.log("selected cg array: "+selectedConditionGroups.length);
+                for (var i = 0; i < selectedConditionGroups.length; i++){
+                    lineChartArray.addColumn('number', 'conditionGroup '+selectedConditionGroups[i]);
+                }
 
-            // need to fix: not looping for some reason
-            for (var i = 0; i < data.length; i++) { // cycle through all the entries in the study
-                partialArray[0] = data[i].entryDate; // append the entry's date
-                console.log("partialArray: "+partialArray[0]);
-                for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
-                    console.log("top of inner loop: j-index: "+j+" i-index: "+i);
-                    if(selectedConditionGroups[j] == data[i].conditionGroupNum && 
-                        cgArray.indexOf(selectedConditionGroups[j]) != -1){ // selected == data entry CG and is already in cgArray
-                            // add the energy to existing entry
-                        console.log("add existing energy j-index: "+j+" i-index: "+i);
-                            partialArray[cgArray.indexOf(selectedConditionGroups[j]) + 1] += (data[i].endEnergy - data[i].startEnergy);
-                    } else if (selectedConditionGroups[j] == data[i].conditionGroupNum) { // not in partialArray
-                        // add it along with energy
-                        console.log("add new entryj-index: "+j+" i-index: "+i);
-                        cgArray.push(selectedConditionGroups[j]);
-                        partialArray.push((data[i].endEnergy - data[i].startEnergy));
-                    } else {
-                        console.log("break out: j-index: "+j+" i-index: "+i);
-                        //break;
+                // need unique date
+                var uniqueDates = [];
+
+                for(var i = 0; i < data.length; i++){
+                    if (uniqueDates.indexOf(data[i].entryDate) != -1 ) {
+                        continue;
                     }
-                }
-                console.log("partial Array");
-                console.log(partialArray);
-                lineChartArray.addRows([partialArray]);
-                console.log("After insert: "+lineChart);
-                partialArray = [];
-                cgArray = [];
-            }
-            
-            console.log("energy array: ");
-            console.log(lineChartArray);
 
-            var dash_container = document.getElementById('dashboard'),
-                myDashboard = new google.visualization.Dashboard(dash_container);
-                var myDateSlider = new google.visualization.ControlWrapper({
-                'controlType': 'ChartRangeFilter',
-                'containerId': 'control',
-                'options': {
-                    'filterColumnLabel': 'Date'
+                    uniqueDates.push(data[i].entryDate);
                 }
-            });
 
-            var trendLine = new google.visualization.ChartWrapper({
-                chartType: 'Line',
-                containerId: 'trendChart',
-                options: {
-                    title: 'Energy consumption per day (kWh) by Condition Group',
+                for (var k = 0; k < uniqueDates.length; k++) { // rows
+                    var multiPointArray = [new Date(uniqueDates[k])];
+                    for (var l = 0; l < selectedConditionGroups.length; l++) {
+                        multiPointArray[l+1] = 0;
+                    }
+
+                    // fill multiPointArray with energy from each condition group
+                    for (var i = 0; i < data.length; i++) { // add data that has same date
+                        if (uniqueDates[k] != data[i].entryDate) {
+                            continue;
+                        }
+                        for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                            for (var p = 0; p < selectedPhases.length; p++) {
+                                if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                                    selectedPhases[p] == data[i].phaseNum){ 
+                                    multiPointArray[j+1] += (parseInt(data[i].numLikes));
+                                    break;
+                                } 
+                            }
+                            
+                        }
+                    }
+            /*    console.log("multiPointArray: "+multiPointArray);*/
+                    // add multiPointArray to lineChartArray
+                    lineChartArray.addRows([multiPointArray]);
+                }
+
+                // Set chart options
+                var options = {                           
+                    height: 300,
+                    title: 'Likes per day',
+                    subtitle: 'By Condition Groups',
+                    legend: { position: 'none' },
+                    
                     vAxis: {
-                        'title': "Energy (kWh)"
+                      'title': "Number of Likes"
+                    },
+                    hAxis: {
+                        //ticks: lineChartArray.getDistinctValues(0)
+/*                        ticks: [{v: 1, f: "Jan"}, {v:2 , f: "Feb"}, {v:3, f: "March"}, 
+                                {v: 4, f: "Apr"}, {v: 5, f: "May"}, {v: 6, f: "June"}, 
+                                {v: 7, f: "Jul"}, {v: 8, f: "Aug"}, {v: 9, f: "Sept"}, 
+                                {v: 10, f: "Oct"}, {v: 11, f: "Nov"}, {v: 12, f: "Dec"}]*/
+                    }
+
+                };
+
+                var trendLine = new google.visualization.LineChart(document.getElementById('trendChart-'+studyID));
+
+                trendLine.draw(lineChartArray, options);
+            } // end createChart
+
+            $(window).resize(function(){
+                createChart();
+            });
+        } else if (dataFormat == 'barGraph-'+studyID) {
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+               /* console.log('create likes bar chart');*/
+
+                // prepare data for bar chart
+                var multiBarArray = [["Condition Group", "Likes"]];
+                for (var i = 0; i < selectedConditionGroups.length; i++) {
+                    multiBarArray.push([selectedConditionGroups[i], 0]);
+                }
+
+                // fill multiBarArray with energy from each condition group
+                for (var i = 0; i < data.length; i++) { // add data that has same date
+                    for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                        for (var p = 0; p < selectedPhases.length; p++) {
+                            if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                                selectedPhases[p] == data[i].phaseNum){
+                                multiBarArray[j+1][0] = "Group " +data[i].conditionGroupNum;
+                                multiBarArray[j+1][1] += (parseInt(data[i].numLikes));
+                                break;
+                            } 
+                        }
                     }
                 }
-            });
-
-            myDashboard.bind(myDateSlider, trendLine);  
-            
-            // Set chart options
-            var options = {                           
-                height: 300,
-                title: 'Energy consumption per day',
-                subtitle: 'in KWs inputted',
-                legend: { position: 'none' },
-                enableInteractivity: false,
                 
-                vAxis: {
-                  'title': "Energy (kWh)"
-                }
-            };
-
-            myDashboard.draw(lineChartArray, options);
-        } // end createChart
-    } else if (dataFormat == 'barGraph') {
-            // prepare data for bar chart
-        var table = [['Condition Group', 'Energy(kWh)']];
-        /*var dataString = JSON.parse(data);
-        var cgDailyEntryArray = $.map(dataString, function(el) {
-            return el;
-        });*/
-        $.each(data, function(key, entry) {
-            for (var i = 0; i < table.length; i++) {
-                if(table[i][0] == entry.conditionGroupNum){
-                    table[i][1] += (entry.endEnergy - entry.startEnergy);
-                    break;
-                } else if(i == table.length - 1) {
-                    // condition group not in table, so add it
-                    table.push([parseInt(entry.conditionGroupNum), parseInt((entry.endEnergy - entry.startEnergy))]);                
-                }
-            }        
-        });
-        console.log("table: ");
-        console.log(table);
-
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-           var data = new google.visualization.arrayToDataTable(table);
-
-            // Set chart options
-            var options = {
-               
+                var barChartArray = google.visualization.arrayToDataTable(multiBarArray);
+                var options = {
+                    title: 'Likes by Condition Groups',
                     width: 600,
                     height: 300
-               
-            };
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.BarChart(document.getElementById('dataSpace'));
-            chart.draw(data, options);
-        
-        } // end drawChart
-    } else {
-        alert("NOT YET IMPLEMENTED");
+                   
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.BarChart(document.getElementById('dataSpace-'+studyID));
+                chart.draw(barChartArray, options);
+            
+            } // end drawChart
+
+            $(window).resize(function(){
+                drawChart();
+            });
+        } else if (dataFormat == 'tableOfData-'+studyID){
+            /*console.log('create likes table');*/
+
+            $("#dataSpace-"+studyID).append(
+                "<div class='table-responsive'>"+
+                    "<table class='table' id='likesTable'>"+
+                        "<thead>"+
+                            "<tr>"+
+                                "<th>Condition Group</th>"+
+                                "<th>Likes</th>"+
+                            "</tr>"+
+                        "</thead>"+
+                        "<tbody id='likesData'>"+
+                        "</tbody>"+
+                    "</table>"+
+                "</div>"
+            );
+
+            // set up table entries
+            var tableArray = [];
+            for (var i = 0; i < selectedConditionGroups.length; i++) {
+                tableArray.push([selectedConditionGroups[i], 0]);
+            }
+            
+            // fill table with energy from each condition group
+            for (var i = 0; i < data.length; i++) { // add data that has same date
+                for (var j = 0; j < selectedConditionGroups.length; j++) { // cycle through the selected CGs
+                    for (var p = 0; p < selectedPhases.length; p++) {
+                        if(selectedConditionGroups[j] == data[i].conditionGroupNum &&
+                            selectedPhases[p] == data[i].phaseNum){
+                            tableArray[j][0] = data[i].conditionGroupNum;
+                            tableArray[j][1] += (parseInt(data[i].numLikes));
+                            break;
+                        } 
+                    }
+
+                }
+            }
+
+            // insert rows
+            for (var i = 0; i < tableArray.length; i++) { // add data that has same date
+                $("#likesData").append(
+                    "<tr>"+
+                        "<td>"+tableArray[i][0]+"</td>"+
+                        "<td>"+tableArray[i][1]+"</td>"+
+                    "</tr>"
+                );
+
+            }
+
+            $("#likesTable").dataTable({
+                "iDisplayLength":5,
+                "bLengthChange": false,
+                "bFilter": false
+            });
+
+        } else {
+            alert("Invalid Data Format Choice!"); // should never get this message
+        }
     }
 }
-
-
-function generateBarGraph(dataQuery, dataChoice) {
-    // bar graph
-    alert("NOT IMPLEMENTED bar graph");
-}
-
-function generateTableOfData(dataQuery, dataChoice) {
-    // dataTable
-    alert("NOT IMPLEMENTED table of data");
-}
-
-/*function convertArrayToTable(arr) {
-    console.log("convertArrayToTable");
-    //var array = [['Date', 'TotalEnergy']];
-    var array = new google.visualization.DataTable();
-    array.addColumn('number', 'conditionGroup');
-    array.addColumn('date', 'Date'); // x-axis
-    array.addColumn('number', "Energy (kWh)"); // y-axis
-
-    //console.log(array);
-    //console.log(arr["DailyEntries"]);
-    $.each(arr.DailyEntries, function(key, entry){
-        var tDate = entry.date.split(/[-]/);
-        var sDate = new Date(tDate[0], tDate[1]-1, tDate[2]);
-        //var strDate = sDate.toDateString().slice(3);
-        //console.log("hit: "+entry);
-        array.addRows([
-                        [entry.conditionGroupNum, sDate, (entry.endEnergy - entry.startEnergy)]
-        ]);
-    });
-    console.log("table data:");
-    console.log(array);
-    return array;
-}*/
 
 // ****************************************
 // This section to do with Community Posts 
 // ****************************************
-
 
 function viewCommunityPosts(studyID) {
    // var controller = "server/admin-monitor-studies-ctr.php";
@@ -530,7 +985,7 @@ function viewCommunityPosts(studyID) {
 
 
     $.getJSON(monitorStudiesController, communityQuery, function(result) {
-        console.log(JSON.stringify(result));
+        /*console.log(JSON.stringify(result));*/
         //alert(result);
         var studyArray = result.studies;
         var conditionGroupPhaseArray = result.conditionGroupPhase;
@@ -538,14 +993,8 @@ function viewCommunityPosts(studyID) {
         
         if (!result.error) {
             // html injection
-            console.log("successful get");
-/*            var studyData = result.data[0];
-            var numConditionGroups = studyData.conditionGroups;
-            var numPhases = studyData.phases;*/
-console.log("community posts for study:"+studyID);
-//            $.each(studyArray, function(index, studyRecord){
                 document.getElementById("infoGoesHere-"+studyID).innerHTML = "";
-                console.log("insert html");
+                /*console.log("insert html");*/
                 $("#infoGoesHere-"+studyID).append(
                     "<form id='postForm"+studyID+"' class='form-horizontal' role='form'>"+
                         "<div id='studyPostContent" + studyID + "'>" + 
@@ -570,7 +1019,7 @@ console.log("community posts for study:"+studyID);
                         "</div>" +
                     "</form>"
                 );
-            console.log(result.errorMsg);
+            /*console.log(result.errorMsg);*/
         }
 
 
@@ -586,7 +1035,7 @@ function monitorConditionGroupPhaseTabs(studyID, conditionGroupPhaseArray, posts
     var tabStr;
     
     // level 1
-    tabStr = "<div class='tabbable boxed parentTabs'>";
+    tabStr = "<div class='tabbable boxed parentTabs' id='tabbable'>";
             
     // condition tabs. Only add unique TABs
     tabStr += "<ul class='nav nav-tabs nav-justified'>";
@@ -646,37 +1095,81 @@ function monitorConditionGroupPhaseTabs(studyID, conditionGroupPhaseArray, posts
             }
         });
         tabStr += "        </ul>";
-        tabStr += "        <div class='tab-content'>";  
+        tabStr += "        <div class='tab-content' id='tab-content'>";  
         firstFoundPh = false;
         $.each(conditionGroupPhaseArray, function(index, phR) {
             if (studyID != phR.studyID || cgR.conditionGroupNum != phR.conditionGroupNum) 
                 return true;
             else if (!firstFoundPh) {
                 tabStr += "<div class='tab-pane fade active in' id='study" + phR.studyID + "Condition" + cgR.conditionGroupNum + "Phase" + phR.phaseNum + "'>";  
+                //tabStr += "     <form name='post-form' action='' method='post' enctype='multipart/form-data'>";
+                tabStr += "<div class='row'>";
+                tabStr += "         <div class='col-sm-12'>";
                 tabStr += "             <div class='form-group'>";
                 tabStr += "                 <label for='post-input-"+phR.studyID+"'>Compose a post!</label>";
                 tabStr += "                 <textarea class='form-control' id='post-input-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"' rows='3'></textarea>";
                 tabStr += "             </div>";
+                tabStr += "         </div>";
+                tabStr += "</div>";
+
+/*                tabStr += "             <div class='form-group'>";
+                tabStr += "                 <label for='file-button-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"'>Image upload</label>";
+                tabStr += "                 <input type='file' name='image' id='file-button-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"'</>";
+                tabStr += "                 <br>";
+                tabStr += "                 <img id='img-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"' src='img/img-preview.jpg' alt='your image' height='100'</>";
+                tabStr += "             </div>";*/
+                tabStr += "<div class='row'>";
+                tabStr += "         <div class='col-sm-12'>";
                 tabStr += "             <div class='form-group'>";
                 tabStr += "                 <a href=# class='btn btn-default' id='post-submit-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"' name='admin-post-form'>"; //onclick='submitPost("+phR.studyID+","+cgR.conditionGroupNum+","+phR.phaseNum+")'
                 tabStr += "                      Submit to Community Posts</a>";
                 tabStr += "              </div>";
-                tabStr += displayPost(phR.studyID, cgR.conditionGroupNum, phR.phaseNum, postsArray);
+                tabStr += "         </div>";
                 tabStr += "</div>";
+                //tabStr += "     </form>";
+                tabStr += "<div class='row'>";
+                tabStr += "         <div class='col-sm-12'>";
+                tabStr += displayPost(phR.studyID, cgR.conditionGroupNum, phR.phaseNum, postsArray);
+                tabStr += "             </div>";
+                tabStr += "         </div>";
+                tabStr += "</div>";
+
                 firstFoundPh = true;
             }
             else {
                 tabStr += "<div class='tab-pane' id='study" + phR.studyID + "Condition" + cgR.conditionGroupNum + "Phase" + phR.phaseNum + "'>";  
+                //tabStr += "     <form name='post-form' action='' method='post' enctype='multipart/form-data'>";
+                tabStr += "<div class='row'>";
+                tabStr += "         <div class='col-sm-12'>";
                 tabStr += "             <div class='form-group'>";
                 tabStr += "                 <label for='post-input-"+phR.studyID+"'>Compose a post!</label>";
                 tabStr += "                 <textarea class='form-control' id='post-input-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"' rows='3'></textarea>";
                 tabStr += "             </div>";
-                tabStr += "             <div class='form-group'>";
+                tabStr += "         </div>";
+                tabStr += "</div>";
+/*                tabStr += "             <div class='form-group'>";
+                tabStr += "                 <label for='file-button-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"'>Image upload</label>";
+                tabStr += "                 <input type='file' name='image' id='file-button-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"'</>";
+                tabStr += "                 <br>";
+                tabStr += "                 <img id='img-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"' src='img/img-preview.jpg' alt='your image' height='100'</>";
+                tabStr += "             </div>";*/
+                tabStr += "<div class='row'>";
+                tabStr += "         <div class='col-sm-12'>";
+                tabStr += "             <div class='form-group'>";                
                 tabStr += "                 <a href=# class='btn btn-default' id='post-submit-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum+"' name='admin-post-form'>"; //onclick='submitPost("+phR.studyID+","+cgR.conditionGroupNum+","+phR.phaseNum+")'
                 tabStr += "                      Submit to Community Posts</a>";
                 tabStr += "              </div>";
-                tabStr += displayPost(phR.studyID, cgR.conditionGroupNum, phR.phaseNum, postsArray);
+                tabStr += "         </div>";
                 tabStr += "</div>";
+ 
+                //tabStr += "     </form>";
+                tabStr += "<div class='row'>";
+                tabStr += "         <div class='col-sm-12'>";
+                tabStr += displayPost(phR.studyID, cgR.conditionGroupNum, phR.phaseNum, postsArray);
+                tabStr += "             </div>";
+                tabStr += "         </div>";
+                tabStr += "</div>";
+
             }
         });
      
@@ -691,8 +1184,8 @@ function monitorConditionGroupPhaseTabs(studyID, conditionGroupPhaseArray, posts
     // close level 1
     tabStr += "</div>";   
 
-    console.log("done insert");
-    console.log(tabStr);
+   /* console.log("done insert");*/
+    //console.log(tabStr);
     
     return tabStr;
 } 
@@ -704,110 +1197,85 @@ function displayPost(studyID, cg, ph, postsArray) {
  //   var postQuery = {q: "get_posts", studyID: studyID, conditionGroup: cg, phaseNum: ph };
     var post = "";
     var noPosts = true;
-console.log("cg: "+ cg + " ph: " + ph);
- /*    $.getJSON(monitorStudiesController, postQuery, function(result) {
-        if (!result.error) {
-            // html injection
-            console.log("successful get");
-            //console.log(result);
-            var postsArray = $.map(result.data, function(el){
-                return el;
-            });
+/*console.log("cg: "+ cg + " ph: " + ph);*/
+          // sort by date
 
- */            // sort by date
- 
-            postsArray.sort(function(postA, postB){
-                return postA.dateTimeStamp - postB.dateTimeStamp;
-            });
 
-            post += "<div class='panel panel-primary'>";
-            post +=     "<div class='panel-heading; id='outer'>Latest Posts</div>";
-            post +=     "<div class='panel-body'>";
-            post +=         "<div class='panel-group id='accordion'>";
-            
-            $.each(postsArray, function(key, postData){
-console.log(postData);            
-                // skips record if the condition group and phase does not match the TAB we are currently
-                // working on
-                if (cg != postData["conditionGroupNum"] ||  ph != postData["phaseNum"])
-                    return true;
-                noPosts = false;
-            //var postData = result.data[0];
-                var date = new Date(postData.dateTimeStamp);
-                console.log("date: "+date.toLocaleString());
-                console.log("post ID "+postData.postID);
-                console.log("post image: " + postData.image);
-                console.log("post text: " + postData.postText);
-                if(postData.image != "") {
-                    console.log("there's an image");
-                    post +=            "<div class='panel panel-default' id='panel-"+postData.ID+"'>";
-                    post +=                 "<div class='panel-heading'>";
-                    post +=                     "<h4 class='panel-title'>";
-                    post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
-                    post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
-                    post +=                          "</a>";
-                    post +=                          "<a href='#'>"; 
-                    post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+")'></i>";
-                    post +=                           "</a>";
-                    post +=                      "</h4>";
-                    post +=                  "</div>"; //10
-                    post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
-                    post +=                         "<div class='panel-body'>";
-                    post +=                             "<p id='text'>"+postData.postText+"</p>";
-                    post +=                             "<img src="+postData.image+" class='media-object' style='width:80px'>";
-                    post +=                         "</div>";
-                    post +=                   "</div>";
-                    post +=             "</div>";
+        post += "<div class='panel panel-primary'>";
+        post +=     "<div class='panel-heading; id='outer'>Latest Posts</div>";
+        post +=     "<div class='panel-body'>";
+        post +=         "<div class='panel-group id='accordion'>";
+        
+        $.each(postsArray, function(key, postData){
+//console.log(postData);            
+            // skips record if the condition group and phase does not match the TAB we are currently
+            // working on
+            if (cg != postData["conditionGroupNum"] ||  ph != postData["phaseNum"])
+                return true;
+            noPosts = false;
+        //var postData = result.data[0];
+            var date = new Date(postData.dateTimeStamp);
+/*            console.log("date: "+date.toLocaleString());
+            console.log("post ID "+postData.postID);
+            console.log("post image: " + postData.image);
+            console.log("post text: " + postData.postText);*/
+            if(postData.image != "" && postData.image != null) {
+                /*console.log("there's an image");*/
+                post +=            "<div class='panel panel-default' id='panel-"+postData.ID+"'>";
+                post +=                 "<div class='panel-heading'>";
+                post +=                     "<h4 class='panel-title'>";
+                post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
+                post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
+                post +=                          "</a>";
+                post +=                          "<a href='#'>"; 
+                post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+", "+studyID+")'></i>";
+                post +=                           "</a>";
+                post +=                      "</h4>";
+                post +=                  "</div>"; //10
+                post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
+                post +=                         "<div class='panel-body'>";
+                post +=                             "<p id='text'>"+postData.postText+"</p>";
+                post +=                             "<img src="+postData.image+" class='media-object' style='width:80px'>";
+                post +=                         "</div>";
+                post +=                   "</div>";
+                post +=             "</div>";
 
-                } else {
-                    console.log("no image");
-                    post +=            "<div class='panel panel-default' id='panel-"+postData.postID+"'>";
-                    post +=                 "<div class='panel-heading'>";
-                    post +=                     "<h4 class='panel-title'>";
-                    post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
-                    post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
-                    post +=                          "</a>";
-                    post +=                          "<a href='#'>"; 
-                    post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+")'></i>";
-                    post +=                           "</a>";                    
-                    post +=                      "</h4>";
-                    post +=                  "</div>"; //10
-                    post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
-                    post +=                         "<div class='panel-body'>";
-                    post +=                            "<p id='text'>"+postData.postText+"</p>";
-                    post +=                         "</div>";
-                    post +=                   "</div>";
-                    post +=             "</div>";
-                }
-
-            }); // end each
-            
-            // TODO - better message
-            if (noPosts) {
-                post += "<p>No Posts</p>";
+            } else {
+                /*console.log("no image");*/
+                post +=            "<div class='panel panel-default' id='panel-"+postData.postID+"'>";
+                post +=                 "<div class='panel-heading'>";
+                post +=                     "<h4 class='panel-title'>";
+                post +=                         "<a class='accordion-toggle' data-toggle='collapse' href='#collapse-"+postData.postID+"'>";
+                post +=                             " <small><i>"+date.toLocaleString()+"</i></small>";
+                post +=                          "</a>";
+                post +=                          "<a href='#'>"; 
+                post +=                             "<i class='pe-7s-trash pe-2x pe-va pull-right' id='deletePost-"+postData.postID+"' onclick='deletePost("+postData.postID+", "+studyID+")'></i>";
+                post +=                           "</a>";                    
+                post +=                      "</h4>";
+                post +=                  "</div>"; //10
+                post +=                   "<div id='collapse-"+postData.postID+"' class='panel-collapse collapse collapse in'>";
+                post +=                         "<div class='panel-body'>";
+                post +=                            "<p id='text'>"+postData.postText+"</p>";
+                post +=                         "</div>";
+                post +=                   "</div>";
+                post +=             "</div>";
             }
-/*         } // end if
-        else {
-            console.log(result.errorMsg);
+
+        }); // end each
+        
+        // TODO - better message
+        if (noPosts) {
+            post += "<p>No Posts</p>";
         }
- */
+
         post +=            "</div> <!--End panel-group-->";
         post +=         "</div> <!--end panel-body-->";
         post +=       "</div> <!--end panel primary-->"; //20
-        //console.log(post);
-        //
-
-        //$("#infoGoesHere-"+studyID).append(post);
-       // $("#"+studyID+"-condition"+cg+"Phase"+ph).append(post);
-//    });
-    console.log("out of get");
-   
+  
     return post;
 }
 
-function deletePost(postID) {
-   // var controller = "server/admin-monitor-studies-ctr.php";
-
+function deletePost(postID, studyID) {
     var checkstr = confirm('Are you sure you want to delete this post?');
     if(checkstr == true) {
         // make DELETE request to server
@@ -815,11 +1283,12 @@ function deletePost(postID) {
             url: monitorStudiesController + '?' + $.param({"postID": postID}),
             type: 'DELETE',
             success: function(result, textStatus, xhr) {
-                console.log(result);
                 var data = result;
-                console.log('errorMsg='+data.errorMsg);
+                /*console.log('errorMsg='+data.errorMsg);*/
                 if (data.error)
                     alert(data.errorMsg);
+                else
+                    viewCommunityPosts(studyID) // refresh the study posts
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.log('Error in Operation');           
@@ -831,42 +1300,92 @@ function deletePost(postID) {
     }    
 }
 
-// currently doesn't create new post, despite the info being passed
 $("#viewGoesHere").on("click", "#currentStudiesTable a[name='admin-post-form']", function(){
     boxID = this.id.slice(12).split("-");
     var studyID = boxID[0];
     var conditionGroup =  boxID[1];
     var phase = boxID[2];
     var text = $("#post-input-"+studyID+"-"+conditionGroup+"-"+phase).val();
-    var dateTimeStamp = Date();
-    var image = null;
+    var image = "";
+   // var doc = document.getElementById("file-button-"+studyID+"-"+conditionGroup+"-"+phase);
+   //var image = ($("#file-button-"+studyID+"-"+conditionGroup+"-"+phase))[0].files[0];//.name;
+  /*  console.log("document: "+image);*/
 
+/*    if('files' in doc) {
+        console.log("there are files!");
+    }*/
 
-    console.log("studyID: "+studyID+", condition group: "+conditionGroup+", phase: "+phase);
-    console.log(text);
+/*    var formData = new FormData();
+    formData.append('studyID1', studyID);
+    formData.append('conditionGroup1', conditionGroup);
+    formData.append('phase1', phase);
+    formData.append('text1', text);
+    formData.append('image1', image);*/
+    //var image = document.getElementById("file-button-"+studyID+"-"+conditionGroup+"-"+phase).value;
+
+    //console.log(image);
+   /* console.log("studyID: "+studyID+", condition group: "+conditionGroup+", phase: "+phase+", text: "+text);*/
+    //console.log(JSON.stringify(formData));
+    
 
     $.ajax({
         url: monitorStudiesController,
         type: 'POST',
-        data: {dateTime1: dateTimeStamp, text1: text, image1: image, conditionGroupNum1: conditionGroup, phaseNum1: phase, studyID1: studyID},
+        //data: formData,
+        data: {text1: text, image1: image, conditionGroupNum1: conditionGroup, phaseNum1: phase, studyID1: studyID},
         dataType: 'json',
+        /*processData: false,
+        contentType: false,*/
         success: function (result, status) {
-            console.log('errorMsg='+result.errorMsg);
-            console.log(JSON.stringify(result));
+            /*console.log('errorMsg='+result.errorMsg);
+            console.log(JSON.stringify(result));*/
 
             if(result.error){
                 alert(result.errorMsg);
             } else {
-                alert("New post made!");
+                //alert("New post made!");
                 // see if can do a soft refresh to get updated posts
+                viewCommunityPosts(studyID) // refresh the study posts
             }
         }, 
         error: function(jqXHR, exception){
-            console.log(jqXHR);
-            console.log(exception);
+            /*console.log(jqXHR);
+            console.log(exception);*/
             //console.log(xhr);
             console.log("Something went wrong");
         }
     });
     return false; // ajax used, block the normal submit
 });
+
+/*function readURL(input, studyID, conditionGroupNum, phaseNum) {
+    console.log("input: "+input);
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            console.log("reader.onload");
+            $("#img-"+studyID+"-"+conditionGroupNum+"-"+phaseNum).attr("src", e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+
+}
+
+$("#viewGoesHere").on("click", "#currentStudiesTable input[name='image']", function(){
+    var boxID = this.id.slice(12).split("-");
+    var studyID = boxID[0];
+    var conditionGroupNum =  boxID[1];
+    var phaseNum = boxID[2];
+    console.log("file button pressed");
+    console.log(this.id);
+    $("#"+this.id).change(function(){
+        console.log("change");
+        readURL(this, studyID, conditionGroupNum, phaseNum);
+    });
+});*/
+
+/*$("#file-"+phR.studyID+"-"+cgR.conditionGroupNum+"-"+phR.phaseNum).change(function(){
+    
+});*/ 

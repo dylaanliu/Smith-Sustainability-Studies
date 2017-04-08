@@ -1,63 +1,77 @@
-<div class="container">        
-    <div class="row" id="profile-mid">
-        <div class="container">
-            <h1>Edit Profile</h1>
-            <div class="row">
-                                    
-              <!-- edit form column -->
-              <div class="col-md-9 personal-info">
-                <h3>Personal info</h3>
-                
-                <form class="form-horizontal" role="form" id="profile-form">
+<div class="container-fluid">
+    <h1 class="title">Your Profile</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h3>Edit Information</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="separator">
+                            <a href="#">
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-                  <div class="form-group">
-                    <label class="col-md-3 control-label">Username:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="text" id="userName" name="userName" value="">
-                    </div>
-                  </div>
 
-                  <div class="form-group">
-                    <label class="col-md-3 control-label">Current Password:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="password" id="current_password" name="password" value="11111122333">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-3 control-label">New Password:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="password" id="password" name="password" value="11111122333">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-3 control-label">Confirm password:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="password" id="confirm_password" name="confirm_password" value="11111122333">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="col-md-3 control-label">Email:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="text" id="email" name="email" value="">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-2">
-                        <button type="submit" class="btn btn-primary btn-block" name="saveChanges" id="saveChanges">Save Changes</button>
-                    </div>
-                    <div class="col-sm-offset-2 col-sm-2">
-                        <button type="reset" class="btn btn-danger btn-block" name="Reset">Reset</button>
-                    </div>                  
-                  </div>
-
-                </form>
-              </div>
+                <div class="row" id="profile-mid">
+                    <form class="form-horizontal" role="form" id="profile-form">
+                        
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Username:</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" id="userName" name="userName" value="">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">New Password:</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="password" id="password" name="password" value="">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Confirm New Password:</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="password" id="confirm_password" name="confirm_password" value="">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="separator">
+                                    <a href="#">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Current Password:</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="password" id="current_password" name="current_password" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Email:</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" id="email" name="email" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-2">
+                                <button type="submit" class="btn btn-primary btn-block long" name="saveChanges" id="saveChanges">Save Changes</button>
+                            </div>
+                            <div class="col-sm-offset-2 col-sm-2">
+                                <button type="reset" class="btn btn-danger btn-block long" name="Reset">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-

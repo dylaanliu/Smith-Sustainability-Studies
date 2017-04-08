@@ -1,38 +1,22 @@
 <?php
-session_start();
-/*
-THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-OTHER POSSIBLE MISSING FEATURES ARE:
-    No related data (automatic joins) supported
-    No condensed JSON output supported
-    No support for PostgreSQL or SQL Server
-    No POST parameter support
-    No JSONP/CORS cross domain support
-    No base64 binary column support
-    No permission system
-    No search/filter support
-    No pagination or sorting supported
-    No column selection supported
-SEE
-https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/  
-*/
-
-require_once 'utils/utils.php';
-require_once 'model.php';
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('user');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
 
 //$userInfo = ""; // global var for user info
-
+  //$userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
+  $userID = $_SESSION['userID'];// ? $_SESSION['userID'] : "13";  //
+ // error_log("user-home userID: ".$userID, 0);
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
-    error_log("got into user-home - GET");
+   // error_log("got into user-home - GET");
 
     $queryType = cleanInputGet('q');
-    $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
+  
     switch ($queryType) {
       case "getUser":
         $userRecords = null;
@@ -42,6 +26,7 @@ switch ($method) {
             if ($userRecords == null) {
                 $error = true;
                 $errorMsg = 'No user record found';
+             // error_log("Not user record found", 0);
             }
             else
                 $errorMsg = 'User record found';
@@ -57,13 +42,33 @@ switch ($method) {
                   "data" => $userRecords));
         break;
       case "condition_group_phase":
-    error_log("got into user-home - getting cg and phase permission");
-        $studyID = $_GET["studyID"];
-        $conditionGroupNum = $_GET["currentConditionGroup"];
-        $phaseNum = $_GET["currentPhase"];
-        $conditionGroupPhaseInfo = getConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum);
+   // error_log("got into user-home - getting cg and phase permission");
+        $studyID = cleanInputGet("studyID");
+        $conditionGroupNum = cleanInputGet("currentConditionGroup");
+        $phaseNum = cleanInputGet("currentPhase");
+        $error = false;
+        $conditionGroupPhaseInfo = getUserConditionGroupPhase($studyID, $conditionGroupNum, $phaseNum);
         header('Content-type: application/json');
-        echo $conditionGroupPhaseInfo;
+        
+    
+    if ($conditionGroupPhaseInfo == null ) {
+     // error_log("null return",0);
+      $error = true;
+      $errorMsg = "Unable to get condition group and phase permissions";
+    }
+    else {
+     // error_log("should return info",0);
+     // error_log(print_r($conditionGroupPhaseInfo, true), 0);
+      $errorMsg = "Successfully retrieved condition group and phase permissions";
+    }
+    
+        echo json_encode(array(
+                  "error" => $error,
+                  "errorMsg" => $errorMsg, 
+                  "data" => $conditionGroupPhaseInfo));  
+          
+    //echo $conditionGroupPhaseInfo;
+    
         break;
       case "rewards":
         break;
@@ -79,34 +84,6 @@ switch ($method) {
     break;
 }
 
-/*When implemented . . . 
-This function will need to access the "adminStudiesTable" first to get the studies associated with an admin. 
-Then it will have to access the "studyTable" to get the records of interest. A JOIN would 
-probably make the SQL queries easier.
-
-At present, a static JSON object string. BE needs to return a JSON object (sorted by id) string
-This function should also be in a separate PHP file with all the other functions as per the Data Design*/
-/*function getUser($userID) {
-    return
-    '{"User":[
-      {"userId":"1", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
-      ]}';
-
-      //return $userInfo;
- 
-}*/
-
-function getConditionGroupPhase($studyID, $cgNum, $phaseNum) {
-        return 
-    '{"ConditionGroupPhase":[
-      {"ID":"2", "studyId":"1", "conditionGroupNum":"1", "phaseNum":"2", "phaseStarted":"True", "phaseEnded":"False", "phasePermission":"0110110000011", "entriesNum": "10", "postsNum":"5", "likesNum":"5"}
-      ]}';
-}
-
-/* TODO: fill in for rewards
-function getRewards($userId) {
-
-}*/
 ?>
 
  

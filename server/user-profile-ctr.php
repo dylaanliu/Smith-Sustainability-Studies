@@ -1,40 +1,19 @@
-
 <?php
-session_start();
-/*
-THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-OTHER POSSIBLE MISSING FEATURES ARE:
-    No related data (automatic joins) supported
-    No condensed JSON output supported
-    No support for PostgreSQL or SQL Server
-    No POST parameter support
-    No JSONP/CORS cross domain support
-    No base64 binary column support
-    No permission system
-    No search/filter support
-    No pagination or sorting supported
-    No column selection supported
-SEE
-https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/  
-*/
-
-require_once 'utils/utils.php';
-require_once 'model.php';
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('user');
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-error_log('hello php1',0);
-error_log($method,0);    
-//$userInfo = ""; // global var for user info
+$userID = $_SESSION['userID'];                                
+//error_log("got into admin-user-accounts. Method=".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
-  case 'GET':
-
-    error_log("got into user-profile - GET");
+    case 'GET':
+//error_log("got into user-profile - GET");
         $q = cleanInputGet('q');
-        $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
+       // $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
         $userRecords = null;
         $error = false;
         
@@ -57,20 +36,18 @@ switch ($method) {
                   "errorMsg" => $errorMsg, 
                   "data" => $userRecords));
         break;
-//error_log('hello php2',0);
-    //header('Content-type: application/json');
-    //echo $userData;
-//error_log($incompleteEntries,0);
-    break;
-  case 'PUT':
-error_log("got into user-profile - PUT");
+
+    case 'PUT':
+//error_log("got into admin-profile - PUT");
         $error = false;
+        $errorMsg = "";
         
         // get user parameters/prevent sql injections/clear user invalid input
         parse_str(file_get_contents("php://input"), $put_vars);
-        $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : 2;  // TODO - used to debug. Should be $userID = $_SESSION['userID']
+       // $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : "13";  // TODO - used to debug. Should be $userID = $_SESSION['userID']
         $userNameIn = cleanInputPut($put_vars['userName']);
         $emailIn = cleanInputPut($put_vars['email']);
+        $current_passwordIn = cleanInputPut($put_vars['current_password']);
         $passwordIn = cleanInputPut($put_vars['password']);
         $confirm_passwordIn = cleanInputPut($put_vars['confirm_password']);
 
@@ -79,24 +56,33 @@ error_log("got into user-profile - PUT");
         // Some validation examples below.
         if (empty($userNameIn)) {
             $error = true;
-            $errorMsg = 'UserID is required.';
+            $errorMsg .= 'UserID is required. ';
         }
-        if (empty($passwordIn)) {
+        if (empty($current_passwordIn)) {
             $error = true;
-            $errorMsg = 'User name is required.';
+            $errorMsg .= 'Current password is required. ';
         }
-        if ($passwordIn != $confirm_passwordIn) {
+        
+       // either change password or change email or both
+        if (empty($passwordIn) && !empty($confirm_passwordIn)) {
             $error = true;
-            $errorMsg = 'Password fields miss-match';
-        }
- 
+            $errorMsg .= 'New password is required. ';
+        } else if ($passwordIn != $confirm_passwordIn) {
+            $error = true;
+            $errorMsg .= 'Password fields miss-match. ';
+        } 
+        if (validateUser($userNameIn, $current_passwordIn) == null) {
+            $error = true;
+            $errorMsg .= 'Current password and/or user name could not be validated. Try again. ';            
+        } 
+
         if (!$error) {
             $success = updateProfile($userID, $userNameIn, $passwordIn, $emailIn);
             if (!$success) {
                 $error = true;
-                $errorMsg = 'Database error: Could not update user: '.$userNameIn;
+                $errorMsg .= 'Database error: Could not update user: '.$userNameIn;
             } else {
-                $errorMsg = 'User record updated.';
+                $errorMsg .= 'User record updated. ';
             }
         }        
         echo json_encode(array(
@@ -104,37 +90,16 @@ error_log("got into user-profile - PUT");
                   "errorMsg" => $errorMsg, 
                   "data" => null));
         break;
-  case 'POST':
+                  
+    case 'POST':
+    case 'DELETE':
+    default:
+        http_response_code(404);
+        // really also want to pass a message back to the client to indicate what the error was
     break;
-  case 'DELETE':                           // not required in this controller
-  default:
-//error_log('hello php3',0);
-    http_response_code(404);
-    // really also want to pass a message back to the client to indicate what the error was
-    break;
-}
-
-
-
-function updateProfile($userID, $userName, $toUpdate){
-  // do update here
-error_log("hello9", 0);
-
-  $updatedData = json_encode($toUpdate);
-  return $updatedData;
- 
-}
-
-function getUser($userID) {
-
-    return
-    '{"User":[
-      {"userId":"1", "userName":"amy123", "encodedPW":"Axhy1sh", "firstName":"Amy", "lastName":"Schumer", "email":"amy_schumer@gmail.com", "privilegeLevel":"user", "studyId":"1", "CurrentConditionGroup":"1", "currentPhase": "2"}
-      ]}';
-
-      //return $userInfo;
- 
 }
 
 
 ?>
+
+ 

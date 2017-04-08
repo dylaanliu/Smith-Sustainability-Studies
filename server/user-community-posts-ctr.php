@@ -1,124 +1,139 @@
 <?php
-/*
-THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-OTHER POSSIBLE MISSING FEATURES ARE:
-    No related data (automatic joins) supported
-    No condensed JSON output supported
-    No support for PostgreSQL or SQL Server
-    No POST parameter support
-    No JSONP/CORS cross domain support
-    No base64 binary column support
-    No permission system
-    No search/filter support
-    No pagination or sorting supported
-    No column selection supported
-SEE
-https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/  
-*/
-
-require_once 'utils/utils.php';
-require_once 'model.php';
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('user');
 
 // get the HTTP method, path and body of the request
-$method = $_SERVER['REQUEST_METHOD'];    
-$permissions = "1111110111111";                             // GET,POST,PUT,DELETE
-error_log('hello php1',0);
-error_log($method,0);    
-//$userInfo = ""; // global var for user info
+$method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
+// $userID = '1';
+$userID = $_SESSION['userID'];
+
 
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
-    error_log("getting condition group posts");
-      
-      $conditionGroupPosts = getUserPosts("user id");
-    error_log(print_r($conditionGroupPosts, true), 0);
-      header('Content-type: application/json');
-      echo $conditionGroupPosts;
-      break;
+    $error = false;
+    $errorMsg = "No Error";
 
-  case 'PUT': // not required int this controller
+    //error_log("getting condition group posts");
+    $conditionGroupNum = cleanInputGet("conditionGroupNum");
+    $studyID = cleanInputGet("studyID");
+    $phaseNum = cleanInputGet("currentPhase");
+    $conditionGroupPosts = getUserPostsByPermission($userID, $studyID, $conditionGroupNum, $phaseNum);
+    //error_log(print_r($conditionGroupPosts, true), 0);
+    header('Content-type: application/json');
+    
+
+    if ( $conditionGroupPosts == null ) {
+      $error = true;
+      $errorMsg = "Failed to retrieve condition group posts";
+    }
+    else {
+      $errorMsg = "Successfully retrieved condition group posts";
+    }
+      
+    echo json_encode(array(
+          "error" => $error,
+          "errorMsg" => $errorMsg, 
+          "posts" => $conditionGroupPosts));
+    
+      //echo $conditionGroupPosts;
+    break;
+
+  case 'PUT':
+    //error_log("put, incr/decr like");
+    $error = false;
+    $errorMsg = "No Error";
+    $phaseUpdated = false;
+    parse_str(file_get_contents("php://input"), $put_vars);
+
+
+    $cmdIn = cleanInputPut($put_vars['cmd']);
+    if (!operateUserTable($userID, $cmdIn, "likesNumPhase") || !operateUserTable($userID, $cmdIn, "likesNumTotal")) {
+      $error = true;
+      $errorMsg = "Database Error: Could not like Post";
+    } 
+    else {
+        if ($cmdIn == 'incr')
+            $phaseUpdated = updatePhase($userID);
+    }
+
+    echo json_encode(array(
+          "error" => $error,
+          "errorMsg" => $errorMsg));
+    
     break;
   case 'POST':
-  error_log("Posting new post");
-    $userID = "fakeUserID"; // get from SESSIONS
-    $dateTime = cleanInputGet($_POST["dateTime1"]);
-    $text = cleanInputGet($_POST["text1"]);
-    $image = cleanInputGet($_POST["image1"]);
-    $conditionGroupNum = cleanInputGet($_POST["conditionGroupNum1"]);
-    $phaseNum = cleanInputGet($_POST["phaseNum1"]);
+  //error_log("Posting new post");
+    $error = false;
+    $errorMsg = "";
 
-    $success = createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum);
+    date_default_timezone_set('America/Toronto');
+    $dateTimeStamp = date('Y-m-d H:i:s'); // when the study is made active
+    $postText = cleanInputPost("text1");
+    $image = cleanInputPost("image1");
+    $conditionGroupNum = cleanInputPost("conditionGroupNum1");
+    $phaseNum = cleanInputPost("phaseNum1");
+    $studyID = cleanInputPost("studyID1");
+    
+//error_log("postText=".$postText." conditionGroupNum=".$conditionGroupNum." PhaseNum=".$phaseNum);
+/*    $success = createPost($userID, $dateTimeStamp, $text, $image, $conditionGroupNum, $phaseNum, $studyID);
     error_log("succeeded");
-    echo $success;
+    echo $success;*/
+    if (empty($postText)) {
+        $error = true;
+        $errorMsg .= 'Text is required. ';
+    }
+    if (empty($conditionGroupNum)) {
+        $error = true;
+        $errorMsg .= 'condition group required. ';
+    }
+    if (empty($phaseNum)) {
+        $error = true;
+        $errorMsg .= 'phase required. ';
+    }
+
+    if(!$error) {
+        // TODO - last parameter is adminID which should be from the $_SESSION 
+        //$userRecords = createUser($userNameIn, $firstNameIn, $lastNameIn, $passwordIn, 'user', $_SESSION['userID']);
+        $postRecord = createPost($userID, $dateTimeStamp, $postText, $image, $conditionGroupNum, $phaseNum, $studyID);  
+
+        if (!operateUserTable($userID, "incr", "postsNumPhase") || !operateUserTable($userID, "incr", "postsNumTotal")) {
+          $error = true;
+          $errorMsg .= "Database Error: Could not like Post ";
+        } 
+        else {
+            $phaseUpdated = updatePhase($userID);
+        }
+        
+        
+        if ($postRecord == null) {
+            $error = true;
+            $errorMsg .= 'Database error: Could not create post ';
+        }  else {
+          $errorMsg = 'Post Created';
+        }
+    }
+    else {
+        $errorMsg = 'No error.';        
+    }
+
+    echo json_encode(array(
+              "error" => $error,
+              "errorMsg" => $errorMsg,
+              "data" => $postRecord));
+
 
     break;
   case 'DELETE':                           // not required in this controller
   default:
+    $error = false;
+    $errorMsg = "No Error";
+
     http_response_code(404);
     // really also want to pass a message back to the client to indicate what the error was
     break;
 }
-
-
-function getUserPosts($userID) {
- /* do a join of posts table & user table to get username for post:
-    ex: SELECT Posts.postId, Posts.userId, Users.username, Posts.dateTime,
-               Posts.text, Posts.image, Posts.conditionGroupNum, Posts.phaseNum
-        FROM Posts
-        INNER JOIN Users
-        ON Posts.userId = Users.userId
-
-  function determines which posts the user can see based on permissions
-      
-*/
-    return
-    '{"Posts":[
-    {"postId":"1", 
-      "userId":"1", 
-      "username":"amy123",
-      "dateTime":"2016-12-24 17:45:12",
-      "text":"this is sample text 1", 
-      "image":"",  
-      "conditionGroupNum":"1", 
-      "phaseNum":"2"},
-    {"postId":"2", 
-      "userId":"2", 
-      "username":"bob456",
-      "dateTime":"2016-12-24 13:45:12",
-      "text":"this is sample text 2", 
-      "image":"",  
-      "conditionGroupNum":"1", 
-      "phaseNum":"2"},
-    {"postId":"3", 
-      "userId":"3",
-      "username": "cathy789", 
-      "dateTime":"2016-12-20 17:45:12",
-      "text":"this is sample text 3 it is meant to be very long to show text wrap within this box. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", 
-      "image":"",  
-      "conditionGroupNum":"1", 
-      "phaseNum":"2"}
-      ]}';
-
-      //return $userInfo;
- 
-}
-
-function createPost($userID, $dateTime, $text, $image, $conditionGroupNum, $phaseNum) {
-  error_log("creating post", 0);
-  $newPostData = array("userID" => $userID,
-                        "dateTime" => $dateTime,
-                        "text" => $text,
-                        "image" => $image,
-                        "conditionGroupNum" => $conditionGroupNum,
-                        "phaseNum" => $phaseNum);
-  error_log(print_r($newPostData, true), 0);
-
-// do CREATE here
-  return true;
-}
-
 ?>
 
  

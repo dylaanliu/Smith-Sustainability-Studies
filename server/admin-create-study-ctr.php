@@ -1,39 +1,15 @@
 <?php
-session_start();
-// THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-// AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-// OTHER POSSIBLE MISSING FEATURES ARE:
-//     No related data (automatic joins) supported
-//     No condensed JSON output supported
-//     No support for PostgreSQL or SQL Server
-//     No POST parameter support
-//     No JSONP/CORS cross domain support
-//     No base64 binary column support
-//     No permission system
-//     No search/filter support
-//     No pagination or sorting supported
-//     No column selection supported
-// SEE
-// https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
-//////////////////////////////////////////////////////////////////////////////////
-
-require_once 'utils/utils.php';
-require_once 'model.php';
-
-// only admins and super_admins are allowed to access this page
- if (!(authenticate("admin") || authenticate("super_admin"))) {
-    header('HTTP/1.0 403 Forbidden');
-    echo 'You are forbidden!';
-    die();
-}
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('admin');
 
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-error_log("got into admin-create-study. Method".$method);
+//error_log("got into admin-create-study. Method".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
     case 'POST':
-error_log("got into admin-create-study - POST");
+//error_log("got into admin-create-study - POST");
         $error = false;
         
         // get user parameters/prevent sql injections/clear user invalid input
@@ -41,7 +17,7 @@ error_log("got into admin-create-study - POST");
         $descriptionIn = cleanInputPost('description');
         $conditionGroupsIn = cleanInputPost('conditionGroupSelector');
         $phaseIn = cleanInputPost('phaseSelector');
-error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
+//error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
         // basic input validation. 
         // TODO:
         // Should really check all fields for validity (valid characters, maxlength, valid ranges, etc)
@@ -68,10 +44,7 @@ error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
         }        
         // create the admin-study records in the adminStudiesTable table
         if (!$error) {
-            // to facilatate testing, if $_SESSION['userID'] does not exist, just set the user to the 
-            // super_admin whose userID should be 1.
-            $userID = (isset($_SESSION['userID'])) ? $_SESSION['userID'] : '1';
-            $numAdminStudyRecords = createAdminStudies($userID, $newStudy['studyID']);
+            $numAdminStudyRecords = createAdminStudies($_SESSION['userID'], $newStudy['studyID']);
             if ($numAdminStudyRecords == 0) {
                 $error = true;
                 $errorMsg = 'Database error: Could not create any Admin Study records';
@@ -121,13 +94,13 @@ error_log($titleIn." ".$descriptionIn." ".$conditionGroupsIn." ".$phaseIn, 0);
        break;
         
     case 'GET':
-error_log("got into admin-create-study - GET");
+//error_log("got into admin-create-study - GET");
         $error = false;
     case 'PUT':
-error_log("got into admin-create-study - PUT");
+//error_log("got into admin-create-study - PUT");
         $error = false;
     case 'DELETE':                           
-error_log("got into admin-create-study - DELETE");
+//error_log("got into admin-create-study - DELETE");
         $error = false;
     default:
         http_response_code(404);

@@ -1,55 +1,25 @@
 <?php
-session_start();
-// THIS IS JUST A FAKED OUT REST API CONTROLLER ON THE SERVER SIDE. IT IS MISSING A LOT INCLUDING
-// AUTHENTICATION and SECURITY (SQLi, XSS, CFRF). IN ADDITION, THERE IS NO SERVER SIDE INPUT VALIDATION.
-// OTHER POSSIBLE MISSING FEATURES ARE:
-//     No related data (automatic joins) supported
-//     No condensed JSON output supported
-//     No support for PostgreSQL or SQL Server
-//     No POST parameter support
-//     No JSONP/CORS cross domain support
-//     No base64 binary column support
-//     No permission system
-//     No search/filter support
-//     No pagination or sorting supported
-//     No column selection supported
-// SEE
-// https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
-//////////////////////////////////////////////////////////////////////////////////
+// load file to authenticate user and then determine if the authenticated user has permission to access this page
+require_once 'utils/authenticateUser.php';
+verifyUserPrivilage('admin');
 
-require_once 'utils/utils.php';
-require_once 'model.php';
-
-
-// TODO put in below just for DEBUGGING
-//$_SESSION['privilegeLevel'] = "super_admin";
-//$_SESSION['privilegeLevel'] = "admin";
-
-// only admins and super_admins are allowed to access this page
- if (!(authenticate("admin") || authenticate("super_admin"))) {
-    header('HTTP/1.0 403 Forbidden');
-    echo 'You are forbidden!';
-    die();
-}
-
+// get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];                                 // GET,POST,PUT,DELETE
-
-// TODO - TEMP just setting an admin ID that we know exists in the database. This should be 
-// retrieved from the session if the user is validated and has permission to this page.
-$adminID = '1';
+// $userID = '1';
+$userID = $_SESSION['userID'];
     
-error_log("got into admin-manage-studies. Method: ".$method);
+//error_log("got into admin-manage-studies. Method: ".$method);
 
 // create SQL based on HTTP method
 switch ($method) {
     case 'GET':
-error_log("got into admin-manage-studies - GET");
+//error_log("got into admin-manage-studies - GET");
         $error = false;
         $studies = null;
         $conditionGroupPhase = null;
         $q = cleanInputGet('q');
 
-        $studies = getAdminStudies($adminID);
+        $studies = getAdminStudies($userID);
         if ($studies == null) {
             $error = true;
             $errorMsg = 'No studies found';
@@ -57,7 +27,7 @@ error_log("got into admin-manage-studies - GET");
         else {
             $errorMsg = 'Admin studies found.';
 
-            $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+            $conditionGroupPhase = getAdminConditionGroupPhase($userID);
             if ($conditionGroupPhase == null) {
                 $error = true;
                 $errorMsg = 'Database error accessing conditionGroupTable';
@@ -72,15 +42,15 @@ error_log("got into admin-manage-studies - GET");
         break;
         
     case 'PUT':
-error_log("got into admin-manage-studies - PUT");
+//error_log("got into admin-manage-studies - PUT");
         $error = false;
         $errorMsg = "";
         $userRecords = null;
         
         // get parameters. Get form string from client and convert to associated array 
         // unique array names
-        error_log("output");
-        error_log(file_get_contents("php://input"));
+/*        error_log("output");
+        error_log(file_get_contents("php://input"));*/
         $nameVal = json_decode(file_get_contents("php://input"), true);
         foreach($nameVal as $pair){
             //error_log("key=".$pair['name'].", value=".$pair['value']);
@@ -145,7 +115,7 @@ error_log("got into admin-manage-studies - PUT");
                 foreach($userRecords as $userRecord) {
                     if ($userRecord["studyID"] == $studyIDIn && $userRecord["currentConditionGroup"] == $conditionGroupIn) {
                         if ($odd) {
-                            if (!operateUserTable($userRecord["userID"], "incr_teamNum")) {
+                            if (!operateUserTable($userRecord["userID"], "incr", "teamNum")) {
                                 $error = true;
                                 $errorMsg .= ' Database error: could not increment team number.';
                             }    
@@ -230,7 +200,7 @@ error_log("got into admin-manage-studies - PUT");
         break;
                 
     case 'POST':
-error_log("got into admin-manage-studies - POST");
+//error_log("got into admin-manage-studies - POST");
         $error = false;
         $errorMsg = "";
         $studyRecord = null;
@@ -261,9 +231,9 @@ error_log("got into admin-manage-studies - POST");
                 $maxConditionGroupNum = $studyRecord["maxConditionGroupNum"] + 1;
                 $conditionGroups = $studyRecord["conditionGroups"];
                 $phases = $studyRecord["phases"];
-                if ($conditionGroups >= 6) {
+                if ($conditionGroups >= 3) {
                     $error = true;
-                    $errorMsg .= 'Error, maximum number of supported condition groups is 6. ';
+                    $errorMsg .= 'Error, maximum number of supported condition groups is 3. ';
                 }
             }
         }
@@ -287,7 +257,7 @@ error_log("got into admin-manage-studies - POST");
                 $errorMsg .= 'Database error: could not increment maximum condition group number in study. ';
             } 
             
-            $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+            $conditionGroupPhase = getAdminConditionGroupPhase($userID);
             if ($conditionGroupPhase == null) {
                 $error = true;
                 $errorMsg .= ' Database error accessing conditionGroupTable. ';
@@ -301,7 +271,7 @@ error_log("got into admin-manage-studies - POST");
         break;
         
     case 'DELETE':                           
-error_log("got into admin-manage-studies - DELETE: ".$_SERVER['QUERY_STRING']);
+//error_log("got into admin-manage-studies - DELETE: ".$_SERVER['QUERY_STRING']);
         $error = false;
         $conditionGroupPhaseRecords = null;
         $conditionGroupPhase = null;
@@ -393,7 +363,7 @@ error_log("got into admin-manage-studies - DELETE: ".$_SERVER['QUERY_STRING']);
                         } else {
                             // get the condition group phase records to display
                             $errorMsg .= 'Condition Group deleted.';
-                            $conditionGroupPhase = getAdminConditionGroupPhase($adminID);
+                            $conditionGroupPhase = getAdminConditionGroupPhase($userID);
                             if ($conditionGroupPhase == null) {
                                 $error = true;
                                 $errorMsg .= 'Database error accessing conditionGroupTable';

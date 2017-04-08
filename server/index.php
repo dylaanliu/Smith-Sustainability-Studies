@@ -1,30 +1,25 @@
 <?php
 // start a session to determine if there is currently a session. In addition, establish connection
 // to the database.
-session_start();
+/*session_start();
 require_once 'utils/utils.php';
-require_once 'model.php';
+require_once 'model.php';*/
+require_once 'utils/authenticateUser.php';
 $error = false;
 
-// TODO : if session is set already, do not allow re-validation. Go to admin or user home. 
- if (isset($_SESSION['userName']) != "" ) {
-     // COMMENTED OUT FOR TESTING
-        // echo json_encode(array(
-            // "error" => true,
-            // "errorMsg" => "Error: Already logged in. Please log out first",
-            // "redirect" => ""));
-        // exit;
-}
-
- 
 // prevent sql injections/clear user invalid inputs
 $usernameIn = cleanInputPost('username1');        // Fetching Values from URL.
 if (empty($usernameIn))
     $error = true;
-
+//error_log("username: ".$usernameIn, 0);
 $passwordIn = cleanInputPost('password1');        // Fetching Values from URL.
+
+
 if (empty($passwordIn))
     $error = true;
+
+//error_log("password: ".$passwordIn, 0);
+
 
 if (!$error) {
     // if password is correct, save session information and send JSON data to 
@@ -35,20 +30,33 @@ if (!$error) {
         // remember user info for the session
         $_SESSION['userID'] = $userRecord['userID'];
         $_SESSION['userName'] = $userRecord['userName'];
+        $_SESSION['encodedPW'] = $userRecord['encodedPW'];
         $_SESSION['privilegeLevel'] = $userRecord['privilegeLevel'];
         $_SESSION['studyID'] = $userRecord['studyID'];
         $_SESSION['currentConditionGroup'] = $userRecord['currentConditionGroup'];
         $_SESSION['currentPhase'] = $userRecord['currentPhase'];
         $_SESSION['teamNum'] = $userRecord['teamNum'];
-error_log("index - SESSION userID = ".$_SESSION['userID']);
                 
         // setup values for client
         $errorMsg = "Successfully Logged in...";
         if ($userRecord['privilegeLevel'] == "admin" || $userRecord['privilegeLevel'] == "super_admin") {
-            $redirect = "/498/admin-template.html";
+            $redirect = dirname(dirname($_SERVER['REQUEST_URI']))."/admin-template.html";
         } else {
-            $redirect = "/498/user-template.html";            
+            $redirect = dirname(dirname($_SERVER['REQUEST_URI']))."/user-template.html";
         }
+        
+        // create cookies if remember me is set else destroy previous cookies
+        if (isset($_POST['remember'])) {
+            setcookie("userID", $userRecord['userID'], strtotime( '+1 days' ), "/", "", "", TRUE); 
+            setcookie("privilegeLevel", $userRecord['privilegeLevel'], strtotime( '+1 days' ), "/", "", "", TRUE); 
+            setcookie("encodedPW", $userRecord['encodedPW'], strtotime( '+1 days' ), "/", "", "", TRUE);
+        }
+        else {
+            setcookie("userID", '', time() - 1*24*60*60); 
+            setcookie("privilegeLevel", '', time() - 1*24*60*60); 
+            setcookie("encodedPW", '', time() - 1*24*60*60);
+        }
+        
     } else {
         $error = true;
         $errorMsg = "Username or Password is wrong...!!!!";

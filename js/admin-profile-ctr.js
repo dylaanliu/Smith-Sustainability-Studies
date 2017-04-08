@@ -4,12 +4,16 @@ function loadAdminProfileView() {
     var controllerData = { q: "getUser" };
 	var view = "views/admin-profile-view.html";
 
+    $('.nav li').removeClass('active');
+    $('#profileView').addClass('active');
+
+    document.getElementById("viewGoesHere").innerHTML = ""
+
 	$("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
 		if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
             $.getJSON(controller, controllerData, function(profileString) {
-                console.log(JSON.stringify(profileString));
             
                 user = profileString.data[0];
                 $('#profile-mid #userName').val(user.userName);
@@ -22,15 +26,17 @@ function loadAdminProfileView() {
 
     // on the click of the save button, check the form and submit if it is OK    
     $("#viewGoesHere").on( "click", "#saveChanges", function(event) {
-console.log("got here 1");
         $('#profile-form').validate({  // initialize plugin
             rules: {
                 userName: {
                     required: true,
                     minlength:5
                 },
+                current_password: {
+                    required: true
+                },
                 password: {
-                    required: true,
+                    required: false,
                     minlength:8
                 },
                 confirm_password: {
@@ -46,8 +52,11 @@ console.log("got here 1");
                     required: "Please enter a userName",
                     minlength: "minimum 5 characters"
                 },
+                current_password: {
+                    required: "Please enter a password"
+                },
                 password: {
-                    required: "Please enter a password",
+                    //required: "Please enter a password",
                     minlength: "minimum 8 characters"
                 },
                 password: {
@@ -86,8 +95,8 @@ console.log("got here 1");
                         else {
                             alert("Success: " + result.errorMsg)                            
                         }
-                        console.log('errorMsg='+result.errorMsg);
-                        console.log(JSON.stringify(result));
+/*                        console.log('errorMsg='+result.errorMsg);
+                        console.log(JSON.stringify(result));*/
                     }
                 });
                 return false; // ajax used, block the normal submit

@@ -17,6 +17,10 @@ function loadAdminCreateStudyView() {
     var view = "views/admin-create-study-view.html";
     var controllerData = { };
 
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadAdminCreateStudy').addClass('active');
+
     // clear contents first
     document.getElementById("viewGoesHere").innerHTML = "";
 
@@ -37,8 +41,7 @@ function loadAdminCreateStudyView() {
 
 // Click controller for the CreateNewAccount button.
 // Clicking button will pop up modal for registration info to be entered. Validate input.
-$("#viewGoesHere").on( "click", "#createStudy", function() {
-    console.log('got create Study submit'); 
+$("#viewGoesHere").on( "click", "#createStudy", function() { 
 
     $('#createStudyForm').validate({  
         rules: {
@@ -75,7 +78,6 @@ $("#viewGoesHere").on( "click", "#createStudy", function() {
                 dataType: "json",        
                 success: function (result, status) {
                     alert(result.errorMsg);
-                    console.log(JSON.stringify(result));
                 }
             });
             return false; // ajax used, block the normal submit
@@ -95,7 +97,6 @@ $("#viewGoesHere").on("click", "#tabsGoesHere ul.nav-tabs a", function(e) {
 $("#viewGoesHere").on("change", "#conditionGroupSelector, #phaseSelector", function(e) {
     var numConditionGroups = $("#conditionGroupSelector").val();
     var numPhases = $("#phaseSelector").val();
-    console.log( "CG=" + numConditionGroups + " Phase=" + numPhases);
     
     document.getElementById("tabsGoesHere").innerHTML = "";
     $("#tabsGoesHere").append(conditionGroupPhaseTabs(numConditionGroups, numPhases));    
@@ -106,7 +107,7 @@ function conditionGroupPhaseTabs(numConditionGroups, numPhases) {
     var tabStr;
     
     // level 1
-    tabStr = "<div class='tabbable boxed parentTabs'>";
+    tabStr = "<div class='tabbable boxed parentTabs' id='tabbable'>";
             
     // condition tabs
     tabStr += "<ul class='nav nav-tabs nav-justified'>";
@@ -166,22 +167,22 @@ function phaseCheckBoxes (cg, ph) {
 
     phaseCheckBoxes += "<div class='row'>";
     phaseCheckBoxes += "<div class='col-sm-4'>";
-    phaseCheckBoxes += "    <strong>Basic</strong><br>";    
+    phaseCheckBoxes += "    <br><strong>Basic</strong><br><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='dataEntry' checked>";
     phaseCheckBoxes += "        <label for='dataEntry'>Data Entry</label><br>";
-    phaseCheckBoxes += "    <strong>Statistics</strong><br>";    
+    phaseCheckBoxes += "    <br><strong>Statistics</strong><br><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='personalStatistics'>";
     phaseCheckBoxes += "        <label for='personalStatistics'>Personal Statistics</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='conditionGroupStatistics'>";
     phaseCheckBoxes += "        <label for='conditionGroupStatistics'>Condition Group Statistics</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='subTeamStatistics'>";
     phaseCheckBoxes += "        <label for='subTeamStatistics'>Sub-team Statistics</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='shareToSocialMedia'>";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='shareToSocialMedia' disabled>";
     phaseCheckBoxes += "        <label for='shareToSocialMedia'>Share to Social Media</label><br>";
     phaseCheckBoxes += "</div>";    
     
     phaseCheckBoxes += "<div class='col-sm-4'>";
-    phaseCheckBoxes += "    <strong>Community Posts</strong><br>";    
+    phaseCheckBoxes += "    <br><strong>Community Posts</strong><br><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='submitTips'>";
     phaseCheckBoxes += "        <label for='submitTips'>Submit Tips</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='viewAdminTips'>";
@@ -190,17 +191,17 @@ function phaseCheckBoxes (cg, ph) {
     phaseCheckBoxes += "        <label for='viewConditionGroupTips'>View Condition Group Tips</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='viewSubTeamTips'>";
     phaseCheckBoxes += "        <label for='viewSubTeamTips'>View Sub-team Tips</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='sharePostsToSocialMedia'>";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='sharePostsToSocialMedia' disabled>";
     phaseCheckBoxes += "        <label for='sharePostsToSocialMedia'>Share Posts to Social Media</label><br>";
     phaseCheckBoxes += "</div>";    
     
     phaseCheckBoxes += "<div class='col-sm-4'>";
-    phaseCheckBoxes += "    <strong>Rewards</strong><br>";
+    phaseCheckBoxes += "    <br><strong>Rewards</strong><br><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='private'>";
     phaseCheckBoxes += "        <label for='private'>Private</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='public'>";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='public' disabled>";
     phaseCheckBoxes += "        <label for='public'>Public</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='progressionSystem'>";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='progressionSystem' disabled>";
     phaseCheckBoxes += "        <label for='progressionSystem'>Progression System</label><br>";
     phaseCheckBoxes += "</div>";    
     phaseCheckBoxes += "</div>";    

@@ -1,10 +1,10 @@
 <div class="container-fluid">
+    <h1 class="title">Welcome Back!</h1>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h1 class="title">
-                    Welcome Back!</h1>
+                    <h3>What's New You Can Do:</h3>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -79,7 +79,7 @@
                         <div id="socialMediaStats">
                             <div class='col-xs-1'><i class="pe-7s-graph1"></i></div>
                             <div class="col-xs-11">
-                                <p>YOU CAN NOW <strong>SHARE YOUR STATISTICS</strong> TO YOUR SOCIAL MEDIA.</p>
+                                <p><strong>SHARE YOUR STATISTICS</strong> TO YOUR SOCIAL MEDIA.</p>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-xs-12">
@@ -150,7 +150,7 @@
                         <div id="socialMediaTips">
                             <div class='col-xs-1'><i class="pe-7s-chat"></i></div>
                             <div class="col-xs-11">
-                                <p>YOU CAN NOW <strong>SHARE COMMUNITY POSTS</strong> TO YOUR SOCIAL MEDIA.</p>
+                                <p><strong>SHARE COMMUNITY POSTS</strong> TO YOUR SOCIAL MEDIA.</p>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-xs-12">
@@ -165,14 +165,14 @@
                         <div id="privateRewards">
                             <div class='col-xs-1'></div>
                             <div class="col-xs-11">
-                                <p>YOU CAN NOW EARN<em><strong> PRIVATE REWARD BADGES</strong></em>!</p>
+                                <p>EARN<em><strong> PRIVATE REWARD BADGES</strong></em>!</p>
                             </div>
                             <div id="publicRewards">
                                 <div class='col-xs-1'></div>
                                 <div class="col-xs-11">
-                                    <p>YOU CAN NOW EARN<em><strong> PUBLIC REWARD BADGES</strong></em>!</p>
+                                    <p>EARN<em><strong> PUBLIC REWARD BADGES</strong></em>!</p>
                                 </div>
-                                <p id="progression">YOU CAN NOW TRACK PROGRESS WITH A<em><strong> PROGRESSION</strong> BAR</em>!</p>
+                                <p id="progression">TRACK PROGRESS WITH A<em><strong> PROGRESSION</strong> BAR</em>!</p>
                             </div>
                         </div>
                     </div>
@@ -183,7 +183,7 @@
             <!-- row -->
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="rewardsSection">
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
@@ -199,14 +199,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12" id="rewards">
+                        <h3 id="rewardMessage">Greetings - you have not earned any rewards</h3>
                         <table id="rewardTable">
-                            <tr ir="rewardRow">
-                                <td id="rewardCell">
-                                    <p id="rewardDescr"><img src="img/yellow_star.png"> Entered 10 entries </p>
-                                </td>
-                                <td id="second">
-                                    <p id="rewardDescr"><img src="img/green_star.png"> Liked 10 tips </p>
-                                </td>
+                            <tr id="entriesRewardRow">
+                            </tr>
+                            <tr id="postsRewardRow">
+                            </tr>
+                            <tr id="likesRewardRow">
                             </tr>
                         </table>
                     </div>

@@ -1,6 +1,6 @@
 // jQuery functions for admin home page
 // TODO: check go-to specific study on manage studies works 
-var controller = "server/admin-manage-studies-ctr.php";
+var manageStudiesController = "server/admin-manage-studies-ctr.php";
 
 // go to content div and shove some stuff in
 $(document).ready(function() {
@@ -16,12 +16,16 @@ function loadAdminManageStudiesView(startStudyIDIn) {
 
     var controllerData = { q: "getStudies" }
     var view = "views/admin-manage-studies-view.html";
-    
+
+    //make link on nav active
+    $('.nav li').removeClass('active');
+    $('#loadManageStudies').addClass('active');
+  
     $("#viewGoesHere").load(view, function(responseTxt, statusTxt, xhr){
         if(statusTxt == "error")
             alert("Error: " + xhr.status + ": " + xhr.statusText);
         if(statusTxt == "success") {
-            $.getJSON(controller, controllerData, function(result) {
+            $.getJSON(manageStudiesController, controllerData, function(result) {
                 //console.log(JSON.stringify(result));
                 var studyArray = result.studies;
                 var conditionGroupPhaseArray = result.conditionGroupPhase;
@@ -35,7 +39,7 @@ function loadAdminManageStudiesView(startStudyIDIn) {
                             "<form id='editStudyForm" + studyRecord.studyID + "' class='form-horizontal' role='form'>" +
                             "<div class='panel-heading'>" + 
                                 "<div class='col-sm-12 panel-title'>" + 
-                                    "<h4>Study " + studyRecord.studyID + ": " + studyRecord.title + "</h4>" + 
+                                    "<h3 style='float: left;'>Study " + studyRecord.studyID + ": </h3><h4>" + studyRecord.title + "</h4>" + 
                                 "</div>" + 
                                 "<div class='form-group'>" +
                                     "<label for='description" + studyRecord.studyID + "' class='col-sm-2 control-label'>Study Summary:</label>" +
@@ -65,13 +69,20 @@ function loadAdminManageStudiesView(startStudyIDIn) {
                                     conditionGroupPhaseTabsEdit(studyRecord.studyID, conditionGroupPhaseArray) +
                                 "</div>" +      
                             "</div>" +
-                            "</form>";
+                            "</form>"+
+                            "<div class='row'>"+
+                                "<div class='col-md-12'>"+
+                                    "<div class='separator'>"+
+                                        "<a href='#'></a>"+
+                                    "</div>" +
+                                "</div>" + 
+                            "</div>";
                         $("#manageStudiesTable").append(insertStr);
                     }); // end each
                 }
-                else {
+/*                else {
                     console.log(result.errorMsg);
-                }
+                }*/
             });
         }
     });
@@ -95,7 +106,7 @@ $("#viewGoesHere").on("click", "#manageStudiesTable ul.nav-tabs a", function(e) 
 //     try to delete the condition group on the server. If successful then deletes the
 //     local condition group. Note, does not allow a user to delete the last group.
 $("#viewGoesHere").on("click", "#manageStudiesTable ul.nav-tabs i[name^='removeTab']", function(e) {
-console.log("Delete TAB");
+//console.log("Delete TAB");
     var removeTab = $(this).attr("name").split("_");
     var studyID = removeTab[1];
     var conditionGroup = removeTab[2];
@@ -105,7 +116,7 @@ console.log("Delete TAB");
      
         // make the DELETE request to the server. As per HTTP, delete resource should be passed in header
         $.ajax({
-            url: controller + '?' + $.param({"deleteType": "conditionGroup",
+            url: manageStudiesController + '?' + $.param({"deleteType": "conditionGroup",
                                              "studyID": studyID,
                                              "conditionGroup": conditionGroup
                                             }),
@@ -116,7 +127,7 @@ console.log("Delete TAB");
                     alert(data.errorMsg);
                 else {
                     // clear tabs and re-insert with new TAB
-                    console.log ("TAB DELETED");
+                   // console.log ("TAB DELETED");
                     var conditionGroupPhaseArray = data.conditionGroupPhase;
                     $("#studyContent" + studyID + " div").empty();
                     $("#studyContent" + studyID + " div").append(conditionGroupPhaseTabsEdit(studyID, conditionGroupPhaseArray));                    
@@ -137,27 +148,27 @@ console.log("Delete TAB");
 // TAB add click event catcher
 //     add the group on the server and then insert the TAB into the DOM
 $("#viewGoesHere").on("click", "#manageStudiesTable ul.nav-tabs a[name^='addTab']", function(e) {
-console.log("Add TAB");
+//console.log("Add TAB");
     var addTab = $(this).attr("name").split("_");
     var studyID = addTab[1];
 
     // form validates so do the POST
     $.ajax({
-        url: controller,
+        url: manageStudiesController,
         type: 'POST',
         data: {postType : "addTab",
                studyID : studyID
         },
         dataType: "json",        
         success: function (result, status) {            
-            console.log('errorMsg='+result.errorMsg);
+           // console.log('errorMsg='+result.errorMsg);
             // console.log(JSON.stringify(result));
 
             if (result.error)
                 alert(result.errorMsg);
             else {
                 // clear tabs and re-insert with new TAB
-                console.log ("TAB ADDED");
+               // console.log ("TAB ADDED");
                 var conditionGroupPhaseArray = result.conditionGroupPhase;
                 $("#studyContent" + studyID + " div").empty();
                 $("#studyContent" + studyID + " div").append(conditionGroupPhaseTabsEdit(studyID, conditionGroupPhaseArray));
@@ -170,7 +181,7 @@ console.log("Add TAB");
 
 // "More Detail"/"Less Detail" click event catcher to toggle Button Name and chevron
 $("#viewGoesHere").on("click", "#manageStudiesTable a[name='collapse']", function(e) {
-console.log("More Detail Button");
+//console.log("More Detail Button");
     if ($(this).html() == 'More Details <span class="glyphicon glyphicon-chevron-right"></span>')
         $(this).html("Less Details <span class='glyphicon glyphicon-chevron-down'></span>");
     else 
@@ -180,7 +191,7 @@ console.log("More Detail Button");
 
 // handles split sub-team button
 $("#viewGoesHere").on("click", "#manageStudiesTable button[name^='splitSubTeamsStudy']", function(e) {
-console.log("Split Sub Team Button");
+//console.log("Split Sub Team Button");
     // find the studyID
     var splitArray = $(this).attr("name").split("_");
     var studyID = splitArray[1];
@@ -196,14 +207,14 @@ console.log("Split Sub Team Button");
 
     // split the team in the current condition group
     $.ajax({
-        url: controller,
+        url: manageStudiesController,
         type: 'PUT',
         dataType: 'text',        
         contentType: "application/json; charset=utf-8",      // dont know if this is required
         data: JSON.stringify(dataArray),
         success: function (resultOut, status) {
             result = jQuery.parseJSON(resultOut);
-            console.log('errorMsg='+result.errorMsg);
+            //console.log('errorMsg='+result.errorMsg);
             // console.log(JSON.stringify(result));
             
             if (result.error)
@@ -217,7 +228,7 @@ console.log("Split Sub Team Button");
         
 // handles purge study button
 $("#viewGoesHere").on("click", "#manageStudiesTable button[name^='purgeStudy']", function(e) {
-console.log("Purge Study Button");
+//console.log("Purge Study Button");
 
     // find the studyID
     var splitArray = $(this).attr("name").split("_");
@@ -232,11 +243,11 @@ console.log("Purge Study Button");
 
         // make the DELETE request to the server. As per HTTP, delete resource should be passed in header
         $.ajax({
-            url: controller + '?' + $.param(dataObject),
+            url: manageStudiesController + '?' + $.param(dataObject),
             type: 'DELETE',
             success: function(result, textStatus, xhr) {
                 var data = jQuery.parseJSON(result);
-                console.log('errorMsg='+data.errorMsg);
+               // console.log('errorMsg='+data.errorMsg);
                 if (data.error)
                     alert(data.errorMsg);
                 else {
@@ -283,15 +294,15 @@ console.log("Save Changes Button");
 
             // update the study record using PUT
             $.ajax({
-                url: controller,
+                url: manageStudiesController,
                 type: 'PUT',
                 dataType: 'text',        
                 contentType: "application/json; charset=utf-8",      // dont know if this is required
                 data: JSON.stringify(dataArray),
                 success: function (resultOut, status) {
                     result = jQuery.parseJSON(resultOut);
-                    console.log('errorMsg='+result.errorMsg);
-                    console.log(JSON.stringify(result));
+                   // console.log('errorMsg='+result.errorMsg);
+                   // console.log(JSON.stringify(result));
                     
                     if (result.error)
                         alert(result.errorMsg);
@@ -351,7 +362,7 @@ function conditionGroupPhaseTabsEdit(studyID, conditionGroupPhaseArray) {
     var tabStr;
     
     // level 1
-    tabStr = "<div class='tabbable boxed parentTabs'>";
+    tabStr = "<div class='tabbable boxed parentTabs' id='tabbable'>";
             
     // condition tabs. Only add unique TABs
     tabStr += "<ul id='conditionTabHeaderMarker" + studyID + "' class='nav nav-tabs nav-justified'>";
@@ -478,22 +489,22 @@ function phaseCheckBoxesEdit (cg, ph, phR) {
 
     phaseCheckBoxes += "<div class='row'>";
     phaseCheckBoxes += "<div class='col-sm-4'>";
-    phaseCheckBoxes += "    <strong>Basic</strong><br>";    
+    phaseCheckBoxes += "    <br><strong>Basic</strong><br><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='dataEntry' " + checkPermissionChecked(0, permissions) + ">";
     phaseCheckBoxes += "        <label for='dataEntry'>Data Entry</label><br>";
-    phaseCheckBoxes += "    <strong>Statistics</strong><br>";    
+    phaseCheckBoxes += "    <br><strong>Statistics</strong><br><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='personalStatistics' " + checkPermissionChecked(1, permissions) + ">";
     phaseCheckBoxes += "        <label for='personalStatistics'>Personal Statistics</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='conditionGroupStatistics' " + checkPermissionChecked(2, permissions) + ">";
     phaseCheckBoxes += "        <label for='conditionGroupStatistics'>Condition Group Statistics</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='subTeamStatistics' " + checkPermissionChecked(3, permissions) + ">";
     phaseCheckBoxes += "        <label for='subTeamStatistics'>Sub-team Statistics</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='shareToSocialMedia' " + checkPermissionChecked(4, permissions) + ">";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='shareToSocialMedia' " + checkPermissionChecked(4, permissions) + " disabled>";
     phaseCheckBoxes += "        <label for='shareToSocialMedia'>Share to Social Media</label><br>";
     phaseCheckBoxes += "</div>";    
     
     phaseCheckBoxes += "<div class='col-sm-4'>";
-    phaseCheckBoxes += "    <strong>Community Posts</strong><br>";    
+    phaseCheckBoxes += "    <br><strong>Community Posts</strong><br><br>";    
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='submitTips' " + checkPermissionChecked(5, permissions) + ">";
     phaseCheckBoxes += "        <label for='submitTips'>Submit Tips</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='viewAdminTips' " + checkPermissionChecked(6, permissions) + ">";
@@ -502,17 +513,17 @@ function phaseCheckBoxesEdit (cg, ph, phR) {
     phaseCheckBoxes += "        <label for='viewConditionGroupTips'>View Condition Group Tips</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='viewSubTeamTips' " + checkPermissionChecked(8, permissions) + ">";
     phaseCheckBoxes += "        <label for='viewSubTeamTips'>View Sub-team Tips</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='sharePostsToSocialMedia' " + checkPermissionChecked(9, permissions) + ">";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='sharePostsToSocialMedia' " + checkPermissionChecked(9, permissions) + " disabled>";
     phaseCheckBoxes += "        <label for='sharePostsToSocialMedia'>Share Posts to Social Media</label><br>";
     phaseCheckBoxes += "</div>";    
     
     phaseCheckBoxes += "<div class='col-sm-4'>";
-    phaseCheckBoxes += "    <strong>Rewards</strong><br>";
+    phaseCheckBoxes += "    <br><strong>Rewards</strong><br><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='private' " + checkPermissionChecked(10, permissions) + ">";
     phaseCheckBoxes += "        <label for='private'>Private</label><br>";
     phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='public' " + checkPermissionChecked(11, permissions) + ">";
     phaseCheckBoxes += "        <label for='public'>Public</label><br>";
-    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='progressionSystem' " + checkPermissionChecked(12, permissions) + ">";
+    phaseCheckBoxes += "        <input type='checkbox' name='phasePermissions_" + cg + "_" + ph + "[]' value='progressionSystem' " + checkPermissionChecked(12, permissions) + " disabled>";
     phaseCheckBoxes += "        <label for='progressionSystem'>Progression System</label><br>";
     phaseCheckBoxes += "</div>";    
     phaseCheckBoxes += "</div>";    
@@ -521,7 +532,7 @@ function phaseCheckBoxesEdit (cg, ph, phR) {
     phaseCheckBoxes += "    <div class='col-sm-12'>";
     phaseCheckBoxes += "        <strong>Number of :</strong><br>";
     phaseCheckBoxes += "    </div>";
-    phaseCheckBoxes += "    <label for='entriesNum_" + cg + "_" + ph + "' class='col-sm-1 control-label'>Entires</label>";
+    phaseCheckBoxes += "    <label for='entriesNum_" + cg + "_" + ph + "' class='col-sm-1 control-label'>Entries</label>";
     phaseCheckBoxes += "    <div class='col-sm-3'>";
     phaseCheckBoxes += "        <input type='text' class='form-control' id='entriesNum_" + cg + "_" + ph + "' name='entriesNum_" + cg + "_" + ph + "' value='" + phR.entriesNum + "'>";
     phaseCheckBoxes += "    </div>";

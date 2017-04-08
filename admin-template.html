@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!--Default Home Page-->
-        <!-- bootstrap -->
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-
-        <!--CSS-->
+        <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- Smith core CSS -->
         <link rel="stylesheet" href="css/Template.css">
+        <!-- Icons -->
         <link rel="stylesheet" href="css/pe-icon-7-stroke.css">
-        <!-- DataTables CSS  -->
-        <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-        <!-- DataTables Responsive CSS -->
-        <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+        <!-- Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Londrina+Solid" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Cabin|Raleway" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
 
         <title>Smith Sustainability Studies</title>
     </head>
@@ -24,7 +25,6 @@
         <div class="wrapper">
             <div class="sidebar" data-color="azure" data-image="img/Stock1.jpg" style="background-image: url(img/Stock1.jpg);">
                 <div class="sidebar-wrapper">
-                    <!--sidebar wrapper should be here; otherwise get side scroll bar-->
                     <div class="logo">
                         <a class="simple-text" href="#">SMITH SUSTAINABILITY STUDIES</a>
                     </div>
@@ -33,20 +33,18 @@
                             SMITH
                         </a>
                     </div>
-
                     <ul class="nav">
                         <li class="active" id="adminHome">
-                            <a href="#" onclick="loadAdminHomeView()" >
+                            <a href="#" onclick="loadAdminHomeView()">
                                 <i class="pe-7s-home"></i>
                                 <p>Home<p>
                             </a>
                         </li>
                         <li>
                             <div class="separator">
-                                <a href="#">
-                                </a>
+                                <a href="#"></a>
                             </div>
-                        </li>                        
+                        </li>
                         <li id="loadAdminUserAccounts">
                             <a href="#" onclick="loadAdminUserAccountsView()">
                                 <i class="pe-7s-users"></i>
@@ -54,15 +52,14 @@
                             </a>
                         </li>
                         <li id="loadMonitorUsers">
-                            <a href="#" onclick="viewManager('views/admin-monitor-users-view.html')">
+                            <a href="#" onclick="loadAdminMonitorUsersView()">
                                 <i class="pe-7s-note2"></i>
                                 <p>MONITOR USERS</p>
                             </a>
                         </li>
                         <li>
                             <div class="separator">
-                                <a href="#">
-                                </a>
+                                <a href="#"></a>
                             </div>
                         </li>
                         <li id="loadAdminCreateStudy">
@@ -77,7 +74,7 @@
                                 <p>MANAGE STUDIES</p>
                             </a>
                         </li>
-                        <li>
+                        <li id="loadMonitorStudies">
                             <a href="#" onclick="loadAdminMonitorStudiesView()">
                                 <i class="pe-7s-graph1"></i>
                                 <p>MONITOR STUDIES</p>
@@ -95,9 +92,8 @@
                         <div class="navbar-minimize">
                             <button id="minimizeSidebar" class="btn btn-fill btn-icon"><i class="pe-7s-angle-left-circle"></i></button>
                         </div>
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed"> <!-- data-toggle="collapse" data-target="#navbar-main" aria-expanded="false" aria-controls="navbar"> -->
-
+                        <div class="navbar-header" id="navbar">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main"> 
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
@@ -106,79 +102,71 @@
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
-                                <li>
+                                <li id="profileView">
                                     <a href="#" onclick="loadAdminProfileView()">
-
                                         <i class="pe-7s-user"></i> 
-                                        <p>My Profile</p>
+                                        <p>My Account</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="#" id="admin-logout">
                                         <i class="pe-7s-close-circle"></i>
                                         <p>Log out</p>
                                     </a>
-                                    <!-- TODO: Logout functionality -->
                                 </li>
                             </ul>
                         </div> 
                     </div>
-                </nav> 
-                <!-- navbar -->       
-            <div class="content">    
-                <div class="container" id="viewGoesHere">
-                    <!-- Inputs Home View -->
-                </div>
-            </div>         
-            <footer class="footer">
-                <div class="container-fluid">
-                    <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <a href="#" style="color: #66615B; font-size: 11px">
-                                    &quot;We don't inherit the earth from our ancestors, we borrow it from our children.&quot; ― David Brower
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <p class="copyright pull-right"> &copy; Copyright 2017</p>
-                </div>
-            </footer>
+                </nav>      
+                <div class="content">    
+                    <div id="viewGoesHere">
+                        <!-- Inputs Home View -->
+                    </div>
+                </div>         
+                <footer class="footer">
+                    <div class="container-fluid" id="user-footer">
+                        <p class="pull-left">
+                            <a href="#" style="color: #66615B; font-size: 11px">
+                                &ldquo;We don&#39;t inherit the earth from our ancestors, we borrow it from our children.&rdquo; &#45; David Brower
+                            </a>
+                        </p>
+                        <p class="copyright pull-right"> &copy; Copyright 2017</p>
+                    </div>
+                </footer>
+            </div> <!--main panel-->
+
         </div>
-        <!-- main panel -->
-    </div>
-    <!-- wrapper -->
 
-    <!--JavaScript-->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.validate.js"></script>
+        <!--JavaScript-->
+        <script src="vendor/jquery-3.1.1.min.js"></script>
+        <script src="vendor/bootstrap.min.js"></script>
+        <script src="vendor/jquery-ui.min.js"></script>
+        <script src="vendor/jquery.validate.js"></script>
 
-    <!-- DataTables JavaScript -->
-    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
-    <!-- ADDons -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.7/js/min/perfect-scrollbar.jquery.min.js"></script>
-    <!-- Misc Plug-ins -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-     <!--Load the AJAX API for charts-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <!-- DataTables JavaScript -->
+        <script src="vendor/bootstrap-table.js"></script>
+        <script src="vendor/jquery.datatables.js"></script>
 
-    <!-- Controllers -->
-    <script src="js/Template.js"></script>
-    <script src="js/utilities.js"></script>
-    <script src="js/admin-template-ctr.js"></script>
+        <!-- ADDons -->
+        <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.7/js/min/perfect-scrollbar.jquery.min.js"></script> -->
 
-    <script src="js/admin-home-ctr.js"></script>
-    <script src="js/admin-user-accounts-ctr.js"></script>
-    <script src="js/admin-create-study-ctr.js"></script>
-    
-    <script src="js/admin-monitor-studies-ctr.js"></script>
-    <script src="js/admin-profile-ctr.js"></script> 
-    <script src="js/admin-manage-studies-ctr.js"></script> 
+        <!-- Misc Plug-ins -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+         <!--Load the AJAX API for charts-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+        <!-- Controllers -->
+        <script src="js/Template.js"></script>
+        <script src="js/utilities.js"></script>
+        <script src="js/admin-user-template-ctr.js"></script>
 
+        <script src="js/admin-home-ctr.js"></script>
+        <script src="js/admin-user-accounts-ctr.js"></script>
+        <script src="js/admin-monitor-users-ctr.js"></script>
+        <script src="js/admin-create-study-ctr.js"></script>    
+        <script src="js/admin-manage-studies-ctr.js"></script> 
+        <script src="js/admin-monitor-studies-ctr.js"></script>
+        <script src="js/admin-profile-ctr.js"></script> 
     </body>
 
 </html>

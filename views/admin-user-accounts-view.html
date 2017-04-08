@@ -1,9 +1,10 @@
 <div class="container-fluid">
+    <h1 class="title">User Accounts</h1>
     <div class="row" id="top">
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">User Accounts</h4>
+                    <h3>Manage User Accounts</h3>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -13,9 +14,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row panel-body">
+                <div class="row">
                     <div class="col-md-12">
-                        <table width="100%" class="table table-striped table-scroll table-bordered table-hover" id="userAccountsTable">
+                        <table id="userAccountsTable" class="table table-striped table-scroll table-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -23,11 +24,12 @@
                                     <th>Last Name</th>
                                     <th>Username</th>
                                     <th>Email</th>
+                                    <th>Privilege</th>
                                     <th>Study</th>
                                     <th>Condition Group</th>
                                     <th>Current Phase</th>
                                     <th>Team Number</th>
-                                    <th class="Action">Action</th>
+                                    <th class="Action">Actions  </th>
                                 </tr>
                             </thead>
                             <tbody id="insertUserTable">
@@ -35,7 +37,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- </div> panel-body  -->
                     <div class="row">
                         <div class="col-md-12">
                             <div class="separator">
@@ -45,8 +46,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-3 col-sm-offset-1">
-                            <button type="button" class="btn btn-primary pull-left home-btn-primary" id="create-new-account" name="create-new-account"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Create New Account</button>
+                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-5 col-sm-5">
+                            <button type="button" class="btn btn-default long" id="create-new-account"><i class="pe-7s-add-user" aria-hidden="true"></i>CREATE A NEW USER ACCOUNT</button>
                         </div>
                     </div>
                 </div>
@@ -178,19 +180,22 @@
                     <div class="form-group">
                         <label for="studyID" class="col-sm-3 control-label">Study</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="studyID" name="studyID" placeholder="">
+                            <select class="form-control" id="studyIDSelector" name="studyIDSelector">
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="currentConditionGroup" class="col-sm-3 control-label">Condition Group</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="currentConditionGroup" name="currentConditionGroup" placeholder="">
+                            <select class="form-control" id="currentConditionGroupSelector" name="currentConditionGroupSelector">
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="currentPhase" class="col-sm-3 control-label">Current Phase</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="currentPhase" name="currentPhase" placeholder="">
+                            <select class="form-control" id="currentPhaseSelector" name="currentPhaseSelector">
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -206,6 +211,49 @@
                     </div>
                     <div class="col-sm-offset-2 col-sm-4 center-text">
                         <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="manageStudiesUserAccountModal" class="modal fade" role="dialog">
+    <form id="manageStudiesUserAccountForm" class="form-horizontal" role="form">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Add or Remove Admin from Studies</h3>
+                    <p>(these changes are applied immediately)</p>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group justify-content-between">
+                        <div class="col-sm-4">
+                            <p>Studies Currently Accessesible</p>
+                            <select class="form-control" id="inStudySelector" name="inStudySelector">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3 text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-default btn-new" id="removeManageStudiesUserAccountButton" name="removeManageStudiesUserAccountButton"><i class='pe-7s-less'></i></button>
+                                <button type="button" class="btn btn-default btn-new" id="addManageStudiesUserAccountButton" name="addManageStudiesUserAccountButton"><i class='pe-7s-plus'></i></button>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <p>Studies Currently Not Accessesible</p>
+                            <select class="form-control" id="outStudySelector" name="outStudySelector">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                    </div>                
+                </div>
+                <div class="modal-footer  justify-content-between">
+                    <div class="col-sm-offset-4 col-sm-4">
+                        <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
